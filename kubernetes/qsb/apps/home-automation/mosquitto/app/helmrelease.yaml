@@ -15,20 +15,17 @@ spec:
         kind: HelmRepository
         name: bjw-s
         namespace: flux-system
-
   values:
     controllers:
       mosquitto:
         annotations:
           reloader.stakater.com/auto: "true"
-
         pod:
           securityContext:
             runAsUser: 2000
             runAsGroup: 2000
             fsGroup: 2000
             fsGroupChangePolicy: OnRootMismatch
-
         initContainers:
           init-config:
             image:
@@ -38,10 +35,8 @@ spec:
               - "/bin/sh"
               - "-c"
             args:
-              - cp /tmp/secret/* /mosquitto/external_config/;
-                mosquitto_passwd -U /mosquitto/external_config/mosquitto_pwd;
-                chmod 0600 /mosquitto/external_config/mosquitto_pwd;
-
+              - cp /tmp/secret/* /mosquitto/external_config/; mosquitto_passwd -U
+                /mosquitto/external_config/mosquitto_pwd; chmod 0600 /mosquitto/external_config/mosquitto_pwd;
         containers:
           app:
             image:
@@ -63,19 +58,17 @@ spec:
                 memory: 10M
               limits:
                 memory: 10M
-
     service:
       app:
         controller: mosquitto
         type: LoadBalancer
         annotations:
-          external-dns.alpha.kubernetes.io/hostname: "mqtt.${DOMAIN}."
+          external-dns.alpha.kubernetes.io/hostname: "mqtt.${DOMAIN}"
           io.cilium/lb-ipam-ips: 10.1.1.135
         ports:
           mqtt:
             enabled: true
             port: 1883
-
     persistence:
       data:
         existingClaim: mosquitto-data
