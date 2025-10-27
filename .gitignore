@@ -14,5 +14,6 @@ talosconfig
 clusters/psb/*
 !clusters/psb/talos/
 !clusters/psb/mod.just
+!clusters/psb/components/
 
 
