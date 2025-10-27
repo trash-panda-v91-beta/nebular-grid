@@ -13,5 +13,6 @@ talosconfig
 .direnv/
 clusters/psb/*
 !clusters/psb/talos/
+!clusters/psb/mod.just
 
 
