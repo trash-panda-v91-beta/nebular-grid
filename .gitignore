@@ -11,10 +11,8 @@ talosconfig
 
 # Other Folders
 .direnv/
-clusters/psb/*
 
-!clusters/psb/bootstrap/
-!clusters/psb/components/
-!clusters/psb/mod.just
-!clusters/psb/talos/
+clusters/psb/apps/*
+
+!clusters/psb/apps/cert-manager/
 
