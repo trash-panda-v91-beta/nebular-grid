@@ -1,0 +1,17 @@
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: onepassword-secret
+  namespace: external-secrets
+stringData:
+  1password-credentials.json: "op://NebularGrid/kwiyndoilh7ke7zfpo5kk3dlz4/credential"
+  token: "op://NebularGrid/kwiyndoilh7ke7zfpo5kk3dlz4/token"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: sops-age
+  namespace: flux-system
+stringData:
+  age.agekey: "op://NebularGrid/hiwux4olk5avle7yidvwlsgdyy/private key"

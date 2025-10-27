@@ -12,8 +12,9 @@ talosconfig
 # Other Folders
 .direnv/
 clusters/psb/*
-!clusters/psb/talos/
-!clusters/psb/mod.just
-!clusters/psb/components/
 
+!clusters/psb/bootstrap/
+!clusters/psb/components/
+!clusters/psb/mod.just
+!clusters/psb/talos/
 
