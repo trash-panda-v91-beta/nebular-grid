@@ -15,4 +15,5 @@ talosconfig
 clusters/psb/apps/*
 
 !clusters/psb/apps/cert-manager/
+!clusters/psb/apps/flux-system/
 
