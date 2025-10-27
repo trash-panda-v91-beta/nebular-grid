@@ -1,0 +1,14 @@
+# Trash
+.DS_Store
+Thumbs.db
+
+# Sops
+.decrypted~*
+
+# Other files
+kubeconfig
+talosconfig
+
+# Other Folders
+.direnv/
+clusters/psb/
