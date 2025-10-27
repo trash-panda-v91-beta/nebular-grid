@@ -1,0 +1,41 @@
+---
+machine:
+  install:
+    diskSelector:
+      serial: S665NN0Y705375
+  network:
+    hostname: midori.sto.bar.internal
+    interfaces:
+      - interface: bond0
+        bond:
+          deviceSelectors:
+            - hardwareAddr: 38:05:25:31:7f:f5
+              driver: igc
+          mode: active-backup
+        dhcp: true
+        vlans:
+          - vlanId: 303
+            dhcp: false
+            mtu: 1500
+          - vlanId: 305
+            dhcp: false
+            mtu: 1500
+  nodeLabels:
+    node.kubernetes.io/gpu: "true"
+  type: controlplane
+---
+apiVersion: v1alpha1
+kind: VolumeConfig
+name: EPHEMERAL
+provisioning:
+  diskSelector:
+    match: system_disk
+  maxSize: 512GiB
+---
+apiVersion: v1alpha1
+kind: UserVolumeConfig
+name: local-hostpath
+provisioning:
+  diskSelector:
+    match: system_disk
+  maxSize: 256GiB
