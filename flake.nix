@@ -20,11 +20,13 @@
       {
         devShells.default = pkgs.mkShell {
           buildInputs = with pkgs; [
+            helmfile-wrapped
             gum
             just
+            kubernetes-helm-wrapped
             minijinja
             ntp
-            yq
+            yq-go
           ];
 
           shellHook = ''

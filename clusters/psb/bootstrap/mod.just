@@ -14,11 +14,11 @@ talos:
   just log info "Running stage..." "stage" "$0"
   for n in {{ nodes }}; do \
     if ! op=$(just psb talos apply-node "$n" --insecure 2>&1); then \
-      if [[ "$op" == *"certificate required"* ]]; then \
+      if [[ "$op" == *"produced zero addresses"* || "$op" == *"certificate required"* ]]; then \
         just log info "Talos already configured, skipping apply of config" "stage" "$0" "node" "$n"; \
         continue; \
       fi; \
-      just log fatal "Failed to apply Talos configuration" "stage" "$0" "node" "$n" "output" "$op"; \
+      just log fatal "Failed to apply Talos configuration" "stage" "$0" "node" "$n" "output" "'$op'"; \
     fi; \
   done
 
@@ -55,7 +55,7 @@ wait:
 [doc('Apply Kubernetes namespaces')]
 namespaces:
   just log info "Running stage..." "stage" "$0"
-  find "{{ kubernetes_dir }}/apps" -mindepth 1 -maxdepth 1 -type d -printf "%f\n" | while IFS= read -r ns; do \
+  find "{{ psb_dir }}/apps" -mindepth 1 -maxdepth 1 -type d -printf "%f\n" | while IFS= read -r ns; do \
     if ! kubectl create namespace "$ns" --dry-run=client -o yaml | kubectl apply --server-side -f -; then \
       just log fatal "Failed to apply namespace" "stage" "$0" "namespace" "$ns"; \
     fi; \
