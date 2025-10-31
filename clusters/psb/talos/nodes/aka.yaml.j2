@@ -8,7 +8,7 @@ machine:
     interfaces:
       # midori
       - deviceSelector:
-          busPath: 0-1.0
+          busPath: 1-1.0
           driver: thunderbolt-net
         dhcp: false
         mtu: 65520
@@ -19,7 +19,7 @@ machine:
             metric: 2048
       # ao
       - deviceSelector:
-          busPath: 1-1.0
+          busPath: 0-1.0
           driver: thunderbolt-net
         dhcp: false
         mtu: 65520
