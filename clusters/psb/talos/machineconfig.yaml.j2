@@ -52,6 +52,11 @@ machine:
         nconnect=16
   install:
     image: factory.talos.dev/metal-installer/a30c16a32db3c99cb35f22401fad96807f80896dfc86aa4ec716ed6b4aff09de:v1.11.3
+  kernel:
+    modules:
+      - name: nbd
+      - name: thunderbolt
+      - name: thunderbolt_net
   kubelet:
     defaultRuntimeSeccompProfileEnabled: true
     disableManifestsDirectory: true
@@ -66,6 +71,25 @@ machine:
         - 10.1.1.0/24
   network:
     disableSearchDomain: true
+    interfaces:
+      - interface: bond0
+        bond:
+          deviceSelectors:
+            - hardwareAddr: 58:47:ca:79:64:87
+              driver: igc
+            - hardwareAddr: 38:05:25:31:7f:f5
+              driver: igc
+            - hardwareAddr: 58:47:ca:7a:bd:b1
+              driver: igc
+          mode: active-backup
+        dhcp: true
+        vlans:
+          - vlanId: 303
+            dhcp: false
+            mtu: 1500
+          - vlanId: 305
+            dhcp: false
+            mtu: 1500
   sysctls:
     fs.inotify.max_user_instances: "8192"
     fs.inotify.max_user_watches: "1048576"
@@ -82,6 +106,10 @@ machine:
       - 10.1.1.12
   token: "op://NebularGrid/6i7sewsv3lus3qxpwddknc7jem/machine token"
   type: controlplane
+  udev:
+    rules:
+      # Thunderbolt
+      - ACTION=="add", SUBSYSTEM=="thunderbolt", ATTR{authorized}=="0", ATTR{authorized}="1"
 cluster:
   {% if ENV.IS_CONTROLPLANE %}
   aggregatorCA:
@@ -170,3 +198,19 @@ apiVersion: v1alpha1
 kind: WatchdogTimerConfig
 device: /dev/watchdog0
 timeout: 5m
+---
+apiVersion: v1alpha1
+kind: VolumeConfig
+name: EPHEMERAL
+provisioning:
+  diskSelector:
+    match: system_disk
+  maxSize: 512GiB
+---
+apiVersion: v1alpha1
+kind: UserVolumeConfig
+name: local-hostpath
+provisioning:
+  diskSelector:
+    match: system_disk
+  maxSize: 256GiB

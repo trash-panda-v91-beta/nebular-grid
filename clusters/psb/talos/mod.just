@@ -3,6 +3,8 @@ set shell := ['bash', '-euo', 'pipefail', '-c']
 
 psb_dir := justfile_dir() + '/clusters/psb'
 talos_dir := psb_dir + '/talos'
+controller := `talosctl config info --output json | jq --raw-output '.endpoints[]' | shuf -n 1`
+nodes := `talosctl config info -o yaml | yq -e '.nodes | join (",")'`
 
 [private]
 default:
@@ -37,18 +39,15 @@ reboot-node node:
 [doc('Reset a node')]
 reset-node node mode="reboot":
   gum confirm "Reset node {{ node }}?" && \
-    talosctl -n "{{ node }}" reset --graceful=false {{ if mode == "reboot" { "--reboot" } else { "" } }} || exit 0
+    talosctl -n "{{ node }}" reset --system-labels-to-wipe STATE --system-labels-to-wipe EPHEMERAL --system-labels-to-wipe u-local-hostpath --graceful=false {{ if mode == "reboot" { "--reboot" } else { "" } }} || exit 0
 
 [doc('Reset all nodes in the cluster')]
 reset-cluster mode="reboot":
-  kubectl get nodes --no-headers | while read -r node _; do \
-    just log info "Resetting Talos node ${node}";\
-    just psb talos reset-node ${node} {{ mode }};\
-  done
+  just talos reset-node {{ nodes }} {{ mode }};
 
 [doc('Upgrade Kubernetes version on the cluster')]
 upgrade-k8s version:
-  talosctl -n "$(just psb talos controller)" upgrade-k8s --to {{ version }}
+  talosctl -n "{{ controller }}" upgrade-k8s --to {{ version }}
 
 [doc('Upgrade Talos version on a node')]
 upgrade-node node:
@@ -71,6 +70,3 @@ machine-controller node:
 machine-image node:
   talosctl --nodes {{ node }} get machineconfig --output=jsonpath='{.spec}' | yq -e 'select(.machine) | .machine.install.image'
 
-[private]
-controller:
-  talosctl config info --output json | jq --raw-output '.endpoints[]' | shuf -n 1
