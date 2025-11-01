@@ -47,7 +47,7 @@ spec:
     route:
       app:
         hostnames:
-          - echo-server.nebular-grid.space
+          - echo-server.psb.nebular-grid.space
         parentRefs:
           - name: envoy-internal
             namespace: network
