@@ -17,6 +17,7 @@ clusters/psb/apps/*
 !clusters/psb/apps/cert-manager/
 !clusters/psb/apps/flux-system/
 !clusters/psb/apps/kube-system/
+!clusters/psb/apps/network/
 !clusters/psb/apps/openebs/
 !clusters/psb/apps/system/
 !clusters/psb/apps/system-controllers/
