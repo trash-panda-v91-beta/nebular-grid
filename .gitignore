@@ -19,4 +19,4 @@ clusters/psb/apps/*
 !clusters/psb/apps/kube-system/
 !clusters/psb/apps/openebs/
 !clusters/psb/apps/system/
-
+!clusters/psb/apps/system-controllers/
