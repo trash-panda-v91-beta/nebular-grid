@@ -19,5 +19,6 @@ clusters/psb/apps/*
 !clusters/psb/apps/kube-system/
 !clusters/psb/apps/network/
 !clusters/psb/apps/openebs/
+!clusters/psb/apps/rook-ceph/
 !clusters/psb/apps/system/
 !clusters/psb/apps/system-controllers/
