@@ -18,7 +18,7 @@ spec:
               - hostname: "*.nebular-grid.space"
                 originRequest:
                   http2Origin: true
-                  originServerName: ingress-ext.nebular-grid.space
+                  originServerName: ingress-ext-psb.nebular-grid.space
                 service: https://envoy-external.{{ .Release.Namespace }}.svc.cluster.local:443
               - service: http_status:404
     controllers:

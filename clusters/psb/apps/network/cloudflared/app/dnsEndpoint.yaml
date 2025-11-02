@@ -6,7 +6,7 @@ metadata:
   name: cloudflared-tunnel
 spec:
   endpoints:
-    - dnsName: ingress-ext.nebular-grid.space
+    - dnsName: ingress-ext-psb.nebular-grid.space
       recordType: CNAME
       targets:
         - 8d6494d3-135c-4607-a873-154374e9ab66.cfargotunnel.com
