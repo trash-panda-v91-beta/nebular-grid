@@ -1,0 +1,28 @@
+{
+  $schema: "https://docs.renovatebot.com/renovate-schema.json",
+  extends: [
+    "github>trash-panda-v91-beta/renovate-config",
+    "github>trash-panda-v91-beta/nebular-grid//.renovate/overrides.json5",
+    "github>trash-panda-v91-beta/nebular-grid//.renovate/groups.json5",
+    "github>trash-panda-v91-beta/nebular-grid//.renovate/autoMerge.json5",
+    "github>trash-panda-v91-beta/nebular-grid//.renovate/customManagers.json5",
+    "github>trash-panda-v91-beta/nebular-grid//.renovate/grafanaDashboards.json5",
+  ],
+  flux: {
+    managerFilePatterns: ["/^clusters/.+\\.yaml(?:\\.j2)?$/"],
+  },
+  "helm-values": {
+    managerFilePatterns: ["/^clusters/.+\\.yaml(?:\\.j2)?$/"],
+  },
+  kubernetes: {
+    managerFilePatterns: ["/^clusters/.+\\.yaml(?:\\.j2)?$/"],
+  },
+  packageRules: [
+    {
+      description: "Configure Emby versioning",
+      matchDatasources: ["docker"],
+      matchPackageNames: ["ghcr.io/home-operations/emby"],
+      versioning: "loose",
+    },
+  ],
+}
