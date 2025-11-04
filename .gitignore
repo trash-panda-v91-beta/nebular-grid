@@ -18,6 +18,7 @@ clusters/psb/apps/*
 !clusters/psb/apps/external-secrets/
 !clusters/psb/apps/flux-system/
 !clusters/psb/apps/kube-system/
+!clusters/psb/apps/observability/
 !clusters/psb/apps/network/
 !clusters/psb/apps/openebs/
 !clusters/psb/apps/rook-ceph/
