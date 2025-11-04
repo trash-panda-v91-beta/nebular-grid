@@ -15,6 +15,7 @@ talosconfig
 clusters/psb/apps/*
 
 !clusters/psb/apps/cert-manager/
+!clusters/psb/apps/external-secrets/
 !clusters/psb/apps/flux-system/
 !clusters/psb/apps/kube-system/
 !clusters/psb/apps/network/
