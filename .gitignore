@@ -22,6 +22,7 @@ clusters/psb/apps/*
 !clusters/psb/apps/network/
 !clusters/psb/apps/openebs/
 !clusters/psb/apps/rook-ceph/
+!clusters/psb/apps/selfhosted/
 !clusters/psb/apps/system/
 !clusters/psb/apps/system-controllers/
 !clusters/psb/apps/system-upgrade/
