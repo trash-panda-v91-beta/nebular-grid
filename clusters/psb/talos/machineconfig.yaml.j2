@@ -75,12 +75,12 @@ machine:
       - interface: bond0
         bond:
           deviceSelectors:
-            - hardwareAddr: 58:47:ca:79:64:87
-              driver: igc
-            - hardwareAddr: 38:05:25:31:7f:f5
-              driver: igc
-            - hardwareAddr: 58:47:ca:7a:bd:b1
-              driver: igc
+            - hardwareAddr: 58:47:ca:79:64:84
+              driver: i40e
+            - hardwareAddr: 38:05:25:31:7f:f2
+              driver: i40e
+            - hardwareAddr: 58:47:ca:7a:bd:ae
+              driver: i40e
           mode: active-backup
         dhcp: true
         vlans:
