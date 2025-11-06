@@ -56,7 +56,6 @@ spec:
       storage:
         useAllNodes: true
         useAllDevices: false
-        deviceFilter: nvme0n1
         config:
           osdsPerDevice: "1"
         nodes:
