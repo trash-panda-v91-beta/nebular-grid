@@ -24,6 +24,7 @@
             gum
             just
             kubernetes-helm-wrapped
+            kustomize
             minijinja
             ntp
             yq-go
