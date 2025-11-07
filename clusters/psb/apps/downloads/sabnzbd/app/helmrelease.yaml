@@ -107,10 +107,6 @@ spec:
             app:
               - path: /incomplete
                 subPath: incomplete
-      scripts:
-        type: configMap
-        defaultMode: 0775
-        name: sabnzbd-scripts
       tmpfs:
         type: emptyDir
         globalMounts:
