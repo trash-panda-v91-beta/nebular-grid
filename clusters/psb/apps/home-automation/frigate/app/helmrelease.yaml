@@ -47,6 +47,8 @@ spec:
                 memory: 2Gi
               limits:
                 memory: 8Gi
+            securityContext:
+              privileged: true
     service:
       frigate:
         type: LoadBalancer
