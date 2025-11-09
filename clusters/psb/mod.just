@@ -65,10 +65,14 @@ sync-all-es:
     just psb sync-es "$ns" "$name"; \
   done
 
-[doc('Snapshot VolSync PVCs')]
+[doc('Snapshot VolSync replication source')]
+snapshot ns name:
+  kubectl -n "{{ ns }}" patch replicationsources "{{ name }}" --type merge -p '{"spec":{"trigger":{"manual":"$(date +%s)"}}}'; \
+
+[doc('Snapshot all VolSync replication sources')]
 snapshot:
   kubectl get replicationsources --no-headers -A | while read -r ns name _; do \
-    kubectl -n "$ns" patch replicationsources "$name" --type merge -p '{"spec":{"trigger":{"manual":"$(date +%s)"}}}'; \
+    just psb snapshot "$ns" "$name"; \
   done
 
 [private]
