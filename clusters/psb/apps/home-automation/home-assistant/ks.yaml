@@ -20,12 +20,10 @@ spec:
   postBuild:
     substitute:
       APP: home-assistant
-      APP_UID: "65534"
       APP_GID: "65533"
-      VOLSYNC_CLAIM: home-assistant
-      VOLSYNC_STORAGECLASS: ceph-filesystem
-      VOLSYNC_CACHE_ACCESSMODES: ReadWriteMany
+      APP_UID: "65534"
       VOLSYNC_CAPACITY: 8Gi
+      VOLSYNC_CLAIM: home-assistant
   prune: true
   sourceRef:
     kind: GitRepository
