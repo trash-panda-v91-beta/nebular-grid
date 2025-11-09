@@ -102,7 +102,7 @@ spec:
         advancedMounts:
           home-assistant:
             app:
-              - path: /venv
+              - path: /config/.venv
                 subPath: hass-venv
       tmpfs:
         type: emptyDir
