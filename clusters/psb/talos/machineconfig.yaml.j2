@@ -106,10 +106,6 @@ machine:
       - 10.1.1.12
   token: "op://NebularGrid/6i7sewsv3lus3qxpwddknc7jem/machine token"
   type: controlplane
-  udev:
-    rules:
-      # Thunderbolt
-      - ACTION=="add", SUBSYSTEM=="thunderbolt", ATTR{authorized}=="0", ATTR{authorized}="1"
 cluster:
   {% if ENV.IS_CONTROLPLANE %}
   aggregatorCA:
