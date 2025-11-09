@@ -83,6 +83,7 @@ machine:
               driver: i40e
           mode: active-backup
         dhcp: true
+        mtu: 9000
         vlans:
           - vlanId: 303
             dhcp: false
@@ -105,7 +106,6 @@ machine:
     servers:
       - 10.1.1.12
   token: "op://NebularGrid/6i7sewsv3lus3qxpwddknc7jem/machine token"
-  type: controlplane
 cluster:
   {% if ENV.IS_CONTROLPLANE %}
   aggregatorCA:
