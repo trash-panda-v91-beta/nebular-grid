@@ -1,0 +1,20 @@
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: doco-cd
+spec:
+  hostnames:
+    - doco-cd.nebular-grid.space
+  parentRefs:
+    - name: envoy-external
+      namespace: network
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /v1/webhook
+      backendRefs:
+        - name: doco-cd
+          namespace: external
+          port: 8080
