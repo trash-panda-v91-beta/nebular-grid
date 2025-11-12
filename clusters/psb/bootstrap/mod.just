@@ -5,16 +5,22 @@ set shell := ['bash', '-euo', 'pipefail', '-c']
 
 psb_dir := justfile_dir() + '/clusters/psb'
 bootstrap_dir := psb_dir + '/bootstrap'
-controller := `talosctl config info --output json | jq --raw-output '.endpoints[]' | shuf -n 1`
-nodes := `talosctl config info -o yaml | yq -e '.nodes | join (" ")'`
 
 [private]
 default: talos kubernetes (kubeconfig "node") wait namespaces resources crds apps kubeconfig
 
+[private]
+controller:
+  @talosctl config info --output json | jq --raw-output '.endpoints[]' | shuf -n 1
+
+[private]
+nodes:
+  @talosctl config info -o yaml | yq -e '.nodes | join (" ")'
+
 [doc('Install Talos')]
 talos:
   just log info "Running stage..." "stage" "$0"
-  for n in {{ nodes }}; do \
+  for n in $(just psb bootstrap nodes); do \
     if ! op=$(just psb talos apply-node "$n" --insecure 2>&1); then \
       if [[ "$op" == *"produced zero addresses"* || "$op" == *"certificate required"* ]]; then \
         just log info "Talos already configured, skipping apply of config" "stage" "$0" "node" "$n"; \
@@ -27,7 +33,7 @@ talos:
 [doc('Install Kubernetes')]
 kubernetes:
   just log info "Running stage..." "stage" "$0"
-  until op=$(talosctl -n "{{ controller }}" bootstrap 2>&1 || true) && [[ "$op" == *"AlreadyExists"* ]]; do \
+  until op=$(talosctl -n "$(just psb bootstrap controller)" bootstrap 2>&1 || true) && [[ "$op" == *"AlreadyExists"* ]]; do \
     just log info "Kubernetes bootstrap in progress. Retrying in 5 seconds..." "stage" "$0"; \
     sleep 5; \
   done
@@ -35,11 +41,11 @@ kubernetes:
 [doc('Fetch kubeconfig')]
 kubeconfig lb="cilium":
   just log info "Running stage..." "stage" "$0"
-  if ! talosctl kubeconfig -n "{{ controller }}" -f --force-context-name psb {{ justfile_dir() }}; then \
+  if ! talosctl kubeconfig -n "$(just psb bootstrap controller)" -f --force-context-name psb {{ justfile_dir() }}; then \
     just log fatal "Failed to fetch kubeconfig" "stage" "$0"; \
   fi
   if [[ "{{ lb }}" != "cilium" ]]; then \
-    if ! kubectl config set-cluster psb --server "https://{{ controller }}:6443"; then \
+    if ! kubectl config set-cluster psb --server "https://$(just psb bootstrap controller):6443"; then \
       just log fatal "Failed to set kubectl cluster server address" "stage" "$0"; \
     fi; \
   fi
