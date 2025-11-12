@@ -59,19 +59,9 @@ spec:
       storage:
         useAllNodes: true
         useAllDevices: false
-        deviceFilter: nvme0n1
+        devicePathFilter: /dev/disk/by-id/nvme-SAMSUNG_MZQL21T9HCJR-00A07_.*
         config:
           osdsPerDevice: "1"
-        nodes:
-          - name: aka
-            devices:
-              - name: /dev/disk/by-id/nvme-SAMSUNG_MZQL21T9HCJR-00A07_S728NJ0Y800182Z
-          - name: midori
-            devices:
-              - name: /dev/disk/by-id/nvme-SAMSUNG_MZQL21T9HCJR-00A07_S728NS0X400105X
-          - name: ao
-            devices:
-              - name: /dev/disk/by-id/nvme-SAMSUNG_MZQL21T9HCJR-00A07_S728NS0X400076H
     cephBlockPools:
       - name: ceph-blockpool
         spec:
