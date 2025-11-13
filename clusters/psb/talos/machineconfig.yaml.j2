@@ -106,6 +106,10 @@ machine:
     servers:
       - 10.1.1.12
   token: "op://NebularGrid/6i7sewsv3lus3qxpwddknc7jem/machine token"
+  udev:
+    rules:
+      - # Thunderbolt - Disable Power Management
+        ACTION=="add", SUBSYSTEM=="thunderbolt", ATTR{power/control}="on"
 cluster:
   {% if ENV.IS_CONTROLPLANE %}
   aggregatorCA:
