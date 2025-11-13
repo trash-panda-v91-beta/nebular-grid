@@ -31,7 +31,15 @@
           ];
 
           shellHook = ''
-            echo "🚀 Nix dev environment loaded!"
+            # Fix neogit "address already in use" error
+            # Use /tmp with a unique subdirectory to avoid nix-shell TMPDIR issues
+            if [ "$NEOGIT_TMPDIR_SET" = "" ]; then
+              export NEOGIT_TMPDIR_SET=1
+              export TMPDIR="/tmp/nix-shell-$$"
+              mkdir -p "$TMPDIR"
+              # Clean up on exit
+              trap "rm -rf $TMPDIR" EXIT
+            fi
           '';
         };
       }
