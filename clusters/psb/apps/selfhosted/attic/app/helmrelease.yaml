@@ -57,13 +57,13 @@ spec:
         type: configMap
         name: attic-config
         globalMounts:
-          - path: /etc/atticd/server.toml
+          - path: /var/empty/.config/attic/server.toml
             subPath: server.toml
             readOnly: true
       data:
         existingClaim: attic-data
         globalMounts:
-          - path: /var/lib/atticd
+          - path: /attic/storage
 
     route:
       app:
