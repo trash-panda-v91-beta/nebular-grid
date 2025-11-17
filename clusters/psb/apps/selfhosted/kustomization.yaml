@@ -8,5 +8,4 @@ components:
 resources:
   - ./namespace.yaml
   - ./actual/ks.yaml
-  - ./attic/ks.yaml
   - ./paperless/ks.yaml
