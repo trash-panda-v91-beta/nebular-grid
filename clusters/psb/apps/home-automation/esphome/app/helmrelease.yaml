@@ -78,6 +78,8 @@ spec:
             app:
               - path: /cache
                 subPath: cache
+              - path: /tmp
+                subPath: esphome-tmp
       deploy-key:
         type: secret
         name: esphome-deploykey
