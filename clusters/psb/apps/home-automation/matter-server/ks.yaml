@@ -21,6 +21,7 @@ spec:
     substitute:
       APP: matter-server
       VOLSYNC_CLAIM: matter-server-data
+      VOLSYNC_CAPACITY: 1Gi
   prune: true
   sourceRef:
     kind: GitRepository
