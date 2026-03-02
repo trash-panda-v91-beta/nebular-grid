@@ -1,0 +1,39 @@
+---
+# Deployed through the TrueNAS UI
+
+configs:
+  poll-config.yml:
+    content: |
+      - run_once: true
+        url: https://github.com/trash-panda-v91-beta/nebular-grid
+secrets:
+  webhook_secret:
+    file: /home/truenas_admin/.config/doco-cd/webhook_secret
+services:
+  app:
+    configs:
+      - source: poll-config.yml
+        target: /poll-config.yml
+    container_name: doco-cd
+    environment:
+      HTTP_PORT: 8080
+      LOG_LEVEL: info
+      POLL_CONFIG_FILE: /poll-config.yml
+      WEBHOOK_SECRET_FILE: /run/secrets/webhook_secret
+      DEPLOY_CONFIG_BASE_DIR: ./docker/truenas/
+    healthcheck:
+      interval: 30s
+      retries: 3
+      start_period: 15s
+      timeout: 5s
+    image: ghcr.io/kimdre/doco-cd:0.57.0
+    ports:
+      - 8080:8080
+    restart: unless-stopped
+    secrets:
+      - webhook_secret
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - data:/data
+volumes:
+  data: {}
