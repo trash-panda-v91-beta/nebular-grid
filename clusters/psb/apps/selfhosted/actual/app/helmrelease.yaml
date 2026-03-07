@@ -29,6 +29,7 @@ spec:
               tag: 26.2.1
             env:
               ACTUAL_PORT: &httpPort 5006
+              ACTUAL_UPLOAD_FILE_SYNC_SIZE_LIMIT_MB: 80
             probes:
               liveness:
                 enabled: true
