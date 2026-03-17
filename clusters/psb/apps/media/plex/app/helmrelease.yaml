@@ -88,6 +88,8 @@ spec:
             app:
               - path: /data/nas-media/movies
                 subPath: movies
+              - path: /data/nas-media/tube
+                subPath: tube
               - path: /data/nas-media/tv
                 subPath: tv
     route:
