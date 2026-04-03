@@ -30,6 +30,7 @@ spec:
             env:
               ACTUAL_PORT: &httpPort 5006
               ACTUAL_UPLOAD_FILE_SYNC_SIZE_LIMIT_MB: 80
+              NODE_OPTIONS: --max-old-space-size=768
             probes:
               liveness:
                 enabled: true
