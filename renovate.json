@@ -1,0 +1,39 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "github>trash-panda-v91-beta/renovate-config",
+    "github>trash-panda-v91-beta/nebular-grid//.renovate/overrides.json",
+    "github>trash-panda-v91-beta/nebular-grid//.renovate/groups.json",
+    "github>trash-panda-v91-beta/nebular-grid//.renovate/autoMerge.json",
+    "github>trash-panda-v91-beta/nebular-grid//.renovate/customManagers.json",
+    "github>trash-panda-v91-beta/nebular-grid//.renovate/grafanaDashboards.json"
+  ],
+  "flux": {
+    "managerFilePatterns": ["/^clusters/.+\\.yaml(?:\\.j2)?$/"]
+  },
+  "helm-values": {
+    "managerFilePatterns": ["/^clusters/.+\\.yaml(?:\\.j2)?$/"]
+  },
+  "kubernetes": {
+    "managerFilePatterns": ["/^clusters/.+\\.yaml(?:\\.j2)?$/"]
+  },
+  "mise": {
+    "enabled": true
+  },
+  "packageRules": [
+    {
+      "description": "Configure Emby versioning",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["ghcr.io/home-operations/emby"],
+      "versioning": "loose"
+    },
+    {
+      "description": "Auto merge mise tool updates",
+      "matchManagers": ["mise"],
+      "automerge": true,
+      "automergeType": "pr",
+      "matchUpdateTypes": ["minor", "patch", "digest"],
+      "minimumReleaseAge": "3 days"
+    }
+  ]
+}

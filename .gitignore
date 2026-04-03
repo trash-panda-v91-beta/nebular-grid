@@ -10,5 +10,5 @@ kubeconfig
 talosconfig
 
 # Other Folders
-.direnv/
+.mise/
 
