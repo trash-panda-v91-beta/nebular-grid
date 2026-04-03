@@ -19,9 +19,17 @@ spec:
               [{
                 "name":"multus-iot",
                 "namespace": "network",
-                "ips": ["10.1.30.157/24"],
+                "ips": ["10.1.30.157/24", "fd12:3456:789a:303::157/64"],
                 "mac": "76:fa:11:c0:c9:84"
               }]
+          securityContext:
+            sysctls:
+              - name: "net.ipv6.conf.net1.accept_ra"
+                value: "2"
+              - name: "net.ipv6.conf.net1.accept_ra_defrtr"
+                value: "1"
+              - name: "net.ipv6.conf.net1.accept_ra_rt_info_max_plen"
+                value: "64"
           resourceClaims:
             - name: gpu
               resourceClaimTemplateName: frigate-gpu
