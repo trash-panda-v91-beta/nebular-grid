@@ -1,5 +1,4 @@
 ---
-# Area
 area/ci:
   - changed-files:
       - any-glob-to-any-file: ".github/**/*"
