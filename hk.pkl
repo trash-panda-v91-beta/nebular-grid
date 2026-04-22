@@ -2,13 +2,13 @@ amends "package://github.com/jdx/hk/releases/download/v1.42.0/hk@1.42.0#/Config.
 import "package://github.com/jdx/hk/releases/download/v1.42.0/hk@1.42.0#/Builtins.pkl"
 
 local linters = new Mapping<String, Step> {
-  ["check-merge-conflict"] = Builtins.`check-merge-conflict`
-  ["detect-private-key"] = Builtins.`detect-private-key`
+  ["check-merge-conflict"] = Builtins.check_merge_conflict
+  ["detect-private-key"] = Builtins.detect_private_key
   ["actionlint"] = Builtins.actionlint
   ["yamllint"] = Builtins.yamllint
   ["yamlfmt"] = Builtins.yamlfmt
   ["pkl"] = Builtins.pkl
-  ["pkl-format"] = Builtins.`pkl-format`
+  ["pkl-format"] = Builtins.pkl_format
 }
 
 hooks {
