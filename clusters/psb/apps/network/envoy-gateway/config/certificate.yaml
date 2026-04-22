@@ -13,3 +13,7 @@ spec:
   dnsNames:
     - "nebular-grid.space"
     - "*.nebular-grid.space"
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+    rotationPolicy: Always
