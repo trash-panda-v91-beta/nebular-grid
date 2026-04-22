@@ -3,31 +3,44 @@ machine:
   install:
     diskSelector:
       serial: S665NN0Y705375
-  network:
-    hostname: midori.sto.bar.internal
-    interfaces:
-      # aka
-      - deviceSelector:
-          busPath: 1-1.0
-          driver: thunderbolt-net
-        dhcp: false
-        mtu: 65520
-        addresses:
-          - 169.254.255.22/32
-        routes:
-          - network: 169.254.255.21/32
-            metric: 2048
-      # ao
-      - deviceSelector:
-          busPath: 0-1.0
-          driver: thunderbolt-net
-        dhcp: false
-        mtu: 65520
-        addresses:
-          - 169.254.255.22/32
-        routes:
-          - network: 169.254.255.23/32
-            metric: 2048
   nodeLabels:
     node.kubernetes.io/gpu: "true"
   type: controlplane
+---
+apiVersion: v1alpha1
+kind: HostnameConfig
+hostname: midori.sto.bar.internal
+---
+apiVersion: v1alpha1
+kind: LinkAliasConfig
+name: midori-aka
+selector:
+    match: link.driver == "thunderbolt-net" && link.bus_path == "1-1.0"
+---
+apiVersion: v1alpha1
+kind: LinkConfig
+name: midori-aka
+addresses:
+  - address: 169.254.255.22/32
+mtu: 65520
+routes:
+  - destination: 169.254.255.21/32
+    metric: 2048
+up: true
+---
+apiVersion: v1alpha1
+kind: LinkAliasConfig
+name: midori-ao
+selector:
+    match: link.driver == "thunderbolt-net" && link.bus_path == "0-1.0"
+---
+apiVersion: v1alpha1
+kind: LinkConfig
+name: midori-ao
+addresses:
+  - address: 169.254.255.22/32
+mtu: 65520
+routes:
+  - destination: 169.254.255.23/32
+    metric: 2048
+up: true
