@@ -63,8 +63,6 @@ machine:
     extraConfig:
       allowedUnsafeSysctls:
         - net.ipv6.conf.*
-      featureGates:
-        ResourceHealthStatus: true
       maxPods: 150
       serializeImagePulls: false
     image: ghcr.io/siderolabs/kubelet:v1.35.3
