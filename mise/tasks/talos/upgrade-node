@@ -4,6 +4,6 @@
 set -euo pipefail
 
 image=$(talosctl --nodes "${usage_node}" get machineconfig --output=jsonpath='{.spec}' \
-  | yq -e 'select(.machine) | .machine.install.image')
+  | yq -e 'select(.machine) | .machine.install.image' | head -1)
 
 talosctl -n "${usage_node}" upgrade -i "${image}" -m powercycle --timeout=10m
