@@ -1,7 +1,0 @@
-#!/usr/bin/env bash
-#MISE description="Reboot a node"
-#USAGE arg "<node>" help="Node name (e.g. aka, ao, midori)"
-set -euo pipefail
-
-gum confirm "Reboot node ${usage_node}?" && \
-  talosctl -n "${usage_node}" reboot -m powercycle || exit 0

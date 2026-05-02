@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+#MISE description="Open a debug shell on a node"
+#USAGE arg "<node>" help="Node name (e.g. aka, ao, midori)"
+set -euo pipefail
+
+kubectl debug "node/${usage_node}" -n default -it \
+  --image='mirror.gcr.io/alpine:latest' \
+  --profile sysadmin
+kubectl delete pod -n default -l app.kubernetes.io/managed-by=kubectl-debug

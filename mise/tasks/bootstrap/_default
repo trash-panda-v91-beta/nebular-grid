@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+#MISE description="Bootstrap a new cluster (runs all stages in order)"
+#MISE depends=["bootstrap:talos", "bootstrap:kubernetes", "bootstrap:kubeconfig", "bootstrap:wait", "bootstrap:namespaces", "bootstrap:resources", "bootstrap:crds", "bootstrap:apps"]
+set -euo pipefail

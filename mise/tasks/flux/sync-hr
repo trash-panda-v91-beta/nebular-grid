@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+#MISE description="Sync a single Flux HelmRelease"
+#USAGE arg "<namespace>" help="Namespace of the HelmRelease"
+#USAGE arg "<name>" help="Name of the HelmRelease"
+set -euo pipefail
+
+kubectl -n "${usage_namespace}" annotate --field-manager flux-client-side-apply --overwrite \
+  hr "${usage_name}" \
+  reconcile.fluxcd.io/requestedAt="$(date +%s)" \
+  reconcile.fluxcd.io/forceAt="$(date +%s)"

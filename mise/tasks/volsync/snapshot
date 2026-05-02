@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+#MISE description="Trigger a manual VolSync snapshot for a replication source"
+#USAGE arg "<namespace>" help="Namespace of the replication source"
+#USAGE arg "<name>" help="Name of the replication source"
+set -euo pipefail
+
+kubectl -n "${usage_namespace}" patch replicationsources "${usage_name}" \
+  --type merge -p "{\"spec\":{\"trigger\":{\"manual\":\"$(date +%s)\"}}}"

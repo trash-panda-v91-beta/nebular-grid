@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+#MISE description="Browse a PVC interactively"
+#USAGE arg "<namespace>" help="Namespace of the PVC"
+#USAGE arg "<claim>" help="Name of the PVC"
+set -euo pipefail
+
+kubectl browse-pvc -n "${usage_namespace}" -i mirror.gcr.io/alpine:latest "${usage_claim}"

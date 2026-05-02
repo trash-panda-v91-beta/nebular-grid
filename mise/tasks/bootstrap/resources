@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+#MISE description="[bootstrap] Apply bootstrap Kubernetes resources"
+set -euo pipefail
+
+BOOTSTRAP_DIR="$(dirname "$0")/../../../clusters/psb/bootstrap"
+
+minijinja-cli "${BOOTSTRAP_DIR}/resources.yaml.j2" | kubectl apply --server-side -f -

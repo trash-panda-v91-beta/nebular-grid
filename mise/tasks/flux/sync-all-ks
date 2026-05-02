@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+#MISE description="Sync all Flux Kustomizations"
+set -euo pipefail
+
+kubectl get ks --no-headers -A | while read -r ns name _; do
+  mise run flux:sync-ks "${ns}" "${name}"
+done

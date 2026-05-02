@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+#MISE description="Prune pods in Failed, Pending, or Succeeded state"
+set -euo pipefail
+
+for phase in Failed Pending Succeeded; do
+  kubectl delete pods -A --field-selector "status.phase=${phase}" --ignore-not-found=true
+done

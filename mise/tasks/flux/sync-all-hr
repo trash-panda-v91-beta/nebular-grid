@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+#MISE description="Sync all Flux HelmReleases"
+set -euo pipefail
+
+kubectl get hr --no-headers -A | while read -r ns name _; do
+  mise run flux:sync-hr "${ns}" "${name}"
+done

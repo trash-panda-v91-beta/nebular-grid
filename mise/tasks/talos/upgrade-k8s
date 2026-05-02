@@ -1,8 +1,0 @@
-#!/usr/bin/env bash
-#MISE description="Upgrade Kubernetes version on the cluster"
-#USAGE arg "<version>" help="Kubernetes version to upgrade to (e.g. v1.36.0)"
-set -euo pipefail
-
-controller=$(talosctl config info --output json | jq --raw-output '.endpoints[]' | shuf -n 1)
-
-talosctl -n "${controller}" upgrade-k8s --to "${usage_version}"

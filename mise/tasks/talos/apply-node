@@ -1,7 +1,0 @@
-#!/usr/bin/env bash
-#MISE description="Apply Talos config to a node"
-#USAGE arg "<node>" help="Node name (e.g. aka, ao, midori)"
-#USAGE flag "--dry-run" help="Print the rendered config without applying"
-set -euo pipefail
-
-mise run talos:render-config "${usage_node}" | talosctl -n "${usage_node}" apply-config -f /dev/stdin ${usage_dry_run:+--dry-run}

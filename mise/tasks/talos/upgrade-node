@@ -1,9 +1,0 @@
-#!/usr/bin/env bash
-#MISE description="Upgrade Talos version on a node"
-#USAGE arg "<node>" help="Node name (e.g. aka, ao, midori)"
-set -euo pipefail
-
-image=$(talosctl --nodes "${usage_node}" get machineconfig --output=jsonpath='{.spec}' \
-  | yq -e 'select(.machine) | .machine.install.image')
-
-talosctl -n "${usage_node}" upgrade -i "${image}" -m powercycle --timeout=10m

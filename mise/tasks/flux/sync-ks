@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+#MISE description="Sync a single Flux Kustomization"
+#USAGE arg "<namespace>" help="Namespace of the Kustomization"
+#USAGE arg "<name>" help="Name of the Kustomization"
+set -euo pipefail
+
+kubectl -n "${usage_namespace}" annotate --field-manager flux-client-side-apply --overwrite \
+  ks "${usage_name}" \
+  reconcile.fluxcd.io/requestedAt="$(date +%s)"

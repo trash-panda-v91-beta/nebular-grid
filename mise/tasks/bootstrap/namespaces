@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+#MISE description="[bootstrap] Create all app namespaces"
+set -euo pipefail
+
+PSB_DIR="$(dirname "$0")/../../../clusters/psb"
+
+find "${PSB_DIR}/apps" -mindepth 1 -maxdepth 1 -type d -printf "%f\n" | while IFS= read -r ns; do
+  kubectl create namespace "${ns}" --dry-run=client -o yaml | kubectl apply --server-side -f -
+done

@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+#MISE description="Trigger manual VolSync snapshots for all replication sources"
+set -euo pipefail
+
+kubectl get replicationsources --no-headers -A | while read -r ns name _; do
+  mise run volsync:snapshot "${ns}" "${name}"
+done

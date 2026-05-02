@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+#MISE description="Delete a local Flux Kustomization (using flux-local)"
+#USAGE arg "<namespace>" help="Namespace of the Kustomization"
+#USAGE arg "<ks>" help="Name of the Kustomization"
+set -euo pipefail
+
+PSB_DIR="$(dirname "$0")/../../../clusters/psb"
+
+flux-local build ks --namespace "${usage_namespace}" --path "${PSB_DIR}/flux/cluster" "${usage_ks}" \
+  | kubectl delete -f /dev/stdin

@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+#MISE description="[bootstrap] Apply Talos config to all nodes (insecure, first boot)"
+set -euo pipefail
+
+nodes=$(talosctl config info -o yaml | yq -e '.nodes | join(" ")')
+
+for node in ${nodes}; do
+  if ! output=$(mise run talos:apply-node "${node}" --insecure 2>&1); then
+    if [[ "${output}" == *"produced zero addresses"* || "${output}" == *"certificate required"* ]]; then
+      echo "Talos already configured on ${node}, skipping"
+      continue
+    fi
+    echo "ERROR: Failed to apply Talos config to ${node}: ${output}" >&2
+    exit 1
+  fi
+done

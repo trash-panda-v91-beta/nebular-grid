@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+#MISE description="[bootstrap] Wait for all nodes to be ready"
+set -euo pipefail
+
+if ! kubectl wait nodes --for=condition=Ready=True --all --timeout=10s &>/dev/null; then
+  until kubectl wait nodes --for=condition=Ready=False --all --timeout=10s &>/dev/null; do
+    echo "Nodes not available yet, retrying in 5 seconds..."
+    sleep 5
+  done
+fi

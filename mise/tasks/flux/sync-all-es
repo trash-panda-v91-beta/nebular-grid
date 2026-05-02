@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+#MISE description="Force sync all ExternalSecrets"
+set -euo pipefail
+
+kubectl get es --no-headers -A | while read -r ns name _; do
+  mise run flux:sync-es "${ns}" "${name}"
+done
