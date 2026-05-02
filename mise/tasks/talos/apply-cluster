@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+#MISE description="Apply Talos config to all nodes in the cluster"
+#USAGE flag "--dry-run" help="Print the rendered config without applying"
+set -euo pipefail
+
+kubectl get nodes --no-headers | while read -r node _; do
+  mise run talos:apply-node "${node}" ${usage_dry_run:+--dry-run}
+done
