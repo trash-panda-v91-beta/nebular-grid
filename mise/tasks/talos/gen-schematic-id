@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+#MISE description="Generate schematic ID from Talos schematic file"
+set -euo pipefail
+
+TALOS_DIR="$(dirname "$0")/../../../clusters/psb/talos"
+
+curl -sX POST --data-binary "@${TALOS_DIR}/schematic.yaml" "https://factory.talos.dev/schematics" \
+  | jq -r '.id'
