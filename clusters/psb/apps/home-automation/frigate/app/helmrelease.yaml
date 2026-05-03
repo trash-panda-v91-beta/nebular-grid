@@ -33,22 +33,6 @@ spec:
           resourceClaims:
             - name: gpu
               resourceClaimTemplateName: frigate-gpu
-        initContainers:
-          routes:
-            image:
-              repository: ghcr.io/nicolaka/netshoot
-              tag: v0.13
-            command:
-              - /bin/sh
-              - -c
-              - |
-                ip route add 10.1.30.0/24 dev net1 src 10.1.30.157 table 157
-                ip route add default via 10.1.30.1 dev net1 table 157
-                ip rule add from 10.1.30.157 table 157
-            securityContext:
-              capabilities:
-                add:
-                  - NET_ADMIN
         containers:
           app:
             image:
@@ -59,6 +43,16 @@ spec:
                   name: frigate-secret
             securityContext:
               privileged: true
+            lifecycle:
+              postStart:
+                exec:
+                  command:
+                    - /bin/sh
+                    - -c
+                    - |
+                      ip route add 10.1.30.0/24 dev net1 src 10.1.30.157 table 157 || true
+                      ip route add default via 10.1.30.1 dev net1 table 157 || true
+                      ip rule add from 10.1.30.157 table 157 || true
             probes:
               liveness: &probes
                 enabled: false
