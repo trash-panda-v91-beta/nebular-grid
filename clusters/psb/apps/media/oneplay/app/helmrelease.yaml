@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: oneplay-server
+  name: oneplay
 spec:
   chartRef:
     kind: OCIRepository
@@ -11,9 +11,9 @@ spec:
   interval: 1h
   values:
     controllers:
-      oneplay-server:
+      oneplay:
         containers:
-          app:
+          oneplay:
             image:
               repository: ghcr.io/waladir/script.oneplay.server
               tag: latest
@@ -71,8 +71,7 @@ spec:
                 memory: 128Mi
               limits:
                 memory: 512Mi
-            persistence:
-              disabled: true
+            
     service:
       app:
         ports:
