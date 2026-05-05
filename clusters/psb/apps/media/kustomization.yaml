@@ -14,3 +14,4 @@ resources:
   - ./dispatcharr/ks.yaml
   - ./mumc/ks.yaml
   - ./maintainerr/ks.yaml
+  - ./oneplay/ks.yaml

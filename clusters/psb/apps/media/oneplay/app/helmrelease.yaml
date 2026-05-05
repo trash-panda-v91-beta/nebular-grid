@@ -1,0 +1,97 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: oneplay-server
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: oneplay-server
+  interval: 1h
+  values:
+    controllers:
+      oneplay-server:
+        containers:
+          app:
+            image:
+              repository: ghcr.io/waladir/script.oneplay.server
+              tag: latest
+            env:
+              TZ: Europe/Prague
+              USERNAME:
+                valueFrom:
+                  secretKeyRef:
+                    name: oneplay-secret
+                    key: username
+              PASSWORD:
+                valueFrom:
+                  secretKeyRef:
+                    name: oneplay-secret
+                    key: password
+              DEVICEID: "oneplay-k8s"
+              WEBSERVER_IP: "0.0.0.0"
+              WEBSERVER_PORT: &port 8082
+              EPG_DNU_ZPETNE: 1
+              EPG_DNU_DOPREDU: 1
+              INTERVAL_STAHOVANI_EPG: 0
+              ODSTRANIT_HD: 0
+              POUZIVAT_CISLA_KANALU: 0
+              PORADI_SLUZBY: -1
+              PIN: "1621"
+              PROFILE_PIN: "4321"
+              DEBUG: 0
+              # AUTH_USER: ""  # Uncomment to enable basic auth for web UI
+              # AUTH_PASS: ""
+            probes:
+              liveness:
+                enabled: true
+                spec:
+                  periodSeconds: 30
+                  timeoutSeconds: 5
+                  failureThreshold: 5
+              readiness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /playlist
+                    port: *port
+                  periodSeconds: 10
+                  timeoutSeconds: 5
+                  failureThreshold: 5
+              startup:
+                enabled: true
+                spec:
+                  failureThreshold: 30
+                  periodSeconds: 10
+            resources:
+              requests:
+                cpu: 50m
+                memory: 128Mi
+              limits:
+                memory: 512Mi
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+    service:
+      app:
+        ports:
+          http:
+            port: *port
+    route:
+      app:
+        hostnames:
+          - oneplay.nebular-grid.space
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+    persistence:
+      app:
+        type: emptyDir
+        globalMounts:
+          - path: /app
