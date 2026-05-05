@@ -11,3 +11,4 @@ resources:
   - ./plex/ks.yaml
   - ./jellyfin/ks.yaml
   - ./seerr/ks.yaml
+  - ./dispatcharr/ks.yaml
