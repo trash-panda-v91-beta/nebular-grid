@@ -10,3 +10,4 @@ resources:
   - ./pinchflat/ks.yaml
   - ./plex/ks.yaml
   - ./jellyfin/ks.yaml
+  - ./seerr/ks.yaml
