@@ -12,3 +12,4 @@ resources:
   - ./jellyfin/ks.yaml
   - ./seerr/ks.yaml
   - ./dispatcharr/ks.yaml
+  - ./mumc/ks.yaml
