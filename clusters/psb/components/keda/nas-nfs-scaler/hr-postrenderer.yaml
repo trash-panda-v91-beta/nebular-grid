@@ -12,7 +12,6 @@ spec:
               kind: Deployment
               name: ${APP}
             patch: |-
-              apiVersion: apps/v1
               kind: Deployment
               metadata:
                 name: ${APP}
