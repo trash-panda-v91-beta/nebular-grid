@@ -90,8 +90,3 @@ spec:
         parentRefs:
           - name: envoy-internal
             namespace: network
-    persistence:
-      app:
-        type: emptyDir
-        globalMounts:
-          - path: /app
