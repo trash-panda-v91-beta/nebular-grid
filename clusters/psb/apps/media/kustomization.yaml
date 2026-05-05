@@ -13,3 +13,4 @@ resources:
   - ./seerr/ks.yaml
   - ./dispatcharr/ks.yaml
   - ./mumc/ks.yaml
+  - ./maintainerr/ks.yaml
