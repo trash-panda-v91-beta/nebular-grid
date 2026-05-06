@@ -9,7 +9,7 @@ metadata:
 spec:
   instances: 2
 
-  imageName: ghcr.io/cloudnative-pg/postgresql:17.5-standard-bookworm
+  imageName: docker.io/timescale/timescaledb-ha:pg18-all-amd64
 
   bootstrap:
     initdb:
