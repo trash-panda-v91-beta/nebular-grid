@@ -117,12 +117,15 @@ spec:
 
     route:
       app:
-        controller: tracearr
         hostnames:
           - tracearr.nebular-grid.space
         parentRefs:
           - name: envoy-internal
             namespace: network
+        rules:
+          - backendRefs:
+              - identifier: app
+                port: *port
 
     persistence:
       pgdata:
