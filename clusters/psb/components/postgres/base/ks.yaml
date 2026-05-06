@@ -3,30 +3,28 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: tracearr
+  name: ${APP}-db
+  namespace: flux-system
 spec:
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: tracearr
-  components:
-    - ../../../../components/dragonfly
-    - ../../../../components/postgres/pass
-    - ../../../../components/postgres/patch
   dependsOn:
-    - name: dragonfly-operator
-      namespace: database
     - name: postgres-cluster
       namespace: flux-system
+  healthChecks:
+    - apiVersion: postgresql.cnpg.io/v1
+      kind: Database
+      name: postgres-${APP}
+      namespace: database
   interval: 1h
-  path: "./clusters/psb/apps/media/tracearr/app"
+  path: ./clusters/psb/components/postgres/base/database
   postBuild:
     substitute:
-      APP: tracearr
+      APP: ${APP}
   prune: true
+  retryInterval: 2m
   sourceRef:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
-  targetNamespace: media
+  targetNamespace: database
   timeout: 5m
   wait: false

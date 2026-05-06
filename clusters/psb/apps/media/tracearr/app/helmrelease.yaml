@@ -41,8 +41,8 @@ spec:
               DATABASE_URL:
                 valueFrom:
                   secretKeyRef:
-                    name: tracearr-secret
-                    key: DATABASE_URL
+                    name: tracearr-postgres
+                    key: url
             probes:
               liveness: &probes
                 enabled: true
@@ -69,32 +69,6 @@ spec:
               limits:
                 memory: 1Gi
 
-      timescaledb:
-        containers:
-          timescaledb:
-            image:
-              repository: timescale/timescaledb-ha
-              tag: pg17-all-amd64
-            env:
-              POSTGRES_DB: tracearr
-              POSTGRES_USER: tracearr
-              POSTGRES_PASSWORD:
-                valueFrom:
-                  secretKeyRef:
-                    name: tracearr-secret
-                    key: TIMESCALEDB_PASSWORD
-            securityContext:
-              allowPrivilegeEscalation: false
-              capabilities:
-                drop:
-                  - ALL
-            resources:
-              requests:
-                cpu: 50m
-                memory: 512Mi
-              limits:
-                memory: 2Gi
-
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
@@ -109,11 +83,6 @@ spec:
         ports:
           http:
             port: *port
-      timescaledb:
-        controller: timescaledb
-        ports:
-          postgres:
-            port: 5432
 
     route:
       app:
@@ -128,12 +97,6 @@ spec:
                 port: *port
 
     persistence:
-      pgdata:
-        existingClaim: tracearr
-        advancedMounts:
-          timescaledb:
-            timescaledb:
-              - path: /home/postgres/pgdata
       tmpfs:
         type: emptyDir
         advancedMounts:

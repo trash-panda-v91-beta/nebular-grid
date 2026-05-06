@@ -1,0 +1,15 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/generators.external-secrets.io/clustergenerator_v1alpha1.json
+apiVersion: generators.external-secrets.io/v1alpha1
+kind: ClusterGenerator
+metadata:
+  name: pw
+  namespace: external-secrets
+spec:
+  kind: Password
+  generator:
+    passwordSpec:
+      length: 32
+      symbols: 0
+      noUpper: false
+      allowRepeat: true

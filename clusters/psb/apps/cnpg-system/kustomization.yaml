@@ -2,11 +2,10 @@
 # yaml-language-server: $schema=https://json.schemastore.org/kustomization
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-namespace: database
+namespace: cnpg-system
 components:
   - ../../components/flux-alerts
 resources:
   - ./namespace.yaml
-  - ./mosquitto/ks.yaml
-  - ./dragonfly-operator/ks.yaml
-  - ./postgres/ks.yaml
+  - ./cloudnative-pg/ks.yaml
+  - ./cloudnative-pg/plugin-barman-cloud/ks.yaml
