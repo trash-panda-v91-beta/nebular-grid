@@ -105,6 +105,7 @@ spec:
 
     service:
       app:
+        controller: tracearr
         ports:
           http:
             port: *port
