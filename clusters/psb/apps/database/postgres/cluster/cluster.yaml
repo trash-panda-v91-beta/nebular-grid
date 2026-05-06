@@ -9,7 +9,7 @@ metadata:
 spec:
   instances: 2
 
-  imageName: docker.io/timescale/timescaledb-ha:pg18-all-amd64
+  imageName: docker.io/timescale/timescaledb-ha:pg18-all-amd64@sha256:ae72553bcb62b1e9e430d5760f30ac612eb88f846904fc38b2b753b791173450
 
   bootstrap:
     initdb:
