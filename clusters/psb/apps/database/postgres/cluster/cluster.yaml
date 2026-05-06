@@ -9,7 +9,7 @@ metadata:
 spec:
   instances: 2
 
-  imageName: ghcr.io/cloudnative-pg/postgresql:18.3-standard-bookworm@sha256:7dafe75a2a0033ae0d91540ce151367aae0c28ef50c8cc6c060092cd22f33b1d
+  imageName: ghcr.io/cloudnative-pg/postgresql:18.3-standard-trixie@sha256:81bad466fe006454482678c6c67a24c1e30454b519011e0196cba2e4c83e1e1a
 
   bootstrap:
     initdb:
@@ -41,7 +41,7 @@ spec:
     extensions:
       - name: timescaledb
         image:
-          reference: ghcr.io/shusaan/timescaledb-testing:2.24.0-18-bookworm@sha256:c70de2380b2acc5237a94be662e362694361216373afb04161eb0e76de79a698
+          reference: ghcr.io/shusaan/timescaledb-testing:2.23.1-18-trixie@sha256:e06e12e4dc1df9d427b22a7cbab19ef9b800552d712a439e948fcc4efacf67d4
 
   managed:
     roles: []
