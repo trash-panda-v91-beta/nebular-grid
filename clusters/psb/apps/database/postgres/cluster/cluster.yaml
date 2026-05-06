@@ -9,7 +9,7 @@ metadata:
 spec:
   instances: 2
 
-  imageName: docker.io/timescale/timescaledb-ha:pg18-all-amd64@sha256:ae72553bcb62b1e9e430d5760f30ac612eb88f846904fc38b2b753b791173450
+  imageName: ghcr.io/cloudnative-pg/postgresql:18.3-standard-bookworm@sha256:7dafe75a2a0033ae0d91540ce151367aae0c28ef50c8cc6c060092cd22f33b1d
 
   bootstrap:
     initdb:
@@ -38,6 +38,10 @@ spec:
     parameters:
       timescaledb.telemetry_level: "off"
       max_locks_per_transaction: "128"
+    extensions:
+      - name: timescaledb
+        image:
+          reference: ghcr.io/shusaan/timescaledb-testing:2.24.0-18-bookworm@sha256:c70de2380b2acc5237a94be662e362694361216373afb04161eb0e76de79a698
 
   managed:
     roles: []
