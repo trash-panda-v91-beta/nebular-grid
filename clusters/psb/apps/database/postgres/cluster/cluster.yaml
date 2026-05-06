@@ -44,4 +44,11 @@ spec:
           reference: ghcr.io/shusaan/timescaledb-testing:2.23.1-18-trixie@sha256:e06e12e4dc1df9d427b22a7cbab19ef9b800552d712a439e948fcc4efacf67d4
 
   managed:
-    roles: []
+    roles:
+      - name: tracearr
+        ensure: present
+        login: true
+        superuser: false
+        disablePassword: false
+        passwordSecret:
+          name: tracearr-postgres
