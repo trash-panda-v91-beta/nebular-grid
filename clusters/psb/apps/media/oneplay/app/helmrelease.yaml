@@ -41,8 +41,6 @@ spec:
               PIN: "1621"
               PROFILE_PIN: "4321"
               DEBUG: 0
-              # AUTH_USER: ""  # Uncomment to enable basic auth for web UI
-              # AUTH_PASS: ""
             probes:
               liveness:
                 enabled: true
@@ -69,7 +67,7 @@ spec:
               requests:
                 cpu: 50m
                 memory: 128Mi
-limits:
+              limits:
                 memory: 512Mi
     defaultPodOptions:
       securityContext:
@@ -83,10 +81,3 @@ limits:
         ports:
           http:
             port: *port
-    route:
-      app:
-        hostnames:
-          - oneplay.nebular-grid.space
-        parentRefs:
-          - name: envoy-internal
-            namespace: network
