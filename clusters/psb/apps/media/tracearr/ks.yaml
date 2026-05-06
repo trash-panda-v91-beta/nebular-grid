@@ -16,7 +16,7 @@ spec:
     - name: dragonfly-operator
       namespace: database
     - name: postgres-cluster
-      namespace: flux-system
+      namespace: database
   interval: 1h
   path: "./clusters/psb/apps/media/tracearr/app"
   postBuild:
