@@ -15,3 +15,4 @@ resources:
   - ./mumc/ks.yaml
   - ./maintainerr/ks.yaml
   - ./oneplay/ks.yaml
+  - ./tracearr/ks.yaml

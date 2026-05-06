@@ -1,0 +1,140 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: tracearr
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: tracearr
+  interval: 30m
+  values:
+    controllers:
+      tracearr:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        containers:
+          app:
+            image:
+              repository: ghcr.io/connorgallopo/tracearr
+              tag: 1.4.27@sha256:4802c793336ec2393de8db1088b0c8aa170c8b8b0aa7bba33a56a599c5d72544
+            env:
+              TZ: Europe/Prague
+              NODE_ENV: production
+              PORT: &port 3000
+              HOST: 0.0.0.0
+              LOG_LEVEL: info
+              CORS_ORIGIN: https://tracearr.nebular-grid.space
+              TRUST_PROXY: "true"
+              REDIS_URL: redis://tracearr-dragonfly.media.svc.cluster.local:6379
+              JWT_SECRET:
+                valueFrom:
+                  secretKeyRef:
+                    name: tracearr-secret
+                    key: JWT_SECRET
+              COOKIE_SECRET:
+                valueFrom:
+                  secretKeyRef:
+                    name: tracearr-secret
+                    key: COOKIE_SECRET
+              DATABASE_URL:
+                valueFrom:
+                  secretKeyRef:
+                    name: tracearr-secret
+                    key: DATABASE_URL
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /health
+                    port: *port
+              readiness: *probes
+              startup:
+                enabled: true
+                spec:
+                  failureThreshold: 30
+                  periodSeconds: 10
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - ALL
+            resources:
+              requests:
+                cpu: 10m
+              limits:
+                memory: 1Gi
+
+      timescaledb:
+        containers:
+          timescaledb:
+            image:
+              repository: timescale/timescaledb-ha
+              tag: pg17-latest
+            env:
+              POSTGRES_DB: tracearr
+              POSTGRES_USER: tracearr
+              POSTGRES_PASSWORD:
+                valueFrom:
+                  secretKeyRef:
+                    name: tracearr-secret
+                    key: TIMESCALEDB_PASSWORD
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop:
+                  - ALL
+            resources:
+              requests:
+                cpu: 50m
+                memory: 512Mi
+              limits:
+                memory: 2Gi
+
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+
+    service:
+      app:
+        ports:
+          http:
+            port: *port
+      timescaledb:
+        controller: timescaledb
+        ports:
+          postgres:
+            port: 5432
+
+    route:
+      app:
+        hostnames:
+          - tracearr.nebular-grid.space
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+
+    persistence:
+      pgdata:
+        existingClaim: tracearr
+        advancedMounts:
+          timescaledb:
+            timescaledb:
+              - path: /home/postgres/pgdata
+      tmpfs:
+        type: emptyDir
+        advancedMounts:
+          tracearr:
+            app:
+              - path: /app/data/image-cache
+                subPath: cache
+              - path: /tmp
+                subPath: tmp
