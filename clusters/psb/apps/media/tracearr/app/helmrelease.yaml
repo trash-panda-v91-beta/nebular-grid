@@ -74,7 +74,7 @@ spec:
           timescaledb:
             image:
               repository: timescale/timescaledb-ha
-              tag: pg17-latest
+              tag: pg17-all-amd64
             env:
               POSTGRES_DB: tracearr
               POSTGRES_USER: tracearr
