@@ -34,6 +34,7 @@ spec:
             env:
               QBT_WEBUI_PORT: &port 8080
               QBT_TORRENTING_PORT: 51478
+              QBT_LISTEN_INTERFACES: 10.1.5.10:51478
             nameOverride: qbittorrent
             probes:
               liveness:
