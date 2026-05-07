@@ -1,0 +1,2 @@
+[secrets]
+TRUENAS_API_KEY = { provider = "onepass", value = "op://NebularGrid/ASC Nebular Grid API Key/credential" }
