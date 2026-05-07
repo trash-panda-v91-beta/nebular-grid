@@ -16,7 +16,7 @@ spec:
           oneplay:
             image:
               repository: ghcr.io/waladir/script.oneplay.server
-              tag: latest
+              tag: 1.5.1@sha256:5faf4c9600f6bc423eff8abb3f007a2f5ed70dd7
             env:
               TZ: Europe/Prague
               USERNAME:
