@@ -52,3 +52,10 @@ spec:
         disablePassword: false
         passwordSecret:
           name: tracearr-postgres
+      - name: immich
+        ensure: present
+        login: true
+        superuser: false
+        disablePassword: false
+        passwordSecret:
+          name: immich-postgres
