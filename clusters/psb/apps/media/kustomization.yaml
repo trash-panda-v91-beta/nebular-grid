@@ -16,3 +16,4 @@ resources:
   - ./oneplay/ks.yaml
   - ./tracearr/ks.yaml
   - ./immich/ks.yaml
+  - ./immich/ks-db-patch.yaml

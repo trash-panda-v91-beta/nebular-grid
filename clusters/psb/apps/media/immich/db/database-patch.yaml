@@ -1,0 +1,16 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: postgres-immich
+  namespace: database
+spec:
+  extensions:
+    - name: timescaledb
+      ensure: present
+    - name: vector
+      ensure: present
+    - name: cube
+      ensure: present
+    - name: earthdistance
+      ensure: present
