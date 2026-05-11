@@ -10,11 +10,14 @@ spec:
       app.kubernetes.io/name: immich
   components:
     - ../../../../components/dragonfly
+    - ../../../../components/gpu
     - ../../../../components/postgres/pass
     - ../../../../components/postgres/patch
   dependsOn:
     - name: dragonfly-operator
       namespace: database
+    - name: intel-gpu-resource-driver
+      namespace: kube-system
     - name: postgres-cluster
       namespace: database
   interval: 1h
