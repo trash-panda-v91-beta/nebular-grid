@@ -11,9 +11,7 @@ resources:
   - ./plex/ks.yaml
   - ./jellyfin/ks.yaml
   - ./seerr/ks.yaml
-  - ./dispatcharr/ks.yaml
   - ./maintainerr/ks.yaml
-  - ./oneplay/ks.yaml
   - ./tracearr/ks.yaml
   - ./immich/ks.yaml
   - ./immich/ks-db-patch.yaml
