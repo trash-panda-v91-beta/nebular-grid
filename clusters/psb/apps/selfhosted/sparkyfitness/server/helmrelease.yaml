@@ -1,0 +1,91 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: sparkyfitness
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: sparkyfitness
+  interval: 30m
+  values:
+    defaultPodOptions:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        runAsNonRoot: true
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+    controllers:
+      sparkyfitness:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        containers:
+          app:
+            image:
+              repository: ghcr.io/codewithcj/sparkyfitness-server
+              tag: v0.16.6.1
+            env:
+              SPARKY_FITNESS_DB_NAME: sparkyfitness
+              SPARKY_FITNESS_DB_USER:
+                valueFrom:
+                  secretKeyRef:
+                    name: sparkyfitness-postgres
+                    key: username
+              SPARKY_FITNESS_DB_PASSWORD:
+                valueFrom:
+                  secretKeyRef:
+                    name: sparkyfitness-postgres
+                    key: password
+              SPARKY_FITNESS_APP_DB_USER:
+                valueFrom:
+                  secretKeyRef:
+                    name: sparkyfitness-postgres
+                    key: username
+              SPARKY_FITNESS_APP_DB_PASSWORD:
+                valueFrom:
+                  secretKeyRef:
+                    name: sparkyfitness-postgres
+                    key: password
+              SPARKY_FITNESS_DB_HOST: postgres-rw.database.svc.cluster.local
+              SPARKY_FITNESS_FRONTEND_URL: https://fitness.nebular-grid.space
+              SPARKY_FITNESS_DISABLE_SIGNUP: "false"
+              NODE_ENV: production
+              SERVER_UPLOADS_PATH: /uploads
+            envFrom:
+              - secretRef:
+                  name: sparkyfitness-secrets
+            probes:
+              liveness:
+                enabled: true
+              readiness:
+                enabled: true
+            resources:
+              requests:
+                cpu: 20m
+                memory: 384Mi
+              limits:
+                memory: 768Mi
+    service:
+      app:
+        controller: sparkyfitness
+        ports:
+          http:
+            port: 3010
+    persistence:
+      uploads:
+        existingClaim: sparkyfitness-uploads
+        advancedMounts:
+          sparkyfitness:
+            app:
+              - path: /app/SparkyFitnessServer/uploads
+      tmp:
+        type: emptyDir
+        advancedMounts:
+          sparkyfitness:
+            app:
+              - path: /tmp
+                subPath: tmp
+              - path: /app/SparkyFitnessServer/temp_uploads
+                subPath: temp_uploads
