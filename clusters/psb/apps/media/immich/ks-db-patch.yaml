@@ -8,7 +8,7 @@ metadata:
 spec:
   dependsOn:
     - name: immich-db
-      namespace: flux-system
+      namespace: media
   interval: 1h
   path: "./clusters/psb/apps/media/immich/db"
   prune: true
