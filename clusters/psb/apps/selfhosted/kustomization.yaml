@@ -10,3 +10,4 @@ resources:
   - ./actual/ks.yaml
   - ./paperless/ks.yaml
   - ./sparkyfitness/ks.yaml
+  - ./sparkyfitness/ks-db-patch.yaml
