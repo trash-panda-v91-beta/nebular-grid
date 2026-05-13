@@ -6,7 +6,7 @@ metadata:
   name: r2-store
 spec:
   configuration:
-    destinationPath: s3://psb-cnpg/
+    destinationPath: s3://psb-postgres/
     endpointURL: ${ENDPOINT}
     s3Credentials:
       accessKeyId:
