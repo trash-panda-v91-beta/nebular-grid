@@ -14,10 +14,7 @@ spec:
     - type: External
       external:
         metric:
-          name: probe_success
-          selector:
-            matchLabels:
-              instance: asc.internal:2049
+          name: probe_success_nfs
         target:
           type: Value
           value: "1"

@@ -14,10 +14,7 @@ spec:
     - type: External
       external:
         metric:
-          name: probe_success
-          selector:
-            matchLabels:
-              instance: zigbee-adapter.drr.nws.internal
+          name: probe_success_zigbee
         target:
           type: Value
           value: "1"
