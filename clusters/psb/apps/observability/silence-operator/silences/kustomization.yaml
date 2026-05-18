@@ -5,4 +5,4 @@ kind: Kustomization
 resources:
   - ./asc_memory_usage.yaml
   - ./cephnodediskspacewarning.yaml
-  - ./keda_hpa_maxed_out.yaml
+  - ./hpa_maxed_out.yaml

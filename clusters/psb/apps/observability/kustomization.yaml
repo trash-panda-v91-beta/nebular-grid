@@ -8,6 +8,7 @@ components:
 resources:
   - ./namespace.yaml
   - ./blackbox-exporter/ks.yaml
+  - ./prometheus-adapter/ks.yaml
   - ./fluent-bit/ks.yaml
   - ./grafana/ks.yaml
   - ./kromgo/ks.yaml
