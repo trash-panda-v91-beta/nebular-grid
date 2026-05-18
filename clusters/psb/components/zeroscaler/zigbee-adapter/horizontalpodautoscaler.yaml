@@ -17,7 +17,6 @@ spec:
           name: probe_success
           selector:
             matchLabels:
-              job: probe/observability/devices
               instance: zigbee-adapter.drr.nws.internal
         target:
           type: Value
