@@ -1,0 +1,45 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: immich-watch-upload
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: immich-watch-upload
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: immich-watch-upload
+    spec:
+      securityContext:
+        fsGroup: 2000
+        fsGroupChangePolicy: OnRootMismatch
+      containers:
+        - name: watcher
+          image: ghcr.io/trash-panda-v91-beta/immich-tools:latest
+          args: ["watch-upload"]
+          env:
+            - name: IMMICH_URL
+              value: http://immich-server.media.svc.cluster.local:2283
+            - name: IMMICH_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: immich-tools-secret
+                  key: api_key
+            - name: WATCH_DIR
+              value: /upload
+          volumeMounts:
+            - name: upload
+              mountPath: /upload
+          resources:
+            requests:
+              cpu: 10m
+              memory: 32Mi
+            limits:
+              memory: 64Mi
+      volumes:
+        - name: upload
+          persistentVolumeClaim:
+            claimName: immich-upload
