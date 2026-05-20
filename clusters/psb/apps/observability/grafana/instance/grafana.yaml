@@ -1,0 +1,96 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/grafana.integreatly.org/grafana_v1beta1.json
+apiVersion: grafana.integreatly.org/v1beta1
+kind: Grafana
+metadata:
+  name: grafana
+  labels:
+    dashboards: grafana
+spec:
+  config:
+    analytics:
+      check_for_updates: "false"
+      check_for_plugin_updates: "false"
+      feedback_links_enabled: "false"
+      reporting_enabled: "false"
+    auth:
+      disable_login_form: "false"
+    date_formats:
+      use_browser_locale: "true"
+    explore:
+      enabled: "true"
+    feature_toggles:
+      enable: publicDashboards
+    log:
+      mode: console
+    metrics:
+      enabled: "true"
+    news:
+      news_feed_enabled: "false"
+    plugins:
+      allow_loading_unsigned_plugins: natel-discrete-panel,pr0ps-trackmap-panel,panodata-map-panel
+      plugin_admin_enabled: "false"
+    security:
+      angular_support_enabled: "true"
+      cookie_samesite: grafana
+    server:
+      enable_gzip: "true"
+      root_url: https://grafana.nebular-grid.space
+  disableDefaultAdminSecret: true
+  disableDefaultSecurityContext: All
+  deployment:
+    spec:
+      strategy:
+        type: Recreate
+      template:
+        spec:
+          containers:
+            - name: grafana
+              env:
+                - name: GF_SECURITY_ADMIN_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: grafana-admin-secret
+                      key: admin-password
+                - name: GF_SECURITY_ADMIN_USER
+                  valueFrom:
+                    secretKeyRef:
+                      name: grafana-admin-secret
+                      key: admin-user
+              resources:
+                requests:
+                  cpu: 50m
+                  memory: 128Mi
+                limits:
+                  memory: 512Mi
+              securityContext:
+                allowPrivilegeEscalation: false
+                readOnlyRootFilesystem: true
+                capabilities:
+                  drop:
+                    - ALL
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 2000
+            runAsGroup: 2000
+            fsGroup: 2000
+            fsGroupChangePolicy: OnRootMismatch
+          volumes:
+            - name: grafana-data
+              persistentVolumeClaim:
+                claimName: grafana-pvc
+  httpRoute:
+    spec:
+      hostnames:
+        - grafana.nebular-grid.space
+      parentRefs:
+        - name: envoy-internal
+          namespace: network
+  persistentVolumeClaim:
+    spec:
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: 5Gi
+      storageClassName: ceph-block
