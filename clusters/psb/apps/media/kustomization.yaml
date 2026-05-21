@@ -15,3 +15,4 @@ resources:
   - ./immich/ks.yaml
   - ./immich/ks-db-patch.yaml
   - ./immich-tools/ks.yaml
+  - ./immich-frame/ks.yaml
