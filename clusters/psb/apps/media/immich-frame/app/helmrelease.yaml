@@ -20,14 +20,8 @@ spec:
               repository: ghcr.io/immichframe/immichframe
               tag: v1.0.33.0@sha256:1680d2f63a89fa0db6e5a7c5c497bed27a47f314efe18e1f11cff1dea1910f57
             env:
-              TZ: America/Chicago
-              ImmichServerUrl: http://immich-server.media.svc.cluster.local:2283
-              ClockFormat: "HH:mm"
-              PhotoDateFormat: "yyyy-MM-dd"
-              UnitSystem: metric
-            envFrom:
-              - secretRef:
-                  name: immich-frame-secret
+              TZ: Europe/Prague
+              IMMICHFRAME_CONFIG_PATH: /config
             securityContext:
               allowPrivilegeEscalation: false
               capabilities:
@@ -54,6 +48,15 @@ spec:
         ports:
           http:
             port: &port 8080
+
+    persistence:
+      config:
+        type: secret
+        name: immich-frame-secret
+        globalMounts:
+          - path: /config/Settings.yml
+            subPath: Settings.yml
+            readOnly: true
 
     route:
       app:
