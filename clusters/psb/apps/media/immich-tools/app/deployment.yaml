@@ -18,7 +18,7 @@ spec:
         fsGroupChangePolicy: OnRootMismatch
       containers:
         - name: watcher
-          image: ghcr.io/trash-panda-v91-beta/immich-tools:latest
+          image: ghcr.io/trash-panda-v91-beta/immich-tools:main
           args: ["watch-upload"]
           env:
             - name: IMMICH_URL
