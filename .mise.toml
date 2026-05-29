@@ -1,8 +1,8 @@
 [env]
 _.fnox-env = { tools = true }
+KUBECONFIG = "{{config_root}}/kubeconfig"
 MINIJINJA_CONFIG_FILE = "{{config_root}}/.minijinja.toml"
 TALOSCONFIG = "{{config_root}}/talosconfig"
-KUBECONFIG = "{{config_root}}/kubeconfig"
 
 [plugins]
 fnox-env = "https://github.com/jdx/mise-env-fnox"
