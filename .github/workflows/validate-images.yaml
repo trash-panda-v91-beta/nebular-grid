@@ -1,0 +1,107 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+name: Validate Images
+
+on:
+  pull_request:
+    branches:
+      - main
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  filter-changes:
+    name: Filter changes
+    runs-on: ubuntu-latest
+    outputs:
+      changed-files: ${{ steps.changed-files.outputs.changed_files }}
+    steps:
+      - name: Get changed files
+        id: changed-files
+        uses: bjw-s-labs/action-changed-files@a9a36fb08ce06db9b02fbd8026cc2c0945eb9841 # v0.6.0
+        with:
+          patterns: |-
+            clusters/**/*
+
+  extract-images:
+    if: ${{ needs.filter-changes.outputs.changed-files != '[]' }}
+    name: Extract Images
+    runs-on: ubuntu-latest
+    needs:
+      - filter-changes
+    outputs:
+      images: ${{ steps.extract-images.outputs.images }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Install flate
+        uses: home-operations/flate/action@13917764cfe2966e22510118ccf2f77d3c4d74ba # 0.2.12
+        with:
+          token: ${{ github.token }}
+
+      - name: Extract Images
+        id: extract-images
+        env:
+          FLATE_OUTPUT: json
+          FLATE_PATH: ./clusters/psb/flux/cluster
+        run: |
+          images=$(flate diff images)
+          echo "Changed images:"
+          echo "${images}" | yq --prettyPrint
+
+          # Ensure matrix is never empty to prevent GitHub from blocking downstream jobs
+          if [ "${images}" = "[]" ]; then
+              images='["__skip__"]'
+          fi
+
+          {
+            echo 'images<<EOF'
+            echo "${images}"
+            echo 'EOF'
+          } >> "${GITHUB_OUTPUT}"
+
+  image-availability-check:
+    name: Image Availability Check
+    runs-on: ubuntu-latest
+    needs:
+      - extract-images
+    strategy:
+      matrix:
+        image: ${{ fromJSON(needs.extract-images.outputs.images) }}
+      max-parallel: 4
+      fail-fast: false
+    env:
+      MATRIX_IMAGE: ${{ matrix.image }}
+    steps:
+      - name: Validate Image Availability
+        run: |
+          if [ "${MATRIX_IMAGE}" = "__skip__" ]; then
+              echo "No new images to validate"
+              exit 0
+          fi
+          docker pull "${MATRIX_IMAGE}"
+
+  validation-result:
+    needs:
+      - extract-images
+      - image-availability-check
+    if: ${{ !cancelled() }}
+    name: Validation Result
+    runs-on: ubuntu-latest
+    steps:
+      - name: Any jobs failed?
+        if: ${{ contains(needs.*.result, 'failure') }}
+        run: exit 1
+
+      - name: All jobs passed or skipped?
+        if: ${{ !contains(needs.*.result, 'failure') }}
+        run: echo "All jobs passed or skipped" && echo "${{ toJSON(needs.*.result) }}"
