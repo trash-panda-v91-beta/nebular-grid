@@ -33,6 +33,7 @@ spec:
     labels:
       app.kubernetes.io/name: rook-ceph
   dependsOn:
+    - name: ceph-csi-drivers
     - name: rook-ceph
     - name: volsync
       namespace: system
