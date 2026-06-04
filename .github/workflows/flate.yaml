@@ -44,6 +44,14 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
+      - name: Generate Token
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        if: ${{ github.event.pull_request.head.repo.full_name == github.repository }}
+        id: app-token
+        with:
+          app-id: ${{ vars.CI_APP_ID }}
+          private-key: ${{ secrets.CI_APP_PRIVATE_KEY }}
+
       - name: Install mise
         uses: jdx/mise-action@dba19683ed58901619b14f395a24841710cb4925 # v4
 
@@ -58,14 +66,6 @@ jobs:
             echo "${diff}"
             echo 'EOF'
           } >> "${GITHUB_OUTPUT}"
-
-      - name: Generate Token
-        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
-        if: ${{ github.event.pull_request.head.repo.full_name == github.repository && steps.diff.outputs.diff != '' }}
-        id: app-token
-        with:
-          app-id: ${{ vars.CI_APP_ID }}
-          private-key: ${{ secrets.CI_APP_PRIVATE_KEY }}
 
       - name: Add Comment
         if: ${{ steps.diff.outputs.diff != '' }}
