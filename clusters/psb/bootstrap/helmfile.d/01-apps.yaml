@@ -59,15 +59,6 @@ releases:
     needs:
       - kube-system/coredns
 
-  - name: spegel
-    namespace: system
-    chart: oci://ghcr.io/spegel-org/helm-charts/spegel
-    version: 0.7.1
-    values:
-      - templates/values.yaml.gotmpl
-    needs:
-      - kube-system/coredns
-
   - name: external-secrets
     namespace: external-secrets
     chart: oci://ghcr.io/external-secrets/charts/external-secrets

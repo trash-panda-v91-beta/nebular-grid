@@ -12,8 +12,6 @@ spec:
   values:
     controllers:
       kromgo:
-        replicas: 1
-        strategy: RollingUpdate
         annotations:
           reloader.stakater.com/auto: "true"
         pod:
@@ -31,14 +29,12 @@ spec:
         containers:
           kromgo:
             image:
-              repository: ghcr.io/kashalls/kromgo
-              tag: v0.10.0
+              repository: ghcr.io/home-operations/kromgo
+              tag: 0.14.0@sha256:94ee0e2561048dc4637ca21b9926b76d87c15baf951678c7febb852269b7e10b
             env:
               PROMETHEUS_URL: http://prometheus-operated.observability.svc.cluster.local:9090
-              SERVER_HOST: 0.0.0.0
               SERVER_PORT: &port 8080
-              HEALTH_HOST: 0.0.0.0
-              HEALTH_PORT: &hport 8888
+              HEALTH_PORT: &healthPort 8888
             probes:
               liveness: &probes
                 enabled: true
@@ -46,7 +42,7 @@ spec:
                 spec:
                   httpGet:
                     path: /readyz
-                    port: *hport
+                    port: *healthPort
                   initialDelaySeconds: 0
                   periodSeconds: 10
                   timeoutSeconds: 1
@@ -71,13 +67,13 @@ spec:
             primary: true
             port: *port
           health:
-            port: *hport
+            port: *healthPort
     persistence:
       config-file:
         type: configMap
         name: kromgo-configmap
         globalMounts:
-          - path: /kromgo/config.yaml
+          - path: /config/config.yaml
             subPath: config.yaml
     route:
       app:
