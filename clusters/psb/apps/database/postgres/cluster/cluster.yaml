@@ -59,10 +59,3 @@ spec:
         disablePassword: false
         passwordSecret:
           name: immich-postgres
-      - name: sparkyfitness
-        ensure: present
-        login: true
-        superuser: false
-        disablePassword: false
-        passwordSecret:
-          name: sparkyfitness-postgres
