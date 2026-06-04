@@ -80,7 +80,7 @@ jobs:
         with:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
           header: flate
-          message: |
+          message: |-
             <details open>
               <summary>Changes:</summary>
 
