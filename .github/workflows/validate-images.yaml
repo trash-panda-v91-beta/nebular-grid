@@ -43,16 +43,13 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
-      - name: Install flate
-        uses: home-operations/flate/action@13917764cfe2966e22510118ccf2f77d3c4d74ba # 0.2.12
-        with:
-          token: ${{ github.token }}
+      - name: Install mise
+        uses: jdx/mise-action@1648a7812b9aeae629881980618f079932869151 # v4
 
       - name: Extract Images
         id: extract-images
         env:
           FLATE_OUTPUT: json
-          FLATE_PATH: ./clusters/psb/flux/cluster
         run: |
           images=$(flate diff images)
           echo "Changed images:"

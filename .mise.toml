@@ -1,5 +1,6 @@
 [env]
 _.fnox-env = { tools = true }
+FLATE_PATH = "{{config_root}}/clusters/psb/flux/cluster"
 KUBECONFIG = "{{config_root}}/kubeconfig"
 MINIJINJA_CONFIG_FILE = "{{config_root}}/.minijinja.toml"
 TALOSCONFIG = "{{config_root}}/talosconfig"
@@ -9,6 +10,7 @@ fnox-env = "https://github.com/jdx/mise-env-fnox"
 
 [tools]
 actionlint = "1.7.12"
+"github:home-operations/flate" = "0.2.12"
 fnox = "1.25.1"
 helm = "4.2.0"
 helmfile = "1.5.2"
@@ -31,3 +33,7 @@ run = "hk check --all"
 [tasks.fix]
 description = "Fix all issues"
 run = "hk fix --all"
+
+[tasks."flate:diff"]
+description = "Show rendered diff of cluster changes vs main"
+run = "flate diff all"
