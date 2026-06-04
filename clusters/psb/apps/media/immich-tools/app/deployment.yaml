@@ -19,7 +19,8 @@ spec:
       containers:
         - name: watcher
           image: ghcr.io/trash-panda-v91-beta/immich-tools:7f6c917
-          args: ["watch-upload"]
+          args:
+            - "watch-upload"
           env:
             - name: IMMICH_URL
               value: http://immich-server.media.svc.cluster.local:2283
