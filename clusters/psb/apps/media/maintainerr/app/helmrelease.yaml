@@ -35,9 +35,9 @@ spec:
                   httpGet:
                     path: /api/health/liveness
                     port: 6246
-                  initialDelaySeconds: 10
+                  initialDelaySeconds: 60
                   periodSeconds: 10
-                  failureThreshold: 3
+                  failureThreshold: 5
               readiness:
                 enabled: true
                 custom: true
@@ -45,9 +45,9 @@ spec:
                   httpGet:
                     path: /api/health/readiness
                     port: 6246
-                  initialDelaySeconds: 10
+                  initialDelaySeconds: 30
                   periodSeconds: 10
-                  failureThreshold: 3
+                  failureThreshold: 5
             resources:
               requests:
                 cpu: 5m
