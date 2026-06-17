@@ -9,7 +9,6 @@ spec:
     labels:
       app.kubernetes.io/name: konflate
   dependsOn:
-    - name: external-secrets
     - name: flux-operator
   interval: 1h
   path: ./clusters/psb/apps/flux-system/konflate/app
