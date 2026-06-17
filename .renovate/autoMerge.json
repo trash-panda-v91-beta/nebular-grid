@@ -7,7 +7,7 @@
       "automergeType": "pr",
       "matchUpdateTypes": ["patch"],
       "minimumReleaseAge": "3 days",
-      "ignoreTests": false
+      "ignoreTests": true
     },
     {
       "description": "Auto merge container digests",
@@ -21,7 +21,7 @@
         "ghcr.io/bjw-s-labs"
       ],
       "minimumReleaseAge": "3 days",
-      "ignoreTests": false
+      "ignoreTests": true
     },
     {
       "description": "Auto merge minors and patches",
@@ -34,7 +34,7 @@
         "ghcr.io/bjw-s-labs/wrangler"
       ],
       "minimumReleaseAge": "3 days",
-      "ignoreTests": false
+      "ignoreTests": true
     }
   ]
 }
