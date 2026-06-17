@@ -33,7 +33,8 @@
       "automerge": true,
       "automergeType": "pr",
       "matchUpdateTypes": ["minor", "patch", "digest"],
-      "minimumReleaseAge": "3 days"
+      "minimumReleaseAge": "3 days",
+      "ignoreTests": true
     }
   ]
 }
