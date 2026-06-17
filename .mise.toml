@@ -20,7 +20,7 @@ uv = "0.11.21"
 yamlfmt = "0.21.0"
 yamllint = "1.38.0"
 yq = "4.53.3"
-"github:mitsuhiko/minijinja[minijinja-cli]" = "2.20.0"
+"github:mitsuhiko/minijinja[minijinja-cli]" = "2.21.0"
 
 [settings.pipx]
 uvx = true
