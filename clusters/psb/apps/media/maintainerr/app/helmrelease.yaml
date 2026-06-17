@@ -33,7 +33,7 @@ spec:
                 custom: true
                 spec:
                   httpGet:
-                    path: /api/health/liveness
+                    path: /api/health/live
                     port: 6246
                   initialDelaySeconds: 60
                   periodSeconds: 10
@@ -43,7 +43,7 @@ spec:
                 custom: true
                 spec:
                   httpGet:
-                    path: /api/health/readiness
+                    path: /api/health/ready
                     port: 6246
                   initialDelaySeconds: 30
                   periodSeconds: 10
