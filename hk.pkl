@@ -9,10 +9,6 @@ local linters = new Mapping<String, Step> {
   ["yamlfmt"] = Builtins.yamlfmt
   ["pkl"] = Builtins.pkl
   ["pkl-format"] = Builtins.pkl_format
-  ["flate"] {
-    check = "flate test all"
-    exclusive = true
-  }
 }
 
 hooks {

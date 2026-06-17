@@ -10,7 +10,6 @@ fnox-env = "https://github.com/jdx/mise-env-fnox"
 
 [tools]
 actionlint = "1.7.12"
-"github:home-operations/flate" = "v0.4.6"
 fnox = "1.26.0"
 helm = "4.2.1"
 helmfile = "1.5.3"
@@ -33,7 +32,3 @@ run = "hk check --all"
 [tasks.fix]
 description = "Fix all issues"
 run = "hk fix --all"
-
-[tasks."flate:diff"]
-description = "Show rendered diff of cluster changes vs main"
-run = "flate diff all"
