@@ -33,4 +33,4 @@ spec:
       matches:
         - path:
             type: PathPrefix
-            value: /webhook
+            value: /hooks
