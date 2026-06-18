@@ -11,7 +11,7 @@ fnox-env = "https://github.com/jdx/mise-env-fnox"
 [tools]
 actionlint = "1.7.12"
 fnox = "1.26.0"
-helm = "4.2.1"
+helm = "4.2.2"
 helmfile = "1.5.5"
 hk = "1.48.0"
 kustomize = "5.8.1"
