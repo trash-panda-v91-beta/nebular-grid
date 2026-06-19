@@ -30,10 +30,8 @@ spec:
               # Web search
               ENABLE_RAG_WEB_SEARCH: "false"
               ENABLE_SEARCH_QUERY: "false"
-              # Websockets
+              # Websockets - single replica, no Redis manager needed
               ENABLE_WEBSOCKET_SUPPORT: "true"
-              WEBSOCKET_MANAGER: redis
-              WEBSOCKET_REDIS_URL: redis://open-webui-dragonfly.ai.svc.cluster.local:6379
             envFrom:
               - secretRef:
                   name: open-webui-secret
