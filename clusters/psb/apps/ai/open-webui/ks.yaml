@@ -8,9 +8,18 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: open-webui
+  components:
+    - ../../../../components/dragonfly
   dependsOn:
     - name: ollama
       namespace: ai
+    - name: dragonfly-operator
+      namespace: database
+  healthCheckExprs:
+    - apiVersion: dragonflydb.io/v1alpha1
+      kind: Dragonfly
+      failed: status.phase != 'ready'
+      current: status.phase == 'ready'
   interval: 1h
   path: ./clusters/psb/apps/ai/open-webui/app
   postBuild:
