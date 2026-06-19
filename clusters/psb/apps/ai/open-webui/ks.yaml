@@ -8,9 +8,13 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: open-webui
+  components:
+    - ../../../../components/dragonfly
   dependsOn:
     - name: ollama
       namespace: ai
+    - name: dragonfly-operator
+      namespace: database
   interval: 1h
   path: ./clusters/psb/apps/ai/open-webui/app
   postBuild:
