@@ -12,7 +12,7 @@ spec:
     - ../../../../components/dragonfly
   dependsOn:
     - name: ollama
-      namespace: flux-system
+      namespace: ai
     - name: dragonfly-operator
       namespace: database
   healthCheckExprs:
