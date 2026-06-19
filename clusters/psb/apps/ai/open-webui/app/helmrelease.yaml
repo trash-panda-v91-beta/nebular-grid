@@ -47,26 +47,14 @@ spec:
         globalMounts:
           - path: /app/backend/data
     route:
-      internal:
+      app:
         hostnames:
           - chat.nebular-grid.space
         parentRefs:
           - name: envoy-internal
             namespace: network
-        rules:
-          - backendRefs:
-              - identifier: app
-                port: http
-      external:
-        hostnames:
-          - chat.nebular-grid.space
-        parentRefs:
           - name: envoy-external
             namespace: network
-        rules:
-          - backendRefs:
-              - identifier: app
-                port: http
     service:
       app:
         ports:
