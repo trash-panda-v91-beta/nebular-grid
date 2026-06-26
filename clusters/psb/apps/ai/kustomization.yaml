@@ -12,3 +12,5 @@ resources:
   - ./text-embeddings-inference/ks.yaml
   - ./llmkube/ks.yaml
   - ./memini/ks.yaml
+  - ./toolhive/ks.yaml
+  - ./mcp/kustomization.yaml

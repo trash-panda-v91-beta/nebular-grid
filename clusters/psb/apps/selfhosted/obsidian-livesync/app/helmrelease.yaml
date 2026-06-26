@@ -1,0 +1,57 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: obsidian-livesync
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: obsidian-livesync
+  interval: 30m
+  values:
+    controllers:
+      obsidian-livesync:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        containers:
+          app:
+            image:
+              repository: ghcr.io/belphemur/obsidian-headless-sync-docker
+              tag: latest
+            env:
+              PUID: "1000"
+              PGID: "1000"
+              DEVICE_NAME: nebular-grid
+              CONFLICT_STRATEGY: merge
+              VAULT_NAME:
+                valueFrom:
+                  secretKeyRef:
+                    name: obsidian-livesync-secret
+                    key: VAULT_NAME
+              OBSIDIAN_AUTH_TOKEN:
+                valueFrom:
+                  secretKeyRef:
+                    name: obsidian-livesync-secret
+                    key: OBSIDIAN_AUTH_TOKEN
+              VAULT_PASSWORD:
+                valueFrom:
+                  secretKeyRef:
+                    name: obsidian-livesync-secret
+                    key: VAULT_PASSWORD
+            resources:
+              requests:
+                cpu: 10m
+                memory: 256Mi
+              limits:
+                memory: 512Mi
+
+    persistence:
+      vault:
+        existingClaim: obsidian-livesync-data
+        globalMounts:
+          - path: /vault
+      config:
+        type: emptyDir
+        globalMounts:
+          - path: /home/obsidian/.config
