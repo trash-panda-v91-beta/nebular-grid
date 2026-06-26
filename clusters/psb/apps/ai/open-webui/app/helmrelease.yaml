@@ -51,8 +51,6 @@ spec:
         hostnames:
           - chat.nebular-grid.space
         parentRefs:
-          - name: envoy-internal
-            namespace: network
           - name: envoy-external
             namespace: network
     service:
