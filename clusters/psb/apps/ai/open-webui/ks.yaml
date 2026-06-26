@@ -11,8 +11,6 @@ spec:
   components:
     - ../../../../components/dragonfly
   dependsOn:
-    - name: ollama
-      namespace: ai
     - name: dragonfly-operator
       namespace: database
   interval: 1h

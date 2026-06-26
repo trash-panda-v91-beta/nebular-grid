@@ -23,9 +23,8 @@ spec:
               # Features
               ENABLE_LOGIN_FORM: "true"
               ENABLE_SIGNUP: "true"
-              ENABLE_OLLAMA_API: "true"
+              ENABLE_OLLAMA_API: "false"
               ENABLE_OPENAI_API: "true"
-              OLLAMA_BASE_URL: http://ollama.ai.svc.cluster.local:11434
               OPENAI_API_BASE_URL: http://litellm.ai.svc.cluster.local:4000/v1
               # Web search
               ENABLE_RAG_WEB_SEARCH: "false"
