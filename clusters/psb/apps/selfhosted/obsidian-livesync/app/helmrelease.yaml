@@ -34,12 +34,6 @@ spec:
                   secretKeyRef:
                     name: obsidian-livesync-secret
                     key: OBSIDIAN_AUTH_TOKEN
-              VAULT_PASSWORD:
-                valueFrom:
-                  secretKeyRef:
-                    name: obsidian-livesync-secret
-                    key: VAULT_PASSWORD
-                    optional: true
             resources:
               requests:
                 cpu: 10m
