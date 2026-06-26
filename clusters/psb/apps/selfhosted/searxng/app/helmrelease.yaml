@@ -18,7 +18,7 @@ spec:
           app:
             image:
               repository: docker.io/searxng/searxng
-              tag: 2025.6.25-82e2b775a
+              tag: 2026.6.26-f8ffbf36f
             env:
               INSTANCE_NAME: searxng
               BASE_URL: https://search.nebular-grid.space/
