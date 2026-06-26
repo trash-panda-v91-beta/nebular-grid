@@ -10,4 +10,5 @@ resources:
   - ./open-webui/ks.yaml
   - ./litellm/ks.yaml
   - ./text-embeddings-inference/ks.yaml
-  # - ./minimax-shim/ks.yaml
+  - ./llmkube/ks.yaml
+  - ./memini/ks.yaml

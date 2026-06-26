@@ -3,16 +3,25 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: minimax-shim
+  name: memini
 spec:
   commonMetadata:
     labels:
-      app.kubernetes.io/name: minimax-shim
+      app.kubernetes.io/name: memini
+  components:
+    - ../../../../components/volsync
   dependsOn:
-    - name: open-webui
-      namespace: flux-system
+    - name: llmkube-models
+      namespace: ai
+    - name: text-embeddings-inference
+      namespace: ai
+    - name: volsync
+      namespace: system
   interval: 1h
-  path: ./clusters/psb/apps/ai/minimax-shim/app
+  path: ./clusters/psb/apps/ai/memini/app
+  postBuild:
+    substitute:
+      APP: memini
   prune: true
   sourceRef:
     kind: GitRepository
