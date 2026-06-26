@@ -14,30 +14,46 @@ spec:
       searxng:
         annotations:
           reloader.stakater.com/auto: "true"
+        pod:
+          securityContext:
+            fsGroup: 977
+            fsGroupChangePolicy: OnRootMismatch
+            runAsGroup: 977
+            runAsUser: 977
         containers:
           app:
             image:
-              repository: docker.io/searxng/searxng
+              repository: ghcr.io/searxng/searxng
               tag: 2026.6.26-f8ffbf36f
             env:
-              INSTANCE_NAME: searxng
-              BASE_URL: https://search.nebular-grid.space/
-              AUTOCOMPLETE: "false"
+              SEARXNG_BASE_URL: https://search.nebular-grid.space
+              SEARXNG_PORT: &httpPort 8080
             probes:
               liveness:
                 enabled: true
                 custom: true
                 spec:
                   httpGet:
-                    path: /healthz
-                    port: 8080
+                    path: /stats
+                    port: *httpPort
               readiness:
                 enabled: true
                 custom: true
                 spec:
                   httpGet:
-                    path: /healthz
-                    port: 8080
+                    path: /stats
+                    port: *httpPort
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                add:
+                  - CHOWN
+                  - DAC_OVERRIDE
+                  - SETGID
+                  - SETUID
+                drop:
+                  - ALL
             resources:
               requests:
                 cpu: 10m
@@ -49,7 +65,7 @@ spec:
       app:
         ports:
           http:
-            port: 8080
+            port: *httpPort
 
     persistence:
       config:
@@ -59,6 +75,10 @@ spec:
           - path: /etc/searxng/settings.yml
             subPath: settings.yml
             readOnly: true
+      tmpfs:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp
 
     route:
       app:

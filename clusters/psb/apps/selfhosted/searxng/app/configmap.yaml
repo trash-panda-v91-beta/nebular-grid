@@ -7,9 +7,21 @@ data:
   settings.yml: |
     use_default_settings: true
     server:
-      secret_key: "changeme"
       limiter: false
+      image_proxy: true
+      method: GET
+      public_instance: false
     search:
+      autocomplete: ""
       formats:
         - html
         - json
+    general:
+      instance_name: Nebular Grid Search
+    ui:
+      default_theme: simple
+      infinite_scroll: true
+      query_in_title: true
+      static_use_hash: true
+      theme_args:
+        simple_style: auto
