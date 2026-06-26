@@ -28,7 +28,7 @@ spec:
             env:
               SEARXNG_BASE_URL: https://search.nebular-grid.space
               SEARXNG_PORT: &httpPort 8080
-              SEARXNG_SECRET_KEY:
+              SEARXNG_SECRET:
                 valueFrom:
                   secretKeyRef:
                     name: searxng-secret
