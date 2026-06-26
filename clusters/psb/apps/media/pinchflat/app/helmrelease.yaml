@@ -91,7 +91,7 @@ spec:
         hostnames:
           - pinchflat.nebular-grid.space
         parentRefs:
-          - name: envoy-external
+          - name: envoy-internal
             namespace: network
         rules:
           - backendRefs:
