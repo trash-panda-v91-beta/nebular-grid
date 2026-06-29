@@ -32,6 +32,7 @@ spec:
               ENABLE_SEARCH_QUERY: "true"
               RAG_WEB_SEARCH_ENGINE: searxng
               SEARXNG_QUERY_URL: http://searxng.selfhosted.svc.cluster.local:8080/search?q=<query>
+              BYPASS_WEB_SEARCH_EMBEDDING_AND_RETRIEVAL: "true"
               ENABLE_WEBSOCKET_SUPPORT: "true"
               WEBSOCKET_MANAGER: redis
               WEBSOCKET_REDIS_URL: redis://open-webui-dragonfly.ai.svc.cluster.local:6379
