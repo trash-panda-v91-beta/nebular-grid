@@ -28,8 +28,9 @@ spec:
               OPENAI_API_BASE_URL: http://litellm.ai.svc.cluster.local:4000/v1
               MEMINI_BASE_URL: http://memini.ai.svc.cluster.local:8080
               # Web search
-              ENABLE_RAG_WEB_SEARCH: "false"
-              ENABLE_SEARCH_QUERY: "false"
+              ENABLE_RAG_WEB_SEARCH: "true"
+              ENABLE_SEARCH_QUERY: "true"
+              SEARXNG_QUERY_URL: http://searxng.selfhosted.svc.cluster.local:8080/search?q=<query>
               ENABLE_WEBSOCKET_SUPPORT: "true"
               WEBSOCKET_MANAGER: redis
               WEBSOCKET_REDIS_URL: redis://open-webui-dragonfly.ai.svc.cluster.local:6379
