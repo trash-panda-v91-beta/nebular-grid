@@ -4,7 +4,7 @@ kind: ConfigMap
 metadata:
   name: searxng-config
 data:
-  settings.yml: |
+  settings.yml: |-
     use_default_settings: true
     server:
       limiter: false
