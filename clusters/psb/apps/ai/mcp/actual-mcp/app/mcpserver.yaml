@@ -8,10 +8,12 @@ spec:
   alias: actual_mcp
   transport: http
   workload:
-    image: ghcr.io/agigante80/actual-mcp-server:latest
+    image: ghcr.io/agigante80/actual-mcp-server:0.7.11
     port: 3600
     path: /http
     env:
+      - name: MCP_ALLOW_UNAUTHENTICATED
+        value: "true"
       - name: ACTUAL_SERVER_URL
         value: http://actual.selfhosted.svc.cluster.local:5006
       - name: ACTUAL_PASSWORD
