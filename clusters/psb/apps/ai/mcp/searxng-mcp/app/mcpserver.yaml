@@ -1,25 +1,22 @@
 ---
-# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/toolhive.stacklok.dev/mcpserver_v1alpha1.json
-apiVersion: toolhive.stacklok.dev/v1alpha1
-kind: MCPServer
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmcpserver_v1alpha1.json
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMMCPServer
 metadata:
-  name: mcp-searxng
+  name: searxng-mcp
 spec:
-  image: docker.io/isokoliuk/mcp-searxng:1.8.0@sha256:e19e276f50123dfaae990bb31a8ae62930ee466b716d70ddc16b9842b0327979
-  transport: streamable-http
-  proxyPort: 8080
-  env:
-    - name: SEARXNG_URL
-      value: http://searxng.selfhosted.svc.cluster.local:8080
-    - name: MCP_HTTP_PORT
-      value: "8080"
-  podTemplateSpec:
-    spec:
-      containers:
-        - name: mcp
-          resources:
-            requests:
-              cpu: 10m
-              memory: 128Mi
-            limits:
-              memory: 256Mi
+  alias: searxng_mcp
+  workload:
+    image: docker.io/isokoliuk/mcp-searxng:1.8.0@sha256:e19e276f50123dfaae990bb31a8ae62930ee466b716d70ddc16b9842b0327979
+    port: 8080
+    env:
+      - name: SEARXNG_URL
+        value: http://searxng.selfhosted.svc.cluster.local:8080
+      - name: MCP_HTTP_PORT
+        value: "8080"
+    resources:
+      requests:
+        cpu: 10m
+        memory: 128Mi
+      limits:
+        memory: 256Mi

@@ -1,0 +1,158 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmproxy_v1alpha1.json
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMProxy
+metadata:
+  name: litellm
+spec:
+  image: ghcr.io/berriai/litellm:v1.90.2@sha256:19a879f9c4ed466f2438aa08b22e2b472053ab57c6325db73c71d0624d2d4953
+  replicas: 1
+  generalSettings:
+    health_check_endpoint: /v1/health
+  routerSettings:
+    routing_strategy: simple-shuffle
+    redis_host: os.environ/REDIS_HOST
+    redis_port: os.environ/REDIS_PORT
+    num_retries: 3
+    timeout: 600
+  litellmSettings:
+    success_callback:
+      - prometheus
+    prometheus_adapter: true
+    cache: true
+    cache_params:
+      type: redis
+      host: os.environ/REDIS_HOST
+      port: os.environ/REDIS_PORT
+    drop_params: true
+  models:
+    - model_name: neuralwatt/qwen3-coder-480b
+      litellm_params:
+        model: openai/Qwen/Qwen3-Coder-480B-A35B-Instruct
+        api_base: https://api.neuralwatt.com/v1
+        api_key: os.environ/NEURALWATT_API_KEY
+      model_info:
+        max_input_tokens: 131072
+        max_output_tokens: 32768
+        supports_function_calling: true
+
+    - model_name: neuralwatt/kimi-k2.6
+      litellm_params:
+        model: openai/moonshotai/Kimi-K2.6
+        api_base: https://api.neuralwatt.com/v1
+        api_key: os.environ/NEURALWATT_API_KEY
+      model_info:
+        max_input_tokens: 262144
+        supports_function_calling: true
+
+    - model_name: neuralwatt/kimi-k2.7-code
+      litellm_params:
+        model: openai/moonshotai/Kimi-K2.7-Code
+        api_base: https://api.neuralwatt.com/v1
+        api_key: os.environ/NEURALWATT_API_KEY
+      model_info:
+        max_input_tokens: 262144
+        supports_function_calling: true
+
+    - model_name: neuralwatt/glm-5.2
+      litellm_params:
+        model: openai/glm-5.2
+        api_base: https://api.neuralwatt.com/v1
+        api_key: os.environ/NEURALWATT_API_KEY
+      model_info:
+        max_input_tokens: 1048560
+        supports_function_calling: true
+
+    - model_name: neuralwatt/gpt-oss-20b
+      litellm_params:
+        model: openai/openai/gpt-oss-20b
+        api_base: https://api.neuralwatt.com/v1
+        api_key: os.environ/NEURALWATT_API_KEY
+      model_info:
+        max_input_tokens: 16384
+        supports_function_calling: true
+
+    - model_name: opencode-go/kimi-k2.7-code
+      litellm_params:
+        model: openai/kimi-k2.7-code
+        api_base: https://opencode.ai/zen/go/v1
+        api_key: os.environ/OPENCODE_API_KEY
+      model_info:
+        max_input_tokens: 262144
+        supports_function_calling: true
+
+    - model_name: opencode-go/kimi-k2.6
+      litellm_params:
+        model: openai/kimi-k2.6
+        api_base: https://opencode.ai/zen/go/v1
+        api_key: os.environ/OPENCODE_API_KEY
+      model_info:
+        max_input_tokens: 262144
+        supports_function_calling: true
+
+    - model_name: opencode-go/glm-5.2
+      litellm_params:
+        model: openai/glm-5.2
+        api_base: https://opencode.ai/zen/go/v1
+        api_key: os.environ/OPENCODE_API_KEY
+      model_info:
+        max_input_tokens: 1048560
+        supports_function_calling: true
+
+    - model_name: opencode-go/qwen3.7-max
+      litellm_params:
+        model: openai/qwen3.7-max
+        api_base: https://opencode.ai/zen/go/v1
+        api_key: os.environ/OPENCODE_API_KEY
+      model_info:
+        max_input_tokens: 131072
+        supports_function_calling: true
+
+    - model_name: opencode-go/deepseek-v4-pro
+      litellm_params:
+        model: openai/deepseek-v4-pro
+        api_base: https://opencode.ai/zen/go/v1
+        api_key: os.environ/OPENCODE_API_KEY
+      model_info:
+        max_input_tokens: 131072
+        supports_function_calling: true
+
+  env:
+    - name: LITELLM_LOG
+      value: INFO
+    - name: LITELLM_MODE
+      value: PRODUCTION
+    - name: REDIS_HOST
+      value: litellm-dragonfly.ai.svc.cluster.local
+    - name: REDIS_PORT
+      value: "6379"
+    - name: LITELLM_MASTER_KEY
+      valueFrom:
+        secretKeyRef:
+          name: litellm
+          key: LITELLM_MASTER_KEY
+    - name: NEURALWATT_API_KEY
+      valueFrom:
+        secretKeyRef:
+          name: litellm
+          key: NEURALWATT_API_KEY
+    - name: OPENCODE_API_KEY
+      valueFrom:
+        secretKeyRef:
+          name: litellm
+          key: OPENCODE_API_KEY
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      memory: 2Gi
+  service:
+    type: ClusterIP
+    port: 4000
+  route:
+    hostnames:
+      - litellm.nebular-grid.space
+    parentRefs:
+      - name: envoy-external
+        namespace: network

@@ -8,9 +8,13 @@ components:
 resources:
   - ./namespace.yaml
   - ./open-webui/ks.yaml
+  - ./litellm-operator/ks.yaml
   - ./litellm/ks.yaml
   - ./text-embeddings-inference/ks.yaml
   - ./llmkube/ks.yaml
   - ./memini/ks.yaml
-  - ./toolhive/ks.yaml
   - ./mcp/searxng-mcp/ks.yaml
+  - ./mcp/context7-mcp/ks.yaml
+  - ./mcp/github-mcp/ks.yaml
+  - ./mcp/ha-mcp/ks.yaml
+  - ./mcp/grafana-mcp/ks.yaml

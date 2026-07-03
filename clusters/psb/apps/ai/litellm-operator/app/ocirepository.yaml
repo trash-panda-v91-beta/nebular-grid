@@ -3,12 +3,12 @@
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: OCIRepository
 metadata:
-  name: toolhive-operator-crds
+  name: litellm-operator
 spec:
   interval: 15m
   layerSelector:
     mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
     operation: copy
   ref:
-    tag: 0.33.0
-  url: oci://ghcr.io/stacklok/toolhive/toolhive-operator-crds
+    tag: 0.0.4
+  url: oci://ghcr.io/home-operations/charts/litellm-operator
