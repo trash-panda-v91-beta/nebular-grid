@@ -9,6 +9,8 @@ spec:
   workload:
     image: sstefanov/actual-mcp:latest
     port: 3000
+    args:
+      - --sse
     env:
       - name: ACTUAL_SERVER_URL
         value: http://actual.selfhosted.svc.cluster.local:5006
