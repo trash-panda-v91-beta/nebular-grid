@@ -18,3 +18,4 @@ resources:
   - ./mcp/github-mcp/ks.yaml
   - ./mcp/ha-mcp/ks.yaml
   - ./mcp/grafana-mcp/ks.yaml
+  - ./mcp/actual-mcp/ks.yaml

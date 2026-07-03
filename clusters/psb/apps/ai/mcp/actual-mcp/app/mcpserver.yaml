@@ -1,0 +1,24 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmcpserver_v1alpha1.json
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMMCPServer
+metadata:
+  name: actual-mcp
+spec:
+  alias: actual_mcp
+  workload:
+    image: sstefanov/actual-mcp:latest
+    port: 3000
+    env:
+      - name: ACTUAL_SERVER_URL
+        value: http://actual.selfhosted.svc.cluster.local:5006
+      - name: ACTUAL_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: actual-mcp-secret
+            key: ACTUAL_PASSWORD
+      - name: ACTUAL_BUDGET_SYNC_ID
+        valueFrom:
+          secretKeyRef:
+            name: actual-mcp-secret
+            key: ACTUAL_BUDGET_SYNC_ID
