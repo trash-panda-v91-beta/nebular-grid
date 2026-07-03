@@ -6,6 +6,7 @@ metadata:
   name: actual-mcp
 spec:
   alias: actual_mcp
+  transport: sse
   workload:
     image: sstefanov/actual-mcp:latest
     port: 3000
