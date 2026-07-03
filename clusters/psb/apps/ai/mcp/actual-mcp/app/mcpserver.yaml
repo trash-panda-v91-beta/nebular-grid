@@ -6,12 +6,11 @@ metadata:
   name: actual-mcp
 spec:
   alias: actual_mcp
-  transport: sse
+  transport: http
   workload:
-    image: sstefanov/actual-mcp:latest
-    port: 3000
-    args:
-      - --sse
+    image: ghcr.io/agigante80/actual-mcp-server:latest
+    port: 3600
+    path: /http
     env:
       - name: ACTUAL_SERVER_URL
         value: http://actual.selfhosted.svc.cluster.local:5006
@@ -25,3 +24,9 @@ spec:
           secretKeyRef:
             name: actual-mcp-secret
             key: ACTUAL_BUDGET_SYNC_ID
+    volumes:
+      - name: data
+        emptyDir: {}
+    volumeMounts:
+      - name: data
+        mountPath: /app/data
