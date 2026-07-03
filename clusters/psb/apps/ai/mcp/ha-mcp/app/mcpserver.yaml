@@ -13,7 +13,7 @@ spec:
       - ha-mcp-web
     env:
       - name: HOMEASSISTANT_URL
-        value: http://home-assistant.home-automation.svc.cluster.local:8123
+        value: http://home-assistant-app.home-automation.svc.cluster.local:8123
       - name: HOMEASSISTANT_TOKEN
         valueFrom:
           secretKeyRef:
