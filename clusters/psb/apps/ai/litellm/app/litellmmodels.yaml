@@ -1,0 +1,171 @@
+---
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: neuralwatt-qwen3-coder-480b
+spec:
+  proxyRef: litellm
+  modelName: neuralwatt/qwen3-coder-480b
+  params:
+    model: openai/Qwen/Qwen3-Coder-480B-A35B-Instruct
+    apiBase: https://api.neuralwatt.com/v1
+    apiKeyRef:
+      name: litellm
+      key: NEURALWATT_API_KEY
+  info:
+    maxInputTokens: 131072
+    maxOutputTokens: 32768
+    supportsFunctionCalling: true
+---
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: neuralwatt-kimi-k2-6
+spec:
+  proxyRef: litellm
+  modelName: neuralwatt/kimi-k2.6
+  params:
+    model: openai/moonshotai/Kimi-K2.6
+    apiBase: https://api.neuralwatt.com/v1
+    apiKeyRef:
+      name: litellm
+      key: NEURALWATT_API_KEY
+  info:
+    maxInputTokens: 262144
+    supportsFunctionCalling: true
+---
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: neuralwatt-kimi-k2-7-code
+spec:
+  proxyRef: litellm
+  modelName: neuralwatt/kimi-k2.7-code
+  params:
+    model: openai/moonshotai/Kimi-K2.7-Code
+    apiBase: https://api.neuralwatt.com/v1
+    apiKeyRef:
+      name: litellm
+      key: NEURALWATT_API_KEY
+  info:
+    maxInputTokens: 262144
+    supportsFunctionCalling: true
+---
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: neuralwatt-glm-5-2
+spec:
+  proxyRef: litellm
+  modelName: neuralwatt/glm-5.2
+  params:
+    model: openai/glm-5.2
+    apiBase: https://api.neuralwatt.com/v1
+    apiKeyRef:
+      name: litellm
+      key: NEURALWATT_API_KEY
+  info:
+    maxInputTokens: 1048560
+    supportsFunctionCalling: true
+---
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: neuralwatt-gpt-oss-20b
+spec:
+  proxyRef: litellm
+  modelName: neuralwatt/gpt-oss-20b
+  params:
+    model: openai/openai/gpt-oss-20b
+    apiBase: https://api.neuralwatt.com/v1
+    apiKeyRef:
+      name: litellm
+      key: NEURALWATT_API_KEY
+  info:
+    maxInputTokens: 16384
+    supportsFunctionCalling: true
+---
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: opencode-go-kimi-k2-7-code
+spec:
+  proxyRef: litellm
+  modelName: opencode-go/kimi-k2.7-code
+  params:
+    model: openai/kimi-k2.7-code
+    apiBase: https://opencode.ai/zen/go/v1
+    apiKeyRef:
+      name: litellm
+      key: OPENCODE_API_KEY
+  info:
+    maxInputTokens: 262144
+    supportsFunctionCalling: true
+---
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: opencode-go-kimi-k2-6
+spec:
+  proxyRef: litellm
+  modelName: opencode-go/kimi-k2.6
+  params:
+    model: openai/kimi-k2.6
+    apiBase: https://opencode.ai/zen/go/v1
+    apiKeyRef:
+      name: litellm
+      key: OPENCODE_API_KEY
+  info:
+    maxInputTokens: 262144
+    supportsFunctionCalling: true
+---
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: opencode-go-glm-5-2
+spec:
+  proxyRef: litellm
+  modelName: opencode-go/glm-5.2
+  params:
+    model: openai/glm-5.2
+    apiBase: https://opencode.ai/zen/go/v1
+    apiKeyRef:
+      name: litellm
+      key: OPENCODE_API_KEY
+  info:
+    maxInputTokens: 1048560
+    supportsFunctionCalling: true
+---
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: opencode-go-qwen3-7-max
+spec:
+  proxyRef: litellm
+  modelName: opencode-go/qwen3.7-max
+  params:
+    model: openai/qwen3.7-max
+    apiBase: https://opencode.ai/zen/go/v1
+    apiKeyRef:
+      name: litellm
+      key: OPENCODE_API_KEY
+  info:
+    maxInputTokens: 131072
+    supportsFunctionCalling: true
+---
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: opencode-go-deepseek-v4-pro
+spec:
+  proxyRef: litellm
+  modelName: opencode-go/deepseek-v4-pro
+  params:
+    model: openai/deepseek-v4-pro
+    apiBase: https://opencode.ai/zen/go/v1
+    apiKeyRef:
+      name: litellm
+      key: OPENCODE_API_KEY
+  info:
+    maxInputTokens: 131072
+    supportsFunctionCalling: true
