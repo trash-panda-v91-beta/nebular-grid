@@ -20,6 +20,8 @@ spec:
   postBuild:
     substitute:
       APP: esphome
+      DOMAIN: asc.internal
+      TIMEZONE: Europe/Prague
       VOLSYNC_CLAIM: esphome-config
       VOLSYNC_CAPACITY: 5Gi
   prune: true
