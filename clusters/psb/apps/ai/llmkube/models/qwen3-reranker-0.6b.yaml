@@ -32,6 +32,8 @@ spec:
     - --pooling
     - rank
     - --embedding
+  nodeSelector:
+    kubernetes.io/hostname: midori
   resources:
     cpu: 100m
     memory: 2Gi
