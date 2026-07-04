@@ -83,6 +83,24 @@ spec:
           jellyfin:
             app:
               - path: /config
+      metadata:
+        type: persistentVolumeClaim
+        accessMode: ReadWriteOnce
+        size: 10Gi
+        suffix: metadata
+        advancedMounts:
+          jellyfin:
+            app:
+              - path: /config/metadata
+                subPath: metadata
+              - path: /config/data/introskipper
+                subPath: introskipper
+      log:
+        type: emptyDir
+        advancedMounts:
+          jellyfin:
+            app:
+              - path: /config/log
       media:
         type: nfs
         server: asc.internal
