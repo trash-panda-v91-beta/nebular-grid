@@ -32,8 +32,15 @@ spec:
     - --pooling
     - rank
     - --embedding
-  nodeSelector:
-    kubernetes.io/hostname: midori
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: In
+                values:
+                  - midori
   resources:
     cpu: 100m
     memory: 2Gi
