@@ -6,15 +6,13 @@ metadata:
   name: obsidian-mcp
 spec:
   alias: obsidian_mcp
-  transport: http
+  transport: sse
   workload:
     image: docker.io/supercorp/supergateway:3.4.3
     port: 8000
     args:
       - --stdio
       - "npx -y @bitbonsai/mcpvault@latest /vault"
-      - --outputTransport
-      - streamableHttp
       - --port
       - "8000"
     volumes:
