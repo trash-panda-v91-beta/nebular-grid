@@ -1,0 +1,33 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmcpserver_v1alpha1.json
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMMCPServer
+metadata:
+  name: obsidian-mcp
+spec:
+  alias: obsidian_mcp
+  workload:
+    image: ghcr.io/supercorp-ai/supergateway:v3.4.3
+    port: 8000
+    args:
+      - --stdio
+      - "npx -y @bitbonsai/mcpvault@latest /vault"
+      - --outputTransport
+      - streamableHttp
+      - --port
+      - "8000"
+    volumes:
+      - name: vault
+        nfs:
+          server: asc.internal
+          path: /mnt/tank/apps/vault
+    volumeMounts:
+      - name: vault
+        mountPath: /vault
+        readOnly: true
+    resources:
+      requests:
+        cpu: 10m
+        memory: 256Mi
+      limits:
+        memory: 512Mi

@@ -48,7 +48,9 @@ spec:
 
     persistence:
       vault:
-        existingClaim: obsidian-livesync-data
+        type: nfs
+        server: asc.internal
+        path: /mnt/tank/apps/vault
         globalMounts:
           - path: /vault
       config:
