@@ -6,6 +6,7 @@ metadata:
   name: obsidian-mcp
 spec:
   alias: obsidian_mcp
+  transport: http
   workload:
     image: docker.io/supercorp/supergateway:3.4.3
     port: 8000
