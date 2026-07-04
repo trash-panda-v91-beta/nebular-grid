@@ -46,6 +46,6 @@ spec:
     modelCache:
       enabled: true
       size: 100Gi
-      storageClass: ceph-block
-      accessMode: ReadWriteOnce
+      storageClass: ceph-filesystem
+      accessMode: ReadWriteMany
       mountPath: /models
