@@ -18,6 +18,8 @@ spec:
       replicaCount: 1
       leaderElection:
         enabled: false
+      nodeSelector:
+        kubernetes.io/hostname: midori
       resources:
         requests:
           cpu: 10m
@@ -46,6 +48,6 @@ spec:
     modelCache:
       enabled: true
       size: 100Gi
-      storageClass: ceph-filesystem
-      accessMode: ReadWriteMany
+      storageClass: ceph-block
+      accessMode: ReadWriteOnce
       mountPath: /models
