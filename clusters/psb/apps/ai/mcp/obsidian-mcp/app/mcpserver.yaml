@@ -10,6 +10,7 @@ spec:
   workload:
     image: docker.io/supercorp/supergateway:3.4.3
     port: 8000
+    path: /sse
     args:
       - --stdio
       - "npx -y @bitbonsai/mcpvault@latest /vault"
