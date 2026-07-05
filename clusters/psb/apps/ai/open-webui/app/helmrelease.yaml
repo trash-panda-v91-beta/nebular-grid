@@ -50,6 +50,7 @@ spec:
             image:
               repository: ghcr.io/open-webui/open-terminal
               tag: slim
+            workingDir: /home/user
             ports:
               - containerPort: 8000
             env:
