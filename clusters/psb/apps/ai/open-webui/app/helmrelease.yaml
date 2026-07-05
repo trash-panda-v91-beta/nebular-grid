@@ -46,6 +46,37 @@ spec:
                 cpu: 100m
               limits:
                 memory: 2Gi
+          open-terminal:
+            image:
+              repository: ghcr.io/open-webui/open-terminal
+              tag: slim
+            ports:
+              - containerPort: 8000
+            env:
+              OPEN_TERMINAL_API_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: open-webui-secret
+                    key: OPEN_TERMINAL_API_KEY
+            resources:
+              requests:
+                cpu: 50m
+                memory: 128Mi
+              limits:
+                memory: 1Gi
+            probes:
+              liveness:
+                enabled: true
+                spec:
+                  httpGet:
+                    path: /health
+                    port: 8000
+              readiness:
+                enabled: true
+                spec:
+                  httpGet:
+                    path: /health
+                    port: 8000
     persistence:
       config:
         enabled: true
