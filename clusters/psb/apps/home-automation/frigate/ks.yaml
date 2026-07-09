@@ -10,9 +10,11 @@ spec:
       app.kubernetes.io/name: frigate
   components:
     - ../../../../components/gpu
-    - ../../../../components/volsync
+    - ../../../../components/kopiur/backup
     - ../../../../components/zeroscaler/nas-nfs-scaler
   dependsOn:
+    - name: kopiur
+      namespace: system
     - name: intel-gpu-resource-driver
       namespace: kube-system
     - name: multus-networks
@@ -24,8 +26,8 @@ spec:
   postBuild:
     substitute:
       APP: frigate
-      VOLSYNC_CLAIM: frigate
-      VOLSYNC_CAPACITY: 5Gi
+      KOPIUR_CLAIM: frigate
+      KOPIUR_CAPACITY: 5Gi
   prune: true
   sourceRef:
     kind: GitRepository

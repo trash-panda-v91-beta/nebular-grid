@@ -9,9 +9,11 @@ spec:
     labels:
       app.kubernetes.io/name: sonarr
   components:
-    - ../../../../components/volsync
+    - ../../../../components/kopiur/backup
     - ../../../../components/zeroscaler/nas-nfs-scaler
   dependsOn:
+    - name: kopiur
+      namespace: system
     - name: rook-ceph-cluster
       namespace: rook-ceph
   interval: 1h
@@ -19,7 +21,7 @@ spec:
   postBuild:
     substitute:
       APP: sonarr
-      VOLSYNC_CLAIM: sonarr-config
+      KOPIUR_CLAIM: sonarr-config
   prune: true
   sourceRef:
     kind: GitRepository

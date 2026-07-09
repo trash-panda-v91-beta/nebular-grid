@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+#MISE description="Trigger manual Kopiur snapshots for all SnapshotPolicies"
+set -euo pipefail
+
+kubectl get snapshotpolicies -A --no-headers | while read -r ns name _; do
+  mise run kopiur:snapshot "${ns}" "${name}"
+done

@@ -10,9 +10,11 @@ spec:
       app.kubernetes.io/name: jellyfin
   components:
     - ../../../../components/gpu
-    - ../../../../components/volsync
+    - ../../../../components/kopiur/backup
     - ../../../../components/zeroscaler/nas-nfs-scaler
   dependsOn:
+    - name: kopiur
+      namespace: system
     - name: intel-gpu-resource-driver
       namespace: kube-system
     - name: rook-ceph-cluster
@@ -22,8 +24,8 @@ spec:
   postBuild:
     substitute:
       APP: jellyfin
-      VOLSYNC_CLAIM: jellyfin
-      VOLSYNC_CAPACITY: 10Gi
+      KOPIUR_CLAIM: jellyfin
+      KOPIUR_CAPACITY: 10Gi
   prune: true
   sourceRef:
     kind: GitRepository

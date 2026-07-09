@@ -1,0 +1,18 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/monitoring.coreos.com/prometheusrule_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: kopiur
+spec:
+  groups:
+    - name: kopiur.rules
+      rules:
+        - alert: KopiurComponentAbsent
+          annotations:
+            summary: Kopiur controller has disappeared from Prometheus target discovery.
+          expr: |
+            absent(up{job="kopiur-metrics"})
+          for: 15m
+          labels:
+            severity: critical

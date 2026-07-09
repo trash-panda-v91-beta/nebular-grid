@@ -9,9 +9,11 @@ spec:
     labels:
       app.kubernetes.io/name: zigbee2mqtt
   components:
-    - ../../../../components/volsync
+    - ../../../../components/kopiur/backup
     - ../../../../components/zeroscaler/zigbee-adapter
   dependsOn:
+    - name: kopiur
+      namespace: system
     - name: rook-ceph-cluster
       namespace: rook-ceph
   interval: 1h
@@ -19,7 +21,7 @@ spec:
   postBuild:
     substitute:
       APP: zigbee2mqtt
-      VOLSYNC_CLAIM: zigbee2mqtt-data
+      KOPIUR_CLAIM: zigbee2mqtt-data
   prune: true
   sourceRef:
     kind: GitRepository

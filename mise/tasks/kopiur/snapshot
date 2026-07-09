@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+#MISE description="Trigger a manual Kopiur snapshot for a SnapshotPolicy"
+#USAGE arg "<namespace>" help="Namespace of the SnapshotPolicy"
+#USAGE arg "<name>" help="Name of the SnapshotPolicy"
+set -euo pipefail
+
+kubectl -n "${usage_namespace}" kopiur snapshot now --policy "${usage_name}" --wait
