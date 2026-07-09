@@ -19,6 +19,8 @@ spec:
       - name: repo
         mountPath: /repo
     monitoring:
+      dashboards:
+        enabled: true
       prometheusRule:
         enabled: true
       serviceMonitor:
