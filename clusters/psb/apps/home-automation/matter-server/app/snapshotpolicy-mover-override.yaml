@@ -1,0 +1,17 @@
+---
+# Override the matter-server SnapshotPolicy mover to run as root.
+#
+# The matter-server workload runs as root (uid 0) and writes its state files
+# in /data as mode 600 owned by root. The kopiur backup component's default
+# mover runs as uid 2000, which cannot read those files; every backup
+# therefore fails with kopia PermissionDenied. Running the mover as root
+# matches the workload's uid and lets it read the source.
+apiVersion: kopiur.home-operations.com/v1alpha1
+kind: SnapshotPolicy
+metadata:
+  name: ${APP}
+spec:
+  mover:
+    securityContext:
+      runAsGroup: 0
+      runAsUser: 0
