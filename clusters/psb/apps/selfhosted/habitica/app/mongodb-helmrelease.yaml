@@ -1,12 +1,13 @@
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
-# ponytail: single-node replica set. Habitica's `blocker` model uses MongoDB
-# change streams (models/blocker.js), which require a replica set even with
-# one member. mongod is started with --replSet rs0; a sidecar container
-# waits for mongod to accept connections, then runs rs.initiate() once.
-# After the first successful init, subsequent restarts find the rs already
-# initialised on the PVC and skip the init. Single-node is fine for a
-# smoke test; production would use 3 nodes.
+# Pattern adapted from gabe565/home-ops (kubernetes/gabernetes/apps/your-spotify
+# and nightscout) which uses the official mongo entrypoint + bjw-s app-template's
+# secrets/persistence/configMaps blocks. The official entrypoint:
+#   - reads MONGODB_REPLSET_NAME and adds --replSet to mongod args
+#   - starts a temp standalone mongod to run init scripts (creates the root
+#     user from MONGO_INITDB_ROOT_USERNAME/PASSWORD_FILE)
+#   - stops the temp mongod, starts the main one with --replSet
+# We only need a sidecar to call rs.initiate() since the entrypoint doesn't.
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
@@ -19,45 +20,60 @@ spec:
   values:
     controllers:
       mongodb:
+        type: statefulset
         pod:
           securityContext:
+            runAsUser: 999
+            runAsGroup: 999
             fsGroup: 999
             fsGroupChangePolicy: OnRootMismatch
-            runAsGroup: 999
-            runAsUser: 999
+            seccompProfile:
+              type: RuntimeDefault
         containers:
           mongodb:
             image:
               repository: docker.io/library/mongo
               tag: "8.0.4"
-            command:
-              - mongod
-            args:
-              - --replSet=rs0
-              - --bind_ip_all
             env:
-              MONGODB_INITDB_ROOT_USERNAME: root
-              MONGODB_INITDB_ROOT_PASSWORD:
-                valueFrom:
-                  secretKeyRef:
-                    name: habitica-mongodb-auth
-                    key: password
+              # official entrypoint processes these:
+              MONGO_INITDB_ROOT_USERNAME: root
+              MONGO_INITDB_ROOT_PASSWORD_FILE: /secret/mongodb-root-password
+              # habitica's blocker model uses change streams, which require a
+              # replica set. The entrypoint converts this to --replSet rs0.
+              MONGODB_REPLSET_NAME: rs0
+              # per-app user (created by the initdb configmap script below):
+              MONGO_INITDB_DATABASE: habitica
+              MONGODB_EXTRA_USERNAMES: habitica
+              MONGODB_EXTRA_PASSWORDS_FILE: /secret/mongodb-passwords
             probes:
               liveness:
                 enabled: true
                 custom: true
                 spec:
-                  tcpSocket:
-                    port: 27017
+                  exec:
+                    command: [/scripts/liveness.sh]
+                  periodSeconds: 60
+                  timeoutSeconds: 10
               readiness:
                 enabled: true
                 custom: true
                 spec:
-                  tcpSocket:
-                    port: 27017
+                  exec:
+                    command: [/scripts/readiness.sh]
+                  periodSeconds: 10
+                  timeoutSeconds: 5
+              startup:
+                enabled: true
+                custom: true
+                spec:
+                  exec:
+                    command: [/scripts/liveness.sh]
+                  failureThreshold: 30
+                  periodSeconds: 5
             securityContext:
+              runAsNonRoot: true
               allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: false
+              readOnlyRootFilesystem: true
               capabilities:
                 drop:
                   - ALL
@@ -67,64 +83,47 @@ spec:
                 memory: 512Mi
               limits:
                 memory: 1Gi
-          # Sidecar: initialises the replica set on first boot. Re-runs are
-          # idempotent because rs.status() detects an existing init.
+          # Sidecar: calls rs.initiate() once. Re-runs are idempotent.
+          # mongosh is a node.js binary that needs >= 256Mi to start.
           init-replset:
             image:
               repository: docker.io/library/mongo
               tag: "8.0.4"
-            env:
-              - name: MONGO_PASSWORD
-                valueFrom:
-                  secretKeyRef:
-                    name: habitica-mongodb-auth
-                    key: password
             command:
               - sh
               - -c
               - |
-                set -eu
+                set +e
                 echo "waiting for mongod..."
                 until mongosh --host localhost --quiet --eval 'db.runCommand({ ping: 1 })' >/dev/null 2>&1; do
                   sleep 2
                 done
-                echo "ensuring replica set rs0..."
+                echo "initialising replica set..."
                 mongosh --host localhost --quiet --eval '
                   try {
                     const s = rs.status();
                     print("replica set already initialised: " + s.set);
                   } catch (e) {
-                    rs.initiate({_id: "rs0", members: [{_id: 0, host: "habitica-mongodb:27017"}]});
-                    print("replica set initialised");
+                    try {
+                      rs.initiate({_id: "rs0", members: [{_id: 0, host: "habitica-mongodb:27017"}]});
+                      print("replica set initialised");
+                    } catch (e2) {
+                      if (e2.codeName === "AlreadyInitialized" || /already initialized/i.test(e2.message)) {
+                        print("replica set already initialised (idempotent)");
+                      } else {
+                        throw e2;
+                      }
+                    }
                   }
                 '
-                # ponytail: by overriding command=[mongod] args=[--replSet=rs0, --bind_ip_all]
-                # we bypass the official docker-entrypoint.sh that normally creates the
-                # root user from MONGODB_INITDB_ROOT_USERNAME/PASSWORD. So we create it
-                # here instead. The user only exists after this sidecar runs.
-                echo "ensuring root user..."
-                mongosh --host localhost --quiet --eval "
-                  try {
-                    db.getSiblingDB('admin').getUser('root');
-                    print('root user already exists');
-                  } catch (e) {
-                    db.getSiblingDB('admin').createUser({
-                      user: 'root',
-                      pwd: '${MONGO_PASSWORD}',
-                      roles: [{ role: 'root', db: 'admin' }]
-                    });
-                    print('root user created');
-                  }
-                "
                 echo "done"
+                exit 0
             securityContext:
               allowPrivilegeEscalation: false
               capabilities:
                 drop:
                   - ALL
             resources:
-              # ponytail: mongosh is a node.js app that OOMKills at 64Mi.
-              # 256Mi is the floor for the mongo:8 image's mongosh binary.
               requests:
                 cpu: 10m
                 memory: 128Mi
@@ -132,14 +131,56 @@ spec:
                 memory: 256Mi
     service:
       mongodb:
+        controller: mongodb
         ports:
-          main:
+          mongodb:
             port: 27017
-            targetPort: 27017
     persistence:
       data:
-        existingClaim: habitica-mongodb-data
-        advancedMounts:
-          mongodb:
-            mongodb:
-              - path: /data/db
+        globalMounts:
+          - path: /data/db
+      secret:
+        type: secret
+        identifier: habitica-mongodb-auth
+      tmp:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp
+            subPath: tmp
+          - path: /data
+            subPath: data
+      initdb:
+        type: configMap
+        identifier: initdb
+        globalMounts:
+          - path: /docker-entrypoint-initdb.d
+      scripts:
+        type: configMap
+        identifier: scripts
+        defaultMode: 0o550
+    configMaps:
+      initdb:
+        data:
+          create-user.js: |
+            let {
+                MONGO_INITDB_DATABASE: appDB,
+                MONGODB_EXTRA_USERNAMES: user,
+                MONGODB_EXTRA_PASSWORDS: pwd,
+                MONGODB_EXTRA_PASSWORDS_FILE: passwordFile,
+            } = process.env;
+
+            if (!pwd && passwordFile) {
+                pwd = fs.readFileSync(passwordFile, 'utf8').trim();
+            }
+
+            if (appDB && user && pwd) {
+                db.createUser({ user, pwd, roles: [{ role: "readWrite", db: appDB }]});
+            }
+      scripts:
+        data:
+          liveness.sh: |
+            #!/bin/sh
+            exec mongosh --quiet --eval 'db.adminCommand("ping")'
+          readiness.sh: |
+            #!/bin/sh
+            exec mongosh --quiet --eval 'if (!(db.hello().isWritablePrimary || db.hello().secondary)) { throw new Error("Not ready") }'
