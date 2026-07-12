@@ -162,6 +162,12 @@ spec:
         type: configMap
         identifier: scripts
         defaultMode: 0o550
+    secrets:
+      habitica-mongodb-auth:
+        # Reference the existing K8s Secret that ExternalSecret syncs from
+        # 1Password. The bjw-s chart needs a `secrets.<id>` block to know
+        # about a secret used in persistence.secret / probes etc.
+        existingSecret: habitica-mongodb-auth
     configMaps:
       initdb:
         data:
