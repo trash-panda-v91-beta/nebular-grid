@@ -51,7 +51,8 @@ spec:
                 custom: true
                 spec:
                   exec:
-                    command: [/scripts/liveness.sh]
+                    command:
+                      - /scripts/liveness.sh
                   periodSeconds: 60
                   timeoutSeconds: 10
               readiness:
@@ -59,7 +60,8 @@ spec:
                 custom: true
                 spec:
                   exec:
-                    command: [/scripts/readiness.sh]
+                    command:
+                      - /scripts/readiness.sh
                   periodSeconds: 10
                   timeoutSeconds: 5
               startup:
@@ -67,7 +69,8 @@ spec:
                 custom: true
                 spec:
                   exec:
-                    command: [/scripts/liveness.sh]
+                    command:
+                      - /scripts/liveness.sh
                   failureThreshold: 30
                   periodSeconds: 5
             securityContext:
@@ -181,6 +184,6 @@ spec:
           liveness.sh: |
             #!/bin/sh
             exec mongosh --quiet --eval 'db.adminCommand("ping")'
-          readiness.sh: |
+          readiness.sh: |-
             #!/bin/sh
             exec mongosh --quiet --eval 'if (!(db.hello().isWritablePrimary || db.hello().secondary)) { throw new Error("Not ready") }'
