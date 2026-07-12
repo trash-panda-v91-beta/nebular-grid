@@ -34,6 +34,16 @@ spec:
             image:
               repository: docker.io/library/mongo
               tag: "8.0.4"
+            # ponytail: --replSet MUST be passed via args. MONGODB_REPLSET_NAME
+            # is only used by the entrypoint to set a flag, it does NOT add
+            # --replSet to mongod args. The entrypoint strips --replSet from
+            # the args when running the temp standalone mongod for init
+            # scripts, then re-adds it for the main mongod.
+            command:
+              - mongod
+            args:
+              - --replSet=rs0
+              - --bind_ip_all
             env:
               # official entrypoint processes these:
               MONGO_INITDB_ROOT_USERNAME: root
