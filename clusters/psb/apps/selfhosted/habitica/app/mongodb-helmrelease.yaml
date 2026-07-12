@@ -92,17 +92,23 @@ spec:
             image:
               repository: docker.io/library/mongo
               tag: "8.0.4"
+            env:
+              - name: MONGO_ROOT_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: habitica-mongodb
+                    key: mongodb-root-password
             command:
               - sh
               - -c
               - |
                 set +e
                 echo "waiting for mongod..."
-                until mongosh --host localhost --quiet --eval 'db.runCommand({ ping: 1 })' >/dev/null 2>&1; do
+                until mongosh --host localhost --quiet -u root -p "${MONGO_ROOT_PASSWORD}" --authenticationDatabase admin --eval 'db.runCommand({ ping: 1 })' >/dev/null 2>&1; do
                   sleep 2
                 done
                 echo "initialising replica set..."
-                mongosh --host localhost --quiet --eval '
+                mongosh --host localhost --quiet -u root -p "${MONGO_ROOT_PASSWORD}" --authenticationDatabase admin --eval '
                   try {
                     const s = rs.status();
                     print("replica set already initialised: " + s.set);
