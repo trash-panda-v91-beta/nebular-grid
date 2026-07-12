@@ -63,10 +63,10 @@ spec:
                   - ALL
             resources:
               requests:
-                cpu: 50m
-                memory: 256Mi
-              limits:
+                cpu: 100m
                 memory: 512Mi
+              limits:
+                memory: 1Gi
           # Sidecar: initialises the replica set on first boot. Re-runs are
           # idempotent because rs.status() detects an existing init.
           init-replset:
@@ -98,11 +98,13 @@ spec:
                 drop:
                   - ALL
             resources:
+              # ponytail: mongosh is a node.js app that OOMKills at 64Mi.
+              # 256Mi is the floor for the mongo:8 image's mongosh binary.
               requests:
                 cpu: 10m
-                memory: 32Mi
+                memory: 128Mi
               limits:
-                memory: 64Mi
+                memory: 256Mi
     service:
       mongodb:
         ports:
