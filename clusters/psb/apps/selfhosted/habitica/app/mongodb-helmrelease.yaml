@@ -140,6 +140,7 @@ spec:
             port: 27017
     persistence:
       data:
+        existingClaim: habitica-mongodb-data
         globalMounts:
           - path: /data/db
       secret:
