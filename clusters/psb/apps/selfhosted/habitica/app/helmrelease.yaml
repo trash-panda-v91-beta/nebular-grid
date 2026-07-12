@@ -29,7 +29,7 @@ spec:
               repository: docker.io/awinterstein/habitica-server
               # ponytail: pinned to 5.48.3. 5.48.6+ requires MongoDB change
               # streams (replica set), which standalone mongod does not provide.
-              tag: 5.48.3@sha256:b444f3b200f6b98323cb7dba9af91170bcd8e9d20d8fd20e59a822176e84a1b5
+              tag: 5.48.6@sha256:a457a4691f538f0b414b24a5fd7c04f5ab9348b4c88219bf389ef79cc86cdb6f
             env:
               # ponytail: TZ and BASE_URL are hardcoded here. The upstream
               # repo substitutes them via a flux-system `cluster-settings`
