@@ -15,6 +15,15 @@ spec:
       namespace: rook-ceph
   interval: 1h
   path: ./clusters/psb/apps/selfhosted/habitica/app
+  postBuild:
+    # The bjw-s chart's `secrets.stringData` block in mongodb-helmrelease.yaml
+    # uses ${mongodb_root_password} which is sourced from this Secret.
+    # optional: true so the first reconcile doesn't fail when the
+    # ExternalSecret hasn't synced yet.
+    substituteFrom:
+      - kind: Secret
+        name: habitica-mongodb-substitutions
+        optional: true
   prune: true
   sourceRef:
     kind: GitRepository

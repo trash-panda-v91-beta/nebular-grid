@@ -164,10 +164,16 @@ spec:
         defaultMode: 0o550
     secrets:
       habitica-mongodb-auth:
-        # Reference the existing K8s Secret that ExternalSecret syncs from
-        # 1Password. The bjw-s chart needs a `secrets.<id>` block to know
-        # about a secret used in persistence.secret / probes etc.
-        existingSecret: habitica-mongodb-auth
+        # Chart creates this Secret. Values come from kustomize substitution
+        # (postBuild.substituteFrom on the ks.yaml reads from the
+        # `habitica-mongodb-substitutions` Secret synced from 1Password).
+        # The mongo entrypoint reads mongodb-root-password and
+        # mongodb-passwords via _FILE env vars; the habitica pod reads
+        # the `uri` key directly for NODE_DB_URI.
+        stringData:
+          mongodb-root-password: ${mongodb_root_password}
+          mongodb-passwords: ${mongodb_root_password}
+          uri: mongodb://root:${mongodb_root_password}@habitica-mongodb:27017/habitica?authSource=admin&replicaSet=rs0
     configMaps:
       initdb:
         data:
