@@ -12,4 +12,5 @@ resources:
   - ./habitica/ks.yaml
   - ./paperless/ks.yaml
   - ./searxng/ks.yaml
+  - ./tidyquest/ks.yaml
   - ./obsidian-livesync/ks.yaml
