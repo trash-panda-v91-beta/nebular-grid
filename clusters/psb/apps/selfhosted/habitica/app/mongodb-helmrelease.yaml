@@ -33,7 +33,7 @@ spec:
           mongodb:
             image:
               repository: docker.io/library/mongo
-              tag: "8.0.4"
+              tag: "8.3.4"
             # ponytail: --replSet MUST be passed via args. MONGODB_REPLSET_NAME
             # is only used by the entrypoint to set a flag, it does NOT add
             # --replSet to mongod args. The entrypoint strips --replSet from
@@ -101,7 +101,7 @@ spec:
           init-replset:
             image:
               repository: docker.io/library/mongo
-              tag: "8.0.4"
+              tag: "8.3.4"
             env:
               - name: MONGO_ROOT_PASSWORD
                 valueFrom:
