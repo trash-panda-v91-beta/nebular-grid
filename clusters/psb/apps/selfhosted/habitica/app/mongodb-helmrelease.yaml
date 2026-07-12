@@ -114,11 +114,11 @@ spec:
               - |
                 set +e
                 echo "waiting for mongod..."
-                until mongosh --host localhost --quiet -u root -p "$${MONGO_ROOT_PASSWORD}" --authenticationDatabase admin --eval 'db.runCommand({ ping: 1 })' >/dev/null 2>&1; do
+                until mongosh --host habitica-mongodb --quiet -u root -p "$${MONGO_ROOT_PASSWORD}" --authenticationDatabase admin --eval 'db.runCommand({ ping: 1 })' >/dev/null 2>&1; do
                   sleep 2
                 done
                 echo "initialising replica set..."
-                mongosh --host localhost --quiet -u root -p "$${MONGO_ROOT_PASSWORD}" --authenticationDatabase admin --eval '
+                mongosh --host habitica-mongodb --quiet -u root -p "$${MONGO_ROOT_PASSWORD}" --authenticationDatabase admin --eval '
                   try {
                     const s = rs.status();
                     print("replica set already initialised: " + s.set);
