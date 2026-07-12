@@ -1,8 +1,12 @@
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
-# ponytail: standalone mongod (no --replSet, no rs.initiate). Habitica does not
-# require a replica set; this just removes the `?replicaSet=...` from the URI.
-# Upgrade path: switch to a 3-node replica set if you want HA.
+# ponytail: single-node replica set. Habitica's `blocker` model uses MongoDB
+# change streams (models/blocker.js), which require a replica set even with
+# one member. mongod is started with --replSet rs0; a sidecar container
+# waits for mongod to accept connections, then runs rs.initiate() once.
+# After the first successful init, subsequent restarts find the rs already
+# initialised on the PVC and skip the init. Single-node is fine for a
+# smoke test; production would use 3 nodes.
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
@@ -26,6 +30,11 @@ spec:
             image:
               repository: docker.io/library/mongo
               tag: "8.0.4"
+            command:
+              - mongod
+            args:
+              - --replSet=rs0
+              - --bind_ip_all
             env:
               MONGODB_INITDB_ROOT_USERNAME: root
               MONGODB_INITDB_ROOT_PASSWORD:
@@ -58,6 +67,42 @@ spec:
                 memory: 256Mi
               limits:
                 memory: 512Mi
+          # Sidecar: initialises the replica set on first boot. Re-runs are
+          # idempotent because rs.status() detects an existing init.
+          init-replset:
+            image:
+              repository: docker.io/library/mongo
+              tag: "8.0.4"
+            command:
+              - sh
+              - -c
+              - |
+                set -eu
+                echo "waiting for mongod..."
+                until mongosh --host localhost --quiet --eval 'db.runCommand({ ping: 1 })' >/dev/null 2>&1; do
+                  sleep 2
+                done
+                echo "ensuring replica set rs0..."
+                mongosh --host localhost --quiet --eval '
+                  try {
+                    const s = rs.status();
+                    print("replica set already initialised: " + s.set);
+                  } catch (e) {
+                    rs.initiate({_id: "rs0", members: [{_id: 0, host: "habitica-mongodb:27017"}]});
+                    print("replica set initialised");
+                  }
+                '
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop:
+                  - ALL
+            resources:
+              requests:
+                cpu: 10m
+                memory: 32Mi
+              limits:
+                memory: 64Mi
     service:
       mongodb:
         ports:
