@@ -114,17 +114,19 @@ spec:
               - |
                 set +e
                 echo "waiting for mongod..."
-                until mongosh --host habitica-mongodb --quiet -u root -p "$${MONGO_ROOT_PASSWORD}" --authenticationDatabase admin --eval 'db.runCommand({ ping: 1 })' >/dev/null 2>&1; do
+                # ponytail: connect via the headless service DNS so the
+                # member host in rs.initiate (also via headless DNS) matches.
+                until mongosh --host habitica-mongodb-0.habitica-mongodb-headless --quiet -u root -p "$${MONGO_ROOT_PASSWORD}" --authenticationDatabase admin --eval 'db.runCommand({ ping: 1 })' >/dev/null 2>&1; do
                   sleep 2
                 done
                 echo "initialising replica set..."
-                mongosh --host habitica-mongodb --quiet -u root -p "$${MONGO_ROOT_PASSWORD}" --authenticationDatabase admin --eval '
+                mongosh --host habitica-mongodb-0.habitica-mongodb-headless --quiet -u root -p "$${MONGO_ROOT_PASSWORD}" --authenticationDatabase admin --eval '
                   try {
                     const s = rs.status();
                     print("replica set already initialised: " + s.set);
                   } catch (e) {
                     try {
-                      rs.initiate({_id: "rs0", members: [{_id: 0, host: "habitica-mongodb:27017"}]});
+                      rs.initiate({_id: "rs0", members: [{_id: 0, host: "habitica-mongodb-0.habitica-mongodb-headless:27017"}]});
                       print("replica set initialised");
                     } catch (e2) {
                       if (e2.codeName === "AlreadyInitialized" || /already initialized/i.test(e2.message)) {
