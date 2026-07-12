@@ -1,0 +1,73 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+# ponytail: standalone mongod (no --replSet, no rs.initiate). Habitica does not
+# require a replica set; this just removes the `?replicaSet=...` from the URI.
+# Upgrade path: switch to a 3-node replica set if you want HA.
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: habitica-mongodb
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: habitica-mongodb
+  interval: 30m
+  values:
+    controllers:
+      mongodb:
+        pod:
+          securityContext:
+            fsGroup: 999
+            fsGroupChangePolicy: OnRootMismatch
+            runAsGroup: 999
+            runAsUser: 999
+        containers:
+          mongodb:
+            image:
+              repository: docker.io/library/mongo
+              tag: "8.0.4"
+            env:
+              MONGODB_INITDB_ROOT_USERNAME: root
+              MONGODB_INITDB_ROOT_PASSWORD:
+                valueFrom:
+                  secretKeyRef:
+                    name: habitica-mongodb-auth
+                    key: password
+            probes:
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  tcpSocket:
+                    port: 27017
+              readiness:
+                enabled: true
+                custom: true
+                spec:
+                  tcpSocket:
+                    port: 27017
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: false
+              capabilities:
+                drop:
+                  - ALL
+            resources:
+              requests:
+                cpu: 50m
+                memory: 256Mi
+              limits:
+                memory: 512Mi
+    service:
+      mongodb:
+        ports:
+          main:
+            port: 27017
+            targetPort: 27017
+    persistence:
+      data:
+        existingClaim: habitica-mongodb-data
+        advancedMounts:
+          mongodb:
+            mongodb:
+              - path: /data/db
