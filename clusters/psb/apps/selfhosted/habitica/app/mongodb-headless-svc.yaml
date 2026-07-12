@@ -1,0 +1,19 @@
+---
+# ponytail: headless service for the StatefulSet so the pod's DNS name
+# (habitica-mongodb-0.habitica-mongodb-headless.selfhosted.svc.cluster.local)
+# resolves to the pod's IP. This is the standard pattern for single-node
+# MongoDB replica sets in k8s: the mongod checks if the member host in
+# rs.initiate resolves to its own IP. Using the pod hostname via the
+# headless service makes that match, and external clients (habitica)
+# can also resolve it.
+apiVersion: v1
+kind: Service
+metadata:
+  name: habitica-mongodb-headless
+spec:
+  clusterIP: None
+  selector:
+    app.kubernetes.io/name: habitica-mongodb
+  ports:
+    - name: mongodb
+      port: 27017
