@@ -1,0 +1,96 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: habitica
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: habitica
+  interval: 30m
+  values:
+    defaultPodOptions:
+      securityContext:
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile:
+          type: RuntimeDefault
+    controllers:
+      habitica:
+        strategy: RollingUpdate
+        rollingUpdate:
+          maxSurge: 1
+          maxUnavailable: 0
+        annotations:
+          reloader.stakater.com/auto: "true"
+        containers:
+          habitica:
+            image:
+              repository: docker.io/awinterstein/habitica-server
+              # ponytail: pinned to 5.48.3. 5.48.6+ requires MongoDB change
+              # streams (replica set), which standalone mongod does not provide.
+              tag: 5.48.3@sha256:b444f3b200f6b98323cb7dba9af91170bcd8e9d20d8fd20e59a822176e84a1b5
+            env:
+              # ponytail: TZ and BASE_URL are hardcoded here. The upstream
+              # repo substitutes them via a flux-system `cluster-settings`
+              # ConfigMap + substituteFrom; that doesn't exist in this
+              # cluster. Hardcoding matches how actual/paperless/searxng
+              # do it (domain + tz are constants, not values).
+              TZ: Europe/Prague
+              BASE_URL: https://habitica.nebular-grid.space
+              NODE_DB_URI:
+                valueFrom:
+                  secretKeyRef:
+                    # Created by the MongoDB community operator from the
+                    # habitica user in mongodb-community.yaml. Key holds a
+                    # complete mongodb:// URI for the replica set.
+                    name: habitica-mongodb-uri
+                    key: connectionString.standard
+              INVITE_ONLY: true
+              ADMIN_EMAIL: noreply@nebular-grid.space
+              # ponytail: maddy is not deployed. SMTP will fail, but habitica
+              # logs warnings instead of refusing to boot, so the pod will
+              # still come up. Password reset / invites will not work.
+              # Upgrade path: install maddy (or use external SMTP) and point
+              # EMAIL_SERVER_URL at it.
+              EMAIL_SERVER_URL: maddy.selfhosted.svc.cluster.local
+              EMAIL_SERVER_PORT: 2525
+            probes:
+              liveness: &probe
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    port: &habiticaPort 3000
+                    path: /api/v3/status
+              readiness: *probe
+            resources:
+              requests:
+                cpu: 25m
+                memory: 256Mi
+              limits:
+                memory: 512Mi
+            securityContext:
+              runAsUser: 0
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: false
+              capabilities:
+                drop:
+                  - ALL
+    service:
+      habitica:
+        ports:
+          http:
+            port: *habiticaPort
+            protocol: HTTP
+    route:
+      habitica:
+        hostnames:
+          - habitica.nebular-grid.space
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+        rules:
+          - backendRefs:
+              - identifier: habitica
+                port: *habiticaPort

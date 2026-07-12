@@ -1,0 +1,12 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/kustomization
+# The operator + CRDs live in the sibling mongodb-operator kustomization,
+# which this ks (habitica) dependsOn so the MongoDBCommunity CRD exists by the
+# time flux applies the CR below.
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ./externalsecret.yaml
+  - ./ocirepository.yaml
+  - ./mongodb-community.yaml
+  - ./helmrelease.yaml

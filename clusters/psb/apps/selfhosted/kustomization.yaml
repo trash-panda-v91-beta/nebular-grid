@@ -8,6 +8,8 @@ components:
 resources:
   - ./namespace.yaml
   - ./actual/ks.yaml
+  - ./mongodb-operator/ks.yaml
+  - ./habitica/ks.yaml
   - ./paperless/ks.yaml
   - ./searxng/ks.yaml
   - ./obsidian-livesync/ks.yaml

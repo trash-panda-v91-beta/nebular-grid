@@ -1,0 +1,28 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/helm.toolkit.fluxcd.io/helmrelease_v2.json
+# Installs the MongoDB Community Kubernetes Operator + its CRDs. The operator
+# reconciles MongoDBCommunity resources: it runs rs.initiate, adds members,
+# creates users, rotates secrets, and wires the mongodb-agent sidecar - this
+# replaces the custom headless Service, init-replset sidecar, keyFile, and
+# StatefulSet serviceName plumbing a hand-rolled replica set would need.
+# CRDs are installed by this chart (community-operator-crds.enabled), and the
+# parent ks.yaml waits for this release to be fully installed before any
+# depending kustomization applies a MongoDBCommunity CR.
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: mongodb-operator
+spec:
+  chart:
+    spec:
+      chart: community-operator
+      sourceRef:
+        kind: HelmRepository
+        name: mongodb
+  interval: 30m
+  values:
+    community-operator-crds:
+      enabled: true
+    # Operator watches its own namespace (selfhosted). The habitica
+    # MongoDBCommunity resource lives here too, so the default
+    # single-namespace watch scope is enough - no cluster-wide RBAC.
