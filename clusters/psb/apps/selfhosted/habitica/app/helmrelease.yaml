@@ -46,7 +46,13 @@ spec:
                     # complete mongodb:// URI for the replica set.
                     name: habitica-mongodb-uri
                     key: connectionString.standard
-              INVITE_ONLY: true
+              # ponytail: start OPEN so the first registration bootstraps
+              # the admin account (habitica auto-grants admin to user #1), then
+              # flip to true to lock further registrations. I had this set to
+              # true on first deploy - that blocked registration before any
+              # admin existed, a deadlock. Leave false while this is a
+              # single-user instance.
+              INVITE_ONLY: false
               ADMIN_EMAIL: noreply@nebular-grid.space
               # ponytail: maddy is not deployed. SMTP will fail, but habitica
               # logs warnings instead of refusing to boot, so the pod will
