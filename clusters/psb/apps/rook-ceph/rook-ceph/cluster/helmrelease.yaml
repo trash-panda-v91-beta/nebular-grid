@@ -60,6 +60,9 @@ spec:
         mgr:
           limits:
             memory: 2Gi
+        mgr-sidecar:
+          limits:
+            memory: 256Mi
         osd:
           limits:
             memory: 8Gi
