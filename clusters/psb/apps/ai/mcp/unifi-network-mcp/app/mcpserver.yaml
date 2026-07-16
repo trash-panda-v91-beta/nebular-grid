@@ -1,0 +1,43 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmcpserver_v1alpha1.json
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMMCPServer
+metadata:
+  name: unifi-network-mcp
+spec:
+  alias: unifi_network_mcp
+  workload:
+    image: ghcr.io/sirkirby/unifi-network-mcp:0.23.1
+    port: 3000
+    env:
+      - name: UNIFI_HOST
+        value: "10.1.0.1"
+      - name: UNIFI_PORT
+        value: "443"
+      - name: UNIFI_VERIFY_SSL
+        value: "false"
+      - name: UNIFI_USERNAME
+        valueFrom:
+          secretKeyRef:
+            name: unifi-network-mcp-secret
+            key: username
+      - name: UNIFI_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: unifi-network-mcp-secret
+            key: password
+      - name: UNIFI_API_KEY
+        valueFrom:
+          secretKeyRef:
+            name: unifi-network-mcp-secret
+            key: api_key
+      - name: UNIFI_MCP_HTTP_ENABLED
+        value: "true"
+      - name: UNIFI_MCP_HTTP_FORCE
+        value: "true"
+    resources:
+      requests:
+        cpu: 10m
+        memory: 128Mi
+      limits:
+        memory: 256Mi

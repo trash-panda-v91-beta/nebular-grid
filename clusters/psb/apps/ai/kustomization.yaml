@@ -20,3 +20,4 @@ resources:
   - ./mcp/grafana-mcp/ks.yaml
   - ./mcp/actual-mcp/ks.yaml
   - ./mcp/obsidian-mcp/ks.yaml
+  - ./mcp/unifi-network-mcp/ks.yaml
