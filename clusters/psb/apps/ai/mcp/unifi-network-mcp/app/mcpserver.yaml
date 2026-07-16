@@ -35,8 +35,8 @@ spec:
         value: "true"
       - name: UNIFI_MCP_HTTP_FORCE
         value: "true"
-      - name: UNIFI_MCP_ALLOWED_HOSTS
-        value: "unifi-network-mcp.ai.svc.cluster.local,localhost,127.0.0.1"
+      - name: UNIFI_MCP_ENABLE_DNS_REBINDING_PROTECTION
+        value: "false"
     resources:
       requests:
         cpu: 10m
