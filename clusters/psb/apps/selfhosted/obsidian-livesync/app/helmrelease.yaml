@@ -20,8 +20,8 @@ spec:
               repository: ghcr.io/belphemur/obsidian-headless-sync-docker
               tag: latest
             env:
-              PUID: "1000"
-              PGID: "1000"
+              PUID: "2000"
+              PGID: "2000"
               DEVICE_NAME: nebular-grid
               CONFLICT_STRATEGY: merge
               VAULT_NAME:
