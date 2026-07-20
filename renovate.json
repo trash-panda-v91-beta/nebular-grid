@@ -20,6 +20,7 @@
   "mise": {
     "enabled": true
   },
+  "minimumReleaseAgeBehaviour": "timestamp-optional",
   "packageRules": [
     {
       "description": "Configure Emby versioning",
