@@ -148,6 +148,11 @@ data:
           tool_progress: "off"
     web:
       search_backend: searxng
+    mcp_servers:
+      litellm:
+        url: http://litellm.ai:4000/mcp
+        headers:
+          Authorization: "Bearer $${LITELLM_API_KEY}"
     dashboard:
       basic_auth:
         username: admin
