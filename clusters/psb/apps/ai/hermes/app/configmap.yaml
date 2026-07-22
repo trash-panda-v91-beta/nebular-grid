@@ -152,6 +152,10 @@ data:
           tool_progress: "off"
     web:
       search_backend: searxng
+    dashboard:
+      basic_auth:
+        username: admin
+        password_hash: "scrypt$16384$8$1$q6oeuCXdiAvvIpLv8/CwKA==$rUrm94HL/2oGfvnV6SqsFpl5bm7CpKZu0q6Nhx3zHqs="
   env: |-
     # Secrets are injected via Kubernetes envFrom; this file only holds
     # non-secret runtime overrides.
