@@ -130,27 +130,7 @@ spec:
                   secretKeyRef:
                     name: hermes-config
                     key: LITELLM_API_KEY
-              MATRIX_HOMESERVER:
-                valueFrom:
-                  secretKeyRef:
-                    name: hermes-config
-                    key: MATRIX_HOMESERVER
-              MATRIX_USER_ID:
-                valueFrom:
-                  secretKeyRef:
-                    name: hermes-config
-                    key: MATRIX_USER_ID
-              MATRIX_ACCESS_TOKEN:
-                valueFrom:
-                  secretKeyRef:
-                    name: hermes-config
-                    key: MATRIX_ACCESS_TOKEN
               MATRIX_ENCRYPTION: "true"
-              MATRIX_ALLOWED_USERS:
-                valueFrom:
-                  secretKeyRef:
-                    name: hermes-config
-                    key: MATRIX_ALLOWED_USERS
               API_SERVER_KEY:
                 valueFrom:
                   secretKeyRef:
