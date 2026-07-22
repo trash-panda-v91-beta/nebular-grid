@@ -133,13 +133,6 @@ spec:
                   secretKeyRef:
                     name: hermes-config
                     key: LITELLM_API_KEY
-              MEMINI_URL: http://memini.ai.svc.cluster.local:8080
-              MEMINI_NAMESPACE: hermes
-              MEMINI_API_KEY:
-                valueFrom:
-                  secretKeyRef:
-                    name: hermes-config
-                    key: MEMINI_API_KEY
               PATH: /opt/hermes/.venv/bin:/opt/data/.local/bin:/opt/data/.local/go/bin:/opt/data/.local/homebrew/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
               PIP_BREAK_SYSTEM_PACKAGES: "1"
               SEARXNG_URL: http://searxng.selfhosted.svc.cluster.local:8080

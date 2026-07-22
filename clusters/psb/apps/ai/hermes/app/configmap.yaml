@@ -84,8 +84,7 @@ data:
     memory:
       provider: memini
     plugins:
-      enabled:
-        - memini
+      enabled: []
     terminal:
       backend: local
       cwd: /opt/data/workspace
