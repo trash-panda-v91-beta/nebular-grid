@@ -151,6 +151,11 @@ spec:
                   secretKeyRef:
                     name: hermes-config
                     key: MATRIX_ALLOWED_USERS
+              API_SERVER_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: hermes-config
+                    key: API_SERVER_KEY
               PATH: /opt/hermes/.venv/bin:/opt/data/.local/bin:/opt/data/.local/go/bin:/opt/data/.local/homebrew/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
               PIP_BREAK_SYSTEM_PACKAGES: "1"
               SEARXNG_URL: http://searxng.selfhosted.svc.cluster.local:8080
