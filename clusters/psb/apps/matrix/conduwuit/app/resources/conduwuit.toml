@@ -1,0 +1,16 @@
+[global]
+server_name = "nebular-grid.space"
+address = ["::"]
+port = 8080
+
+database_path = "/data"
+
+allow_encryption = true
+allow_federation = false
+allow_registration = false
+
+# ponytail: single-user homeserver for hermes. Create the bot user via admin command:
+# kubectl exec -n matrix deploy/conduwuit -- conduwuit register @hermes:nebular-grid.space
+# Then get the access token from the output.
+
+registration_token = "{{ .REGISTRATION_TOKEN }}"

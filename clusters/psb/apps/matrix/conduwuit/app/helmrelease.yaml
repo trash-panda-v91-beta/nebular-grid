@@ -1,0 +1,108 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: conduwuit
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: conduwuit
+  interval: 1h
+  values:
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+    controllers:
+      conduwuit:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        type: statefulset
+        containers:
+          app:
+            image:
+              repository: forgejo.ellis.link/continuwuation/continuwuity
+              tag: main-maxperf@sha256:5efeec73426c820e3a6714b0fcfd29295a998b8b1074aa22869979e71682fb36
+            env:
+              CONDUWUIT_CONFIG: /etc/conduwuit/conduwuit.toml
+              TZ: America/Chicago
+            probes:
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  tcpSocket:
+                    port: 8080
+                  periodSeconds: 15
+                  timeoutSeconds: 5
+                  failureThreshold: 6
+              readiness:
+                enabled: true
+                custom: true
+                spec:
+                  tcpSocket:
+                    port: 8080
+                  periodSeconds: 5
+                  timeoutSeconds: 5
+                  failureThreshold: 3
+              startup:
+                enabled: true
+                custom: true
+                spec:
+                  tcpSocket:
+                    port: 8080
+                  periodSeconds: 5
+                  failureThreshold: 120
+            resources:
+              requests:
+                cpu: 100m
+                memory: 256Mi
+              limits:
+                memory: 512Mi
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - ALL
+    persistence:
+      data:
+        enabled: true
+        type: persistentVolumeClaim
+        existingClaim: "{{ .Release.Name }}"
+        advancedMounts:
+          conduwuit:
+            app:
+              - path: /data
+      conduwuit-toml:
+        type: secret
+        name: conduwuit-config
+        advancedMounts:
+          conduwuit:
+            app:
+              - path: /etc/conduwuit/conduwuit.toml
+                subPath: conduwuit.toml
+                readOnly: true
+      tmp:
+        type: emptyDir
+    route:
+      app:
+        hostnames:
+          - matrix.nebular-grid.space
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+        rules:
+          - backendRefs:
+              - identifier: app
+                port: 8080
+    service:
+      app:
+        controller: conduwuit
+        ports:
+          http:
+            port: 8080
