@@ -58,7 +58,6 @@ spec:
               - |
                 set -euo pipefail
                 mkdir -p /opt/data
-                cp /run/config/config.yaml /opt/data/config.yaml
             securityContext:
               allowPrivilegeEscalation: false
               capabilities:
@@ -274,15 +273,6 @@ spec:
               - path: /opt/data
             codeserver:
               - path: /opt/data
-      config-yaml:
-        type: configMap
-        name: hermes-configmap
-        defaultMode: 0o755
-        advancedMounts:
-          hermes:
-            init:
-              - path: /run/config/config.yaml
-                subPath: config.yaml
       run:
         type: emptyDir
         advancedMounts:
