@@ -6,7 +6,6 @@ resources:
   - ./pvc.yaml
   - ./ocirepository.yaml
   - ./helmrelease.yaml
-  - ./externalsecret.yaml
 configMapGenerator:
   - name: conduwuit-configmap
     files:

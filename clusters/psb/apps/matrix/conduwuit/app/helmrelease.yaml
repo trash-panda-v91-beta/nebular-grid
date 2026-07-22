@@ -79,8 +79,8 @@ spec:
             app:
               - path: /data
       conduwuit-toml:
-        type: secret
-        name: conduwuit-config
+        type: configMap
+        name: conduwuit-configmap
         advancedMounts:
           conduwuit:
             app:

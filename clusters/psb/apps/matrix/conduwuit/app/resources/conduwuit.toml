@@ -10,7 +10,6 @@ allow_federation = false
 allow_registration = false
 
 # ponytail: single-user homeserver for hermes. Create the bot user via admin command:
-# kubectl exec -n matrix deploy/conduwuit -- conduwuit register @hermes:nebular-grid.space
+# kubectl exec -n matrix statefulset/conduwuit -- /conduwuit register @hermes:nebular-grid.space
 # Then get the access token from the output.
-
-registration_token = "{{ .REGISTRATION_TOKEN }}"
+registration_token = "nebular-grid-internal-token"
