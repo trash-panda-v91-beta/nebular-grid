@@ -7,7 +7,7 @@ metadata:
 spec:
   alias: unifi_network_mcp
   workload:
-    image: ghcr.io/sirkirby/unifi-network-mcp:0.23.1
+    image: ghcr.io/sirkirby/unifi-network-mcp:0.24.1
     port: 3000
     env:
       - name: UNIFI_HOST
