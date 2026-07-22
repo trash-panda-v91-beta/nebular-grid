@@ -10,81 +10,77 @@ data:
         base_url: http://litellm.ai:4000/v1
         key_env: LITELLM_API_KEY
         models:
-          opencode-go/minimax-m3:
-            context_length: 1000000
-          opencode-go/glm-5.2:
+          openai/glm-5.2:
             context_length: 1048560
-          opencode-go/deepseek-v4-flash:
+          openai/deepseek-v4-pro:
             context_length: 131072
-          opencode-go/mimo-v2.5:
-            context_length: 262144
-          opencode-go/qwen3.6-plus:
+          openai/kimi-k2.6:
+            context_length: 131072
+          openai/kimi-k2.7-code:
+            context_length: 131072
+          openai/qwen3.7-max:
             context_length: 262144
     model:
-      default: opencode-go/minimax-m3
+      default: openai/deepseek-v4-pro
       provider: custom:litellm
-      context_length: 1000000
+      context_length: 131072
     model_aliases:
-      qwen:
-        model: opencode-go/qwen3.6-plus
-        provider: custom:litellm
-      minimax:
-        model: opencode-go/minimax-m3
-        provider: custom:litellm
       glm:
-        model: opencode-go/glm-5.2
+        model: openai/glm-5.2
         provider: custom:litellm
-      glm-turbo:
-        model: opencode-go/deepseek-v4-flash
+      deepseek:
+        model: openai/deepseek-v4-pro
         provider: custom:litellm
-      mimo:
-        model: opencode-go/mimo-v2.5
+      kimi:
+        model: openai/kimi-k2.6
+        provider: custom:litellm
+      kimi-code:
+        model: openai/kimi-k2.7-code
+        provider: custom:litellm
+      qwen:
+        model: openai/qwen3.7-max
         provider: custom:litellm
     fallback_providers:
       - provider: custom:litellm
-        model: opencode-go/qwen3.6-plus
+        model: openai/glm-5.2
       - provider: custom:litellm
-        model: opencode-go/deepseek-v4-flash
+        model: openai/kimi-k2.6
     auxiliary:
       approval:
         provider: custom:litellm
-        model: opencode-go/minimax-m3
+        model: openai/deepseek-v4-pro
         timeout: 60
       compression:
         provider: custom:litellm
-        model: opencode-go/minimax-m3
+        model: openai/deepseek-v4-pro
       web_extract:
         provider: custom:litellm
-        model: opencode-go/minimax-m3
+        model: openai/deepseek-v4-pro
       session_search:
         provider: custom:litellm
-        model: opencode-go/deepseek-v4-flash
+        model: openai/kimi-k2.6
       vision:
         provider: custom:litellm
-        model: opencode-go/minimax-m3
+        model: openai/deepseek-v4-pro
       goal_judge:
         provider: custom:litellm
-        model: opencode-go/deepseek-v4-flash
+        model: openai/kimi-k2.6
       title_generation:
         provider: custom:litellm
-        model: opencode-go/deepseek-v4-flash
+        model: openai/kimi-k2.6
       profile_describer:
         provider: custom:litellm
-        model: opencode-go/deepseek-v4-flash
+        model: openai/kimi-k2.6
       triage_specifier:
         provider: custom:litellm
-        model: opencode-go/deepseek-v4-flash
+        model: openai/kimi-k2.6
       kanban_decomposer:
         provider: custom:litellm
-        model: opencode-go/deepseek-v4-flash
+        model: openai/kimi-k2.6
       curator:
         provider: custom:litellm
-        model: opencode-go/deepseek-v4-flash
+        model: openai/kimi-k2.6
         timeout: 600
-    memory:
-      provider: memini
-    plugins:
-      enabled: []
     terminal:
       backend: local
       cwd: /opt/data/workspace
@@ -118,7 +114,7 @@ data:
       api_max_retries: 3
       reasoning_effort: medium
     delegation:
-      model: opencode-go/deepseek-v4-flash
+      model: openai/kimi-k2.6
       max_concurrent_children: 8
       max_spawn_depth: 2
     moa:
@@ -128,14 +124,14 @@ data:
           enabled: true
           reference_models:
             - provider: custom:litellm
-              model: opencode-go/minimax-m3
+              model: openai/deepseek-v4-pro
             - provider: custom:litellm
-              model: opencode-go/glm-5.2
+              model: openai/glm-5.2
             - provider: custom:litellm
-              model: opencode-go/mimo-v2.5
+              model: openai/kimi-k2.6
           aggregator:
             provider: custom:litellm
-            model: opencode-go/minimax-m3
+            model: openai/deepseek-v4-pro
           reference_temperature: 0.6
           aggregator_temperature: 0.4
           max_tokens: 8192
