@@ -13,3 +13,6 @@ allow_registration = true
 # kubectl exec -n matrix statefulset/conduwuit -- /conduwuit register @hermes:nebular-grid.space
 # Then get the access token from the output.
 registration_token = "nebular-grid-internal-token"
+
+[global.well_known]
+client = "https://matrix.nebular-grid.space"
