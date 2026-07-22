@@ -145,6 +145,7 @@ spec:
                   secretKeyRef:
                     name: hermes-config
                     key: MATRIX_ACCESS_TOKEN
+              MATRIX_ENCRYPTION: "true"
               MATRIX_ALLOWED_USERS:
                 valueFrom:
                   secretKeyRef:
