@@ -141,7 +141,7 @@ data:
           max_tokens: 8192
     platforms:
       matrix:
-        enabled: false
+        enabled: true
     matrix:
       require_mention: false
       auto_thread: false
