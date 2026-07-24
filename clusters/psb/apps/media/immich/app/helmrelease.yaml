@@ -14,8 +14,6 @@ spec:
       main:
         containers:
           main:
-            image:
-              tag: v2.7.5
             env:
               REDIS_HOSTNAME: immich-dragonfly.media.svc.cluster.local
               REDIS_PORT: "6379"
@@ -52,6 +50,9 @@ spec:
               fsGroupChangePolicy: OnRootMismatch
           containers:
             main:
+              image:
+                repository: ghcr.io/immich-app/immich-server
+                tag: v3.0.3
               env:
                 LIBVA_DRIVER_NAME: iHD
               resources:
@@ -72,6 +73,9 @@ spec:
           strategy: Recreate
           containers:
             main:
+              image:
+                repository: ghcr.io/immich-app/immich-machine-learning
+                tag: v3.0.3
               resources:
                 requests:
                   cpu: 10m
