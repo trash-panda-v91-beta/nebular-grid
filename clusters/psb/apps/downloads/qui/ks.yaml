@@ -1,0 +1,34 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: qui
+spec:
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: qui
+  components:
+    - ../../../../components/kopiur/backup
+    - ../../../../components/zeroscaler/nas-nfs-scaler
+  dependsOn:
+    - name: kopiur
+      namespace: system
+    - name: rook-ceph-cluster
+      namespace: rook-ceph
+    - name: qbittorrent
+      namespace: downloads
+  interval: 1h
+  path: "./clusters/psb/apps/downloads/qui/app"
+  postBuild:
+    substitute:
+      APP: qui
+      KOPIUR_CAPACITY: 1Gi
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+  targetNamespace: downloads
+  timeout: 5m
+  wait: false
