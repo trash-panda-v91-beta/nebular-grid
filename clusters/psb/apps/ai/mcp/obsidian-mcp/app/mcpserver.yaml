@@ -24,7 +24,6 @@ spec:
     volumeMounts:
       - name: vault
         mountPath: /vault
-        readOnly: true
     resources:
       requests:
         cpu: 10m
