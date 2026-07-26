@@ -22,7 +22,7 @@ spec:
           app:
             image:
               repository: ghcr.io/communitymaintained/tubeless
-              tag: 0.1.0@sha256:a8350e58a6c149012463a4e15f99ceb5b8467f0e6ae8f24ac9624d3638b96247
+              tag: 0.3.0@sha256:a43df302bdd35585cb69ccf0251159ce670af8c1180ef2b7267d855a38dba639
             env:
               TZ: Europe/Prague
               TZ_DATA_DIR: /tmp/elixir_tz_data
