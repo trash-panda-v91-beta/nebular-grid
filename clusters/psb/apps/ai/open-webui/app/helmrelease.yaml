@@ -18,7 +18,7 @@ spec:
           app:
             image:
               repository: ghcr.io/open-webui/open-webui
-              tag: v0.10.2
+              tag: v0.11.0@sha256:72c0ba641ba75e7aa52655cb242570906ececd09b1140fb736483038a22b3228
             env:
               # Features
               ENABLE_LOGIN_FORM: "true"
