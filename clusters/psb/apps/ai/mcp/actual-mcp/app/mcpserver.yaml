@@ -1,4 +1,3 @@
----
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmcpserver_v1alpha1.json
 apiVersion: litellm.home-operations.com/v1alpha1
 kind: LiteLLMMCPServer
@@ -26,6 +25,17 @@ spec:
           secretKeyRef:
             name: actual-mcp-secret
             key: ACTUAL_BUDGET_SYNC_ID
+      # Session management — prevent pool exhaustion during burst MCP calls
+      - name: MAX_CONCURRENT_SESSIONS
+        value: "30"
+      - name: SESSION_IDLE_TIMEOUT_MINUTES
+        value: "2"
+      # Increase per-operation timeout — bank sync needs more than 30s
+      - name: ACTUAL_OP_TIMEOUT_MS
+        value: "60000"
+      # More concurrent Actual API operations
+      - name: ACTUAL_API_CONCURRENCY
+        value: "10"
     volumes:
       - name: data
         emptyDir: {}
