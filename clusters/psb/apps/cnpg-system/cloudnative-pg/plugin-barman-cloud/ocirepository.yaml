@@ -10,6 +10,6 @@ spec:
     mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
     operation: copy
   ref:
-    tag: 0.7.0
-    digest: sha256:7c5e0862054294efc24bf5e31ffdb3a4ae232307fca3499b6d068c41051c07ad
+    tag: 0.7.1
+    digest: sha256:fc5683ec655b140e2f82219ffc9ae468e9cf2c0f204251b7da2294e5ce52b625
   url: oci://ghcr.io/cloudnative-pg/charts/plugin-barman-cloud
