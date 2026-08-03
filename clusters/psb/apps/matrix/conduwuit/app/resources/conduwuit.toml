@@ -7,12 +7,13 @@ database_path = "/data"
 
 allow_encryption = true
 allow_federation = false
-allow_registration = true
+# Fail-closed: Env (from 1Password via ExternalSecret) flips allow_registration true
+# and sets the registration token. If the secret is missing, registration stays off.
+allow_registration = false
 
 # ponytail: single-user homeserver for hermes. Create the bot user via admin command:
 # kubectl exec -n matrix statefulset/conduwuit -- /conduwuit register @hermes:nebular-grid.space
 # Then get the access token from the output.
-registration_token = "nebular-grid-internal-token"
 
 [global.well_known]
 client = "https://matrix.nebular-grid.space"

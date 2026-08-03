@@ -30,6 +30,9 @@ spec:
             env:
               CONDUWUIT_CONFIG: /etc/conduwuit/conduwuit.toml
               TZ: America/Chicago
+            envFrom:
+              - secretRef:
+                  name: conduwuit-secret
             probes:
               liveness:
                 enabled: true
