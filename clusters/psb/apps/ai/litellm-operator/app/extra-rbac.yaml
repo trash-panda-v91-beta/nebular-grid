@@ -1,0 +1,47 @@
+---
+# Workaround: chart 0.0.10's ClusterRole omits litellmteams and litellmvirtualkeys,
+# but the operator image watches both. Without these rules the manager spams
+# "forbidden: cannot list" and the webhook stays endpoint-less, blocking every
+# LiteLLMModel dry-run in the ai namespace. Drop this once the chart ships the rules.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: litellm-operator-extra-role
+  labels:
+    app.kubernetes.io/name: litellm-operator
+    app.kubernetes.io/instance: litellm-operator
+rules:
+  - apiGroups:
+      - litellm.home-operations.com
+    resources:
+      - litellmteams
+      - litellmvirtualkeys
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - litellm.home-operations.com
+    resources:
+      - litellmteams/status
+      - litellmvirtualkeys/status
+    verbs:
+      - get
+      - patch
+      - update
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: litellm-operator-extra-binding
+  labels:
+    app.kubernetes.io/name: litellm-operator
+    app.kubernetes.io/instance: litellm-operator
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: litellm-operator-extra-role
+subjects:
+  - kind: ServiceAccount
+    name: litellm-operator
+    namespace: ai
