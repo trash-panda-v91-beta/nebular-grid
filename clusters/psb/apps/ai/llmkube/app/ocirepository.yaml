@@ -10,6 +10,6 @@ spec:
     mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
     operation: copy
   ref:
-    tag: 0.9.13
-    digest: sha256:d7b37dac107e5325f0a41c81712664d2454ff4a5ff6d5653732d54d97e971f1e
+    tag: 0.9.14
+    digest: sha256:0927762b099ca29455e9221e5b6d571930d19b2f0ae79f807c9e277c899eb3b2
   url: oci://ghcr.io/defilantech/charts/llmkube
