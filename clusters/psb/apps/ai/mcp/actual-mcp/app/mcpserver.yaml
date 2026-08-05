@@ -7,7 +7,7 @@ spec:
   alias: actual_mcp
   transport: http
   workload:
-    image: ghcr.io/agigante80/actual-mcp-server:0.8.17@sha256:a1b02f4daa949f548433392c65a2967583b3e62f3bf215e82ee201e4f062600a
+    image: ghcr.io/agigante80/actual-mcp-server:0.9.6@sha256:8402acfc052a4e7a2f8ed2dbcfea8f0f2f823f4251be6cfe172da3b3cf74a398
     port: 3600
     path: /http
     env:
