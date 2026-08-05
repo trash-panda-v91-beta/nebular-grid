@@ -390,6 +390,34 @@ spec:
                 - "get"
                 - "list"
                 - "watch"
+            - apiGroups:
+                - "kopiur.home-operations.com"
+              resources:
+                - snapshotpolicies
+                - snapshots
+                - snapshotschedules
+                - repositories
+                - clusterrepositories
+                - restores
+                - maintenances
+                - repositoryreplications
+              verbs:
+                - "get"
+                - "list"
+                - "watch"
+            - apiGroups:
+                - "snapshot.storage.k8s.io"
+              resources:
+                - volumesnapshots
+                - volumesnapshotclasses
+                - volumesnapshotcontents
+                - volumegroupsnapshots
+                - volumegroupsnapshotclasses
+                - volumegroupsnapshotcontents
+              verbs:
+                - "get"
+                - "list"
+                - "watch"
         hermes-pod-delete:
           type: ClusterRole
           rules:
