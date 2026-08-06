@@ -55,7 +55,8 @@ spec:
                     key: PAPERLESS_OCR_LANGUAGE
               PAPERLESS_REDIS: redis://paperless-dragonfly.selfhosted.svc.cluster.local:6379
               # Configure user permissions
-              USERMAP_GID: "100"
+              USERMAP_UID: "2000"
+              USERMAP_GID: "2000"
               # Configure admin user
               PAPERLESS_ADMIN_USER:
                 valueFrom:
