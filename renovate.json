@@ -29,6 +29,12 @@
       "versioning": "loose"
     },
     {
+      "description": "Configure Hermes agent versioning (date-based tags)",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["nousresearch/hermes-agent"],
+      "versioning": "loose"
+    },
+    {
       "description": "Auto merge mise tool updates",
       "matchManagers": ["mise"],
       "automerge": true,
