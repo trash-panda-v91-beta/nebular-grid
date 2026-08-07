@@ -24,7 +24,7 @@ spec:
             app.kubernetes.io/name: radarr
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: media
-            app.kubernetes.io/name: maintainerr
+            app.kubernetes.io/name: seerr
       toPorts:
         - ports:
             - port: "8096"
