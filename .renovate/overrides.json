@@ -12,6 +12,21 @@
       "matchDatasources": ["docker"],
       "matchPackageNames": ["/factory\\.talos\\.dev/"],
       "overridePackageName": "ghcr.io/siderolabs/installer"
+    },
+    {
+      "description": "Disable digest pinning for date-versioned system images (k8s, talos, flux-operator) - these don't resolve cleanly for digest pinning and cause pin-branch errors",
+      "matchDatasources": ["docker"],
+      "matchUpdateTypes": ["digest"],
+      "matchPackageNames": [
+        "registry.k8s.io/kube-apiserver",
+        "registry.k8s.io/kube-controller-manager",
+        "registry.k8s.io/kube-proxy",
+        "registry.k8s.io/kube-scheduler",
+        "ghcr.io/siderolabs/kubelet",
+        "ghcr.io/siderolabs/installer",
+        "/controlplaneio-fluxcd/"
+      ],
+      "enabled": false
     }
   ]
 }
