@@ -45,7 +45,9 @@ spec:
         # as UID/GID 2000 and must be able to read & migrate that data.
         - name: chown-data
           image: ghcr.io/matter-js/matterjs-server:1.4.0@sha256:1b8e824d9b6c8afed012fd7047ece1f924778c257afc2e5e56435a51a914664a
-          command: ["/bin/sh", "-c"]
+          command:
+            - "/bin/sh"
+            - "-c"
           args:
             - |
               if [ -d /data ]; then
