@@ -5,15 +5,8 @@ name: Auto Merge
 on:
   pull_request_target:
     types:
-      - labeled
       - opened
-      - synchronize
-      - ready_for_review
-  pull_request_review:
-    types:
-      - submitted
-      - dismissed
-      - edited
+      - reopened
 
 permissions:
   contents: read
