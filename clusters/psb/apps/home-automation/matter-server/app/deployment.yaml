@@ -27,105 +27,106 @@ spec:
           }]
     spec:
       securityContext:
-        runAsUser: 0
-        runAsGroup: 0
-        runAsNonRoot: false
+        runAsUser: 2000
+        runAsGroup: 2000
+        runAsNonRoot: true
+        fsGroup: 2000
+        fsGroupChangePolicy: OnRootMismatch
         sysctls:
           - name: net.ipv6.conf.net1.accept_ra
             value: "2"
           - name: net.ipv6.conf.net1.accept_ra_defrtr
             value: "1"
           - name: net.ipv6.conf.net1.accept_ra_rt_info_max_plen
-            value: "64"
+            value: "128"
+      initContainers:
+        # One-time ownership fix: the data was previously written by the Python
+        # matter-server running as root (mode 600). The JS matter-server runs
+        # as UID/GID 2000 and must be able to read & migrate that data.
+        - name: chown-data
+          image: ghcr.io/matter-js/matterjs-server:1.4.0@sha256:1b8e824d9b6c8afed012fd7047ece1f924778c257afc2e5e56435a51a914664a
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              if [ -d /data ]; then
+                chown -R 2000:2000 /data || true
+                chmod -R u+rwX,go+rX /data || true
+              fi
+          securityContext:
+            runAsUser: 0
+            runAsGroup: 0
+          volumeMounts:
+            - name: data
+              mountPath: /data
       containers:
         - name: matter-server
-          image: ghcr.io/matter-js/python-matter-server:8.1.2@sha256:6827e352011e2d8c2bde771e446fcf72acc49150ef66bad978816bac1762aad3
+          image: ghcr.io/matter-js/matterjs-server:1.4.0@sha256:1b8e824d9b6c8afed012fd7047ece1f924778c257afc2e5e56435a51a914664a
           imagePullPolicy: IfNotPresent
           args:
             - --storage-path=/data
             - --primary-interface=net1
             - --log-level=info
-            - --log-level-sdk=info
           env:
             - name: TZ
               value: "Europe/Prague"
-            - name: MATTER_SERVER__INSTANCE_NAME
-              value: "matter-server"
-            - name: MATTER_SERVER__PORT
-              value: "5580"
-            - name: MATTER_SERVER__APPLICATION_URL
-              value: "ws://matter-server.home-automation.svc.cluster.local:5580/ws"
+            - name: STORAGE_PATH
+              value: "/data"
+            - name: PRIMARY_INTERFACE
+              value: "net1"
+            - name: LOG_LEVEL
+              value: "info"
+            - name: PRODUCTION_MODE
+              value: "true"
+            - name: BLE_PROXY
+              value: "true"
+            - name: NODE_OPTIONS
+              value: "--max-old-space-size=768"
           ports:
             - name: http
               containerPort: 5580
               protocol: TCP
           securityContext:
-            privileged: true
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
+              add:
+                - NET_ADMIN
+                - NET_RAW
           startupProbe:
-            exec:
-              command:
-                - python
-                - -c
-                - |
-                  import sys, urllib.request
-                  for url in ("http://127.0.0.1:5580/info", "http://10.1.30.153:5580/info"):
-                      try:
-                          with urllib.request.urlopen(url, timeout=5) as r:
-                              if r.status == 200:
-                                  sys.exit(0)
-                      except Exception:
-                          pass
-                  sys.exit(1)
+            tcpSocket:
+              port: http
             periodSeconds: 10
-            timeoutSeconds: 10
-            failureThreshold: 60
+            timeoutSeconds: 5
+            failureThreshold: 30
           readinessProbe:
-            exec:
-              command:
-                - python
-                - -c
-                - |
-                  import sys, urllib.request
-                  for url in ("http://127.0.0.1:5580/info", "http://10.1.30.153:5580/info"):
-                      try:
-                          with urllib.request.urlopen(url, timeout=5) as r:
-                              if r.status == 200:
-                                  sys.exit(0)
-                      except Exception:
-                          pass
-                  sys.exit(1)
+            tcpSocket:
+              port: http
             initialDelaySeconds: 5
             periodSeconds: 10
-            timeoutSeconds: 10
+            timeoutSeconds: 5
             failureThreshold: 3
           livenessProbe:
-            exec:
-              command:
-                - python
-                - -c
-                - |
-                  import sys, urllib.request
-                  for url in ("http://127.0.0.1:5580/info", "http://10.1.30.153:5580/info"):
-                      try:
-                          with urllib.request.urlopen(url, timeout=5) as r:
-                              if r.status == 200:
-                                  sys.exit(0)
-                      except Exception:
-                          pass
-                  sys.exit(1)
+            tcpSocket:
+              port: http
             periodSeconds: 30
-            timeoutSeconds: 10
+            timeoutSeconds: 5
             failureThreshold: 3
           resources:
             requests:
               cpu: 50m
               memory: 256Mi
             limits:
-              memory: 512Mi
+              memory: 1Gi
           volumeMounts:
             - name: data
               mountPath: /data
+            - name: tmp
+              mountPath: /tmp
       volumes:
         - name: data
           persistentVolumeClaim:
             claimName: matter-server-data
+        - name: tmp
+          emptyDir: {}

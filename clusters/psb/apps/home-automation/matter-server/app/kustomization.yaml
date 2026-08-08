@@ -5,5 +5,3 @@ kind: Kustomization
 resources:
   - ./deployment.yaml
   - ./service.yaml
-patches:
-  - path: ./snapshotpolicy-mover-override.yaml
