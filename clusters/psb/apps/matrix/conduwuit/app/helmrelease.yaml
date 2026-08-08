@@ -97,7 +97,7 @@ spec:
         hostnames:
           - matrix.nebular-grid.space
         parentRefs:
-          - name: envoy-internal
+          - name: envoy-external
             namespace: network
         rules:
           - backendRefs:
