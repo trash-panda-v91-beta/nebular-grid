@@ -7,7 +7,7 @@ metadata:
 spec:
   alias: grafana_mcp
   workload:
-    image: docker.io/mcp/grafana:latest
+    image: docker.io/mcp/grafana:latest@sha256:9362bcf6aa0e44e61f645b905cec03fb346a946a34a4dafecd7f3e28d3724014
     port: 8000
     env:
       - name: GRAFANA_URL
