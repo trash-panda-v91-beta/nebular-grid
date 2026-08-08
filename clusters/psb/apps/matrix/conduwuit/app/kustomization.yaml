@@ -5,7 +5,7 @@ kind: Kustomization
 resources:
   - ./pvc.yaml
   - ./ocirepository.yaml
-  - ./externalsecret.yaml
+  - ./secret.yaml
   - ./helmrelease.yaml
 configMapGenerator:
   - name: conduwuit-configmap
