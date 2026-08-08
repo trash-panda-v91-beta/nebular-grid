@@ -39,27 +39,6 @@ spec:
             value: "1"
           - name: net.ipv6.conf.net1.accept_ra_rt_info_max_plen
             value: "128"
-      initContainers:
-        # One-time ownership fix: the data was previously written by the Python
-        # matter-server running as root (mode 600). The JS matter-server runs
-        # as UID/GID 2000 and must be able to read & migrate that data.
-        - name: chown-data
-          image: ghcr.io/matter-js/matterjs-server:1.4.0@sha256:1b8e824d9b6c8afed012fd7047ece1f924778c257afc2e5e56435a51a914664a
-          command:
-            - "/bin/sh"
-            - "-c"
-          args:
-            - |
-              if [ -d /data ]; then
-                chown -R 2000:2000 /data || true
-                chmod -R u+rwX,go+rX /data || true
-              fi
-          securityContext:
-            runAsUser: 0
-            runAsGroup: 0
-          volumeMounts:
-            - name: data
-              mountPath: /data
       containers:
         - name: matter-server
           image: ghcr.io/matter-js/matterjs-server:1.4.0@sha256:1b8e824d9b6c8afed012fd7047ece1f924778c257afc2e5e56435a51a914664a
