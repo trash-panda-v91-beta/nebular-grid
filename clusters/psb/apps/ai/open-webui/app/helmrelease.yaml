@@ -49,7 +49,7 @@ spec:
           open-terminal:
             image:
               repository: ghcr.io/open-webui/open-terminal
-              tag: slim
+              tag: slim@sha256:472630aa110cda85a4898a4e037b582c8deeb71ab1e91df324a0e78b6c9a47cc
             workingDir: /home/user
             ports:
               - containerPort: 8000
