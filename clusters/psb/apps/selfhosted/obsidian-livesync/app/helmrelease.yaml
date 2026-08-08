@@ -18,7 +18,7 @@ spec:
           app:
             image:
               repository: ghcr.io/belphemur/obsidian-headless-sync-docker
-              tag: latest@sha256:fe239b322426a060de9c2ded70aae23ff175e0b5d57d9a36dec11534b69bb719
+              tag: 0.0.14@sha256:fe239b322426a060de9c2ded70aae23ff175e0b5d57d9a36dec11534b69bb719
             env:
               PUID: "2000"
               PGID: "2000"
