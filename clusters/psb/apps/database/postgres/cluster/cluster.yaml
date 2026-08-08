@@ -42,6 +42,13 @@ spec:
       - name: timescaledb
         image:
           reference: ghcr.io/shusaan/timescaledb-testing:2.23.1-18-trixie@sha256:e06e12e4dc1df9d427b22a7cbab19ef9b800552d712a439e948fcc4efacf67d4
+      - name: vchord
+        image:
+          reference: ghcr.io/tensorchord/vchord-scratch:pg18-v1.1.1@sha256:bdea43bed2a414e21bbf71767bf6f0739747ac480b267b51772dc214ac28dcb3
+        dynamic_library_path:
+          - /usr/lib/postgresql/18/lib/
+        extension_control_path:
+          - /usr/share/postgresql/18/
 
   managed:
     roles:
