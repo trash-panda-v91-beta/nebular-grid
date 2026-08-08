@@ -27,16 +27,24 @@ spec:
             name: actual-mcp-secret
             key: ACTUAL_BUDGET_SYNC_ID
       # Session management - prevent pool exhaustion during burst MCP calls
+      # Explicitly enable connection pooling (image default is true, but make it
+      # explicit so sessions are reused from the pool instead of spawned per call).
+      - name: USE_CONNECTION_POOL
+        value: "true"
+      # Ceiling on concurrent MCP sessions. Generous headroom for bursts; pooling
+      # reuses sessions so this is defense-in-depth, not the primary bottleneck.
       - name: MAX_CONCURRENT_SESSIONS
-        value: "30"
+        value: "50"
       - name: SESSION_IDLE_TIMEOUT_MINUTES
         value: "2"
       # Increase per-operation timeout - bank sync needs more than 30s
       - name: ACTUAL_OP_TIMEOUT_MS
         value: "60000"
-      # More concurrent Actual API operations
+      # Deeper upstream Actual API pool: burst tool calls (e.g. linking transfer
+      # pairs) serialize on the global API mutex; raising pool depth to the server's
+      # documented 15-session ceiling reduces 503 pool-exhaustion under bursts.
       - name: ACTUAL_API_CONCURRENCY
-        value: "10"
+        value: "15"
     volumes:
       - name: data
         emptyDir: {}
