@@ -56,7 +56,7 @@ jobs:
                 && steps.cl4-token.outputs.token
                 || steps.trashbot-token.outputs.token
             }}
-        run: |
+        run: |-
           gh api \
             --method POST \
             "repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/reviews" \
