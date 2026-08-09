@@ -12,16 +12,14 @@ spec:
   values:
     operatorConfig:
       hostname: "tailscale-operator"
-      defaultTags:
-        - "tag:nebular-grid"
+      defaultTags: "tag:nebular-grid"
       # API server proxy (operate cluster via kubectl over tailnet).
       # We don't need it for the use-case here; disable to reduce surface.
       apiServerProxyConfig:
         mode: "false"
     proxyConfig:
       defaultProxyClass: tailscale-tun
-      defaultTags:
-        - "tag:nebular-grid"
+      defaultTags: "tag:nebular-grid"
     # Provide the OAuth client via a Secret so the operator can create
     # ephemeral tagged devices automatically (no manual auth-key rotation).
     oauthSecretVolume:
