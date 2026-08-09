@@ -1,0 +1,17 @@
+---
+# Expose the cluster's internal subnets to the tailnet via a subnet router
+# (Connector). Remote clients (phone/Mac) can then reach internal IPs over the
+# overlay; combined with Tailscale MagicDNS/Split DNS they can use the existing
+# *.nebular-grid.space hostnames (and their valid certs) instead of resolving
+# through public DNS.
+apiVersion: tailscale.com/v1alpha1
+kind: Connector
+metadata:
+  name: psb-internal
+spec:
+  subnetRouter:
+    advertiseRoutes:
+      # Services subnet (envoy at 10.1.6.42) + Default (DNS/resolver 10.1.0.1).
+      # REVIEW: tighten this to only the subnets you need over the tailnet.
+      - "10.1.6.0/24"
+      - "10.1.0.0/24"
