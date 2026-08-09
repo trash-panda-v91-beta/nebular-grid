@@ -48,13 +48,17 @@ jobs:
           private-key: ${{ secrets.TRASHBOT_APP_PRIVATE_KEY }}
           permission-pull-requests: write
 
-      - name: Approve PR
-        uses: hmarr/auto-approve-action@f0939cb97f9205db34d620ee686279e4f373eb60 # v4.0.0
-        with:
-          github-token: >-
+      - name: Approve PR (gh)
+        env:
+          GH_TOKEN: >-
             ${{
               steps.bot.outputs.label == 'cl4'
                 && steps.cl4-token.outputs.token
                 || steps.trashbot-token.outputs.token
             }}
-          review-message: "Auto-approved by ${{ steps.bot.outputs.label }} bot."
+        run: |-
+          gh api \
+            --method POST \
+            "repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/reviews" \
+            -f event=APPROVE \
+            -f body="Auto-approved by ${{ steps.bot.outputs.label }} bot."
