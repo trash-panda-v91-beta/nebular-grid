@@ -15,7 +15,7 @@ jobs:
   auto-merge:
     name: Enable Auto Merge
     runs-on: ubuntu-latest
-    if: >
+    if: >-
       github.event.pull_request.head.repo.full_name == github.repository &&
       !github.event.pull_request.draft
     steps:
@@ -27,9 +27,12 @@ jobs:
           private-key: ${{ secrets.TRASHBOT_APP_PRIVATE_KEY }}
           permission-pull-requests: write
 
-      - name: Enable Auto Merge (rebase)
-        uses: peter-evans/enable-pull-request-automerge@ec33559d28e85e574d8d8ce9fd6b64b1f6456c20 # v4.0.0
-        with:
-          token: ${{ steps.app-token.outputs.token }}
-          pull-request-number: ${{ github.event.pull_request.number }}
-          merge-method: rebase
+      - name: Enable Auto Merge (rebase via gh)
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: |
+          gh pr merge \
+            --repo "${{ github.repository }}" \
+            "${{ github.event.pull_request.number }}" \
+            --auto \
+            --rebase
