@@ -121,7 +121,7 @@ spec:
         hostnames:
           - hass.nebular-grid.space
         parentRefs:
-          - name: envoy-internal
+          - name: envoy-internal-public-dns
             namespace: network
 
         rules:
@@ -132,7 +132,7 @@ spec:
         hostnames:
           - hass-code.nebular-grid.space
         parentRefs:
-          - name: envoy-internal
+          - name: envoy-internal-public-dns
             namespace: network
 
         rules:
