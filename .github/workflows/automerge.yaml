@@ -27,7 +27,7 @@ jobs:
           private-key: ${{ secrets.TRASHBOT_APP_PRIVATE_KEY }}
           permission-pull-requests: write
 
-      - name: Enable Auto Merge (rebase via gh)
+      - name: Enable Auto Merge (squash via gh)
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |-
@@ -35,4 +35,4 @@ jobs:
             --repo "${{ github.repository }}" \
             "${{ github.event.pull_request.number }}" \
             --auto \
-            --rebase
+            --squash
