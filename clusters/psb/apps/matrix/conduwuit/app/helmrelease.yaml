@@ -30,9 +30,10 @@ spec:
             env:
               CONDUWUIT_CONFIG: /etc/conduwuit/conduwuit.toml
               TZ: America/Chicago
-            envFrom:
-              - secretRef:
-                  name: conduwuit-secret
+              # Fail-closed: takes precedence over the config file (see
+              # continuwuity.org/configuration), so registration stays off even if
+              # the toml is ever misconfigured. Not secret - inline in HR.
+              CONDUWUIT_ALLOW_REGISTRATION: "false"
             probes:
               liveness:
                 enabled: true
