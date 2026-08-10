@@ -1,0 +1,32 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/kopiur.home-operations.com/snapshotpolicy_v1alpha1.json
+apiVersion: kopiur.home-operations.com/v1alpha1
+kind: SnapshotPolicy
+metadata:
+  name: hermes
+  annotations:
+    kopiur.home-operations.com/allow-identity-change: "true"
+spec:
+  credentialProjection:
+    enabled: true
+  mover:
+    securityContext:
+      runAsUser: 2000
+      runAsGroup: 2000
+  repository:
+    kind: ClusterRepository
+    name: nas
+  retention:
+    keepHourly: 24
+    keepDaily: 7
+  sources:
+    - pvc:
+        name: "hermes"
+  verification:
+    deep:
+      schedule:
+        cron: H 5 1 * *
+    quick:
+      schedule:
+        cron: H 3 * * *
+  volumeSnapshotClassName: csi-ceph-blockpool

@@ -8,8 +8,6 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: hermes
-  components:
-    - ../../../../components/kopiur/backup
   dependsOn:
     - name: litellm
       namespace: ai
@@ -17,8 +15,6 @@ spec:
       namespace: ai
     - name: conduwuit
       namespace: matrix
-    - name: kopiur
-      namespace: system
   interval: 1h
   path: ./clusters/psb/apps/ai/hermes/app
   postBuild:
