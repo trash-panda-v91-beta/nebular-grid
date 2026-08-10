@@ -69,6 +69,8 @@ spec:
                 subPath: data
     route:
       app:
+        annotations:
+          external-dns.alpha.kubernetes.io/cloudflare-proxied: "false"
         hostnames:
           - maintainerr.nebular-grid.space
         parentRefs:

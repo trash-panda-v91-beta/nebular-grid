@@ -85,6 +85,8 @@ spec:
             subPath: tmp
     route:
       app:
+        annotations:
+          external-dns.alpha.kubernetes.io/cloudflare-proxied: "false"
         hostnames:
           - radarr.nebular-grid.space
         parentRefs:

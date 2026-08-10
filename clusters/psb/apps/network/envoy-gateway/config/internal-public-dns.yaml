@@ -7,13 +7,15 @@ metadata:
   labels:
     external-dns/controller: externaldns-cloudflare
   annotations:
-    external-dns.alpha.kubernetes.io/target: &hostname ingress-int-pub-psb.nebular-grid.space
+    # No external-dns.alpha.kubernetes.io/target -> external-dns falls back to
+    # the gateway Status.Addresses (the Cilium LB IP 10.1.6.43) and emits A
+    # records (not CNAME). cloudflare-proxied is applied per-HTTPRoute (see the
+    # app helmreleases) because external-dns v0.21.0 reads it from the route.
     external-dns.alpha.kubernetes.io/cloudflare-proxied: "false"
 spec:
   gatewayClassName: envoy
   infrastructure:
     annotations:
-      external-dns.alpha.kubernetes.io/hostname: *hostname
       external-dns.alpha.kubernetes.io/cloudflare-proxied: "false"
       lbipam.cilium.io/ips: 10.1.6.43
   listeners:
