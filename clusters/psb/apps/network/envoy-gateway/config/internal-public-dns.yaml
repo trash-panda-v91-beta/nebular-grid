@@ -4,6 +4,8 @@ apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:
   name: envoy-internal-public-dns
+  labels:
+    external-dns/controller: externaldns-cloudflare
   annotations:
     external-dns.alpha.kubernetes.io/target: &hostname ingress-int-pub-psb.nebular-grid.space
     external-dns.alpha.kubernetes.io/cloudflare-proxied: "false"
