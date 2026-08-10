@@ -28,6 +28,9 @@ spec:
             env:
               SEARXNG_BASE_URL: https://search.nebular-grid.space
               SEARXNG_PORT: &httpPort 8080
+              # Backing store for the rate limiter (Dragonfly, deployed via the
+              # dragonfly component). bjw-s pattern.
+              SEARXNG_VALKEY_URL: redis://searxng-dragonfly.selfhosted.svc.cluster.local:6379/0
               SEARXNG_SECRET:
                 valueFrom:
                   secretKeyRef:
@@ -79,6 +82,9 @@ spec:
         globalMounts:
           - path: /etc/searxng/settings.yml
             subPath: settings.yml
+            readOnly: true
+          - path: /etc/searxng/limiter.toml
+            subPath: limiter.toml
             readOnly: true
       tmpfs:
         type: emptyDir

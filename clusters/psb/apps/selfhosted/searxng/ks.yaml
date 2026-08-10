@@ -8,8 +8,16 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: searxng
+  components:
+    - ../../../../components/dragonfly
+  dependsOn:
+    - name: dragonfly-operator
+      namespace: database
   interval: 1h
   path: ./clusters/psb/apps/selfhosted/searxng/app
+  postBuild:
+    substitute:
+      APP: searxng
   prune: true
   sourceRef:
     kind: GitRepository
