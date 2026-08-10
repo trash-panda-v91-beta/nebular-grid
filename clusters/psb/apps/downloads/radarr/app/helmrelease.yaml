@@ -88,5 +88,5 @@ spec:
         hostnames:
           - radarr.nebular-grid.space
         parentRefs:
-          - name: envoy-internal
+          - name: envoy-internal-public-dns
             namespace: network
