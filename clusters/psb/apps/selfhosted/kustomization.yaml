@@ -12,3 +12,4 @@ resources:
   - ./searxng/ks.yaml
   - ./tidyquest/ks.yaml
   - ./obsidian-livesync/ks.yaml
+  - ./donetick/ks.yaml
