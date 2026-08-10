@@ -7,7 +7,7 @@ database_path = "/data"
 
 allow_encryption = true
 allow_federation = false
-# Registration is closed. The ExternalSecret forces CONDUWUIT_ALLOW_REGISTRATION=false
+# Registration is closed. The HelmRelease sets CONDUWUIT_ALLOW_REGISTRATION=false
 # (env overrides the config file), and the runtime account is created via the admin
 # command below. No public sign-ups.
 allow_registration = false
