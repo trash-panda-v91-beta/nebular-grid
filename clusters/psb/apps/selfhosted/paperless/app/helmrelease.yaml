@@ -34,6 +34,8 @@ spec:
                   secretKeyRef:
                     name: paperless-secret
                     key: PAPERLESS_SOCIALACCOUNT_PROVIDERS
+              PAPERLESS_SOCIAL_AUTO_SIGNUP: "true"
+              PAPERLESS_SOCIALACCOUNT_ALLOW_SIGNUPS: "true"
               PAPERLESS_URL: https://paperless.nebular-grid.space
               PAPERLESS_PORT: "8000"
               PAPERLESS_TIME_ZONE: "Europe/Prague"
