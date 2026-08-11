@@ -13,6 +13,7 @@ spec:
     - ../../../../components/gpu
     - ../../../../components/postgres/pass
     - ../../../../components/postgres/patch
+    - ../../../../components/oidc
   dependsOn:
     - name: dragonfly-operator
       namespace: database
@@ -20,11 +21,19 @@ spec:
       namespace: kube-system
     - name: postgres-cluster
       namespace: database
+    - name: kanidm
+      namespace: security
   interval: 1h
   path: "./clusters/psb/apps/media/immich/app"
   postBuild:
     substitute:
       APP: immich
+      APP_NAMESPACE: media
+      SUBDOMAIN: immich
+      OIDC_DISPLAY_NAME: "Immich"
+      OIDC_CALLBACK: /auth/login
+      OIDC_EXTRA_CALLBACKS: '["app.immich:///oauth-callback", "https://immich.nebular-grid.space/user-settings"]'
+      OIDC_LEGACY_CRYPTO: "true"
   prune: true
   sourceRef:
     kind: GitRepository
