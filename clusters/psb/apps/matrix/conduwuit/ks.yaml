@@ -8,11 +8,21 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: conduwuit
+  components:
+    - ../../../../components/oidc
+  dependsOn:
+    - name: kanidm
+      namespace: security
   interval: 1h
   path: ./clusters/psb/apps/matrix/conduwuit/app
   postBuild:
     substitute:
       APP: conduwuit
+      APP_NAMESPACE: matrix
+      SUBDOMAIN: matrix
+      OIDC_CALLBACK: /_continuwuit/oidc/complete
+      OIDC_DISPLAY_NAME: Continuwuity
+      OIDC_SHORT_USERNAME: "true"
   prune: true
   sourceRef:
     kind: GitRepository
