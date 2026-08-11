@@ -31,7 +31,6 @@ spec:
           app:
             image:
               repository: docker.io/donetick/donetick
-              # pin stable v0.1.76 (multi-arch index digest) for reproducible pulls
               tag: v0.1.76@sha256:2f32646ef4e613f44066163646f53c02d6d5b728b31abe47dfd111b3dfd53643
             env:
               DT_ENV: selfhosted
@@ -91,12 +90,11 @@ spec:
             protocol: HTTP
     persistence:
       data:
-        type: persistentVolumeClaim
-        accessMode: ReadWriteOnce
-        storageClass: ceph-block
-        size: 1Gi
-        globalMounts:
-          - path: /donetick-data
+        existingClaim: donetick-data
+        advancedMounts:
+          donetick:
+            app:
+              - path: /donetick-data
     route:
       app:
         annotations:
