@@ -10,17 +10,24 @@ spec:
       app.kubernetes.io/name: prowlarr
   components:
     - ../../../../components/kopiur/backup
+    - ../../../../components/oidc/envoy
   dependsOn:
     - name: kopiur
       namespace: system
     - name: rook-ceph-cluster
       namespace: rook-ceph
+    - name: kanidm
+      namespace: security
   interval: 1h
   path: "./clusters/psb/apps/downloads/prowlarr/app"
   postBuild:
     substitute:
       APP: prowlarr
+      APP_NAMESPACE: downloads
       KOPIUR_CLAIM: prowlarr-config
+      OIDC_DISPLAY_NAME: Prowlarr
+      OIDC_GROUP: admins
+      OIDC_SCOPES: '["openid", "profile"]'
   prune: true
   sourceRef:
     kind: GitRepository
