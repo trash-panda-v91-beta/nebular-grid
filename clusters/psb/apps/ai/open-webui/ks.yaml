@@ -10,14 +10,21 @@ spec:
       app.kubernetes.io/name: open-webui
   components:
     - ../../../../components/dragonfly
+    - ../../../../components/oidc
   dependsOn:
     - name: dragonfly-operator
       namespace: database
+    - name: kanidm
+      namespace: security
   interval: 1h
   path: ./clusters/psb/apps/ai/open-webui/app
   postBuild:
     substitute:
       APP: open-webui
+      APP_NAMESPACE: ai
+      SUBDOMAIN: chat
+      OIDC_CALLBACK: /oauth/oidc/callback
+      OIDC_DISPLAY_NAME: Open WebUI
   prune: true
   sourceRef:
     kind: GitRepository
