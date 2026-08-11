@@ -11,17 +11,24 @@ spec:
   components:
     - ../../../../components/kopiur/backup
     - ../../../../components/zeroscaler/nas-nfs-scaler
+    - ../../../../components/oidc/envoy
   dependsOn:
     - name: kopiur
       namespace: system
     - name: rook-ceph-cluster
       namespace: rook-ceph
+    - name: kanidm
+      namespace: security
   interval: 1h
   path: "./clusters/psb/apps/downloads/sonarr/app"
   postBuild:
     substitute:
       APP: sonarr
+      APP_NAMESPACE: downloads
       KOPIUR_CLAIM: sonarr-config
+      OIDC_DISPLAY_NAME: Sonarr
+      OIDC_GROUP: admins
+      OIDC_SCOPES: '["openid", "profile"]'
   prune: true
   sourceRef:
     kind: GitRepository
