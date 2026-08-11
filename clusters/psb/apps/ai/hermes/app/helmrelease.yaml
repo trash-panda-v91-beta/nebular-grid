@@ -14,10 +14,10 @@ spec:
       automountServiceAccountToken: true
       terminationGracePeriodSeconds: 120
       securityContext:
-        fsGroup: 1000
+        fsGroup: 2000
         fsGroupChangePolicy: "OnRootMismatch"
-        runAsGroup: 1000
-        runAsUser: 1000
+        runAsGroup: 2000
+        runAsUser: 2000
         seccompProfile:
           type: RuntimeDefault
     controllers:
@@ -47,8 +47,8 @@ spec:
               capabilities:
                 drop:
                   - ALL
-              runAsGroup: 1000
-              runAsUser: 1000
+              runAsGroup: 2000
+              runAsUser: 2000
           init:
             image:
               repository: docker.io/library/alpine
@@ -64,8 +64,8 @@ spec:
               capabilities:
                 drop:
                   - ALL
-              runAsGroup: 1000
-              runAsUser: 1000
+              runAsGroup: 2000
+              runAsUser: 2000
           install-tools:
             image:
               repository: nousresearch/hermes-agent
@@ -103,8 +103,8 @@ spec:
               capabilities:
                 drop:
                   - ALL
-              runAsGroup: 1000
-              runAsUser: 1000
+              runAsGroup: 2000
+              runAsUser: 2000
         containers:
           app:
             image:
@@ -118,9 +118,9 @@ spec:
               API_SERVER_ENABLED: "true"
               API_SERVER_HOST: 0.0.0.0
               GOPATH: /opt/data/go
-              HERMES_GID: "1000"
+              HERMES_GID: "2000"
               HERMES_HOME: /opt/data
-              HERMES_UID: "1000"
+              HERMES_UID: "2000"
               HERMES_CRON_TIMEOUT: 0
               HOME: /opt/data
               HOMEBREW_CELLAR: /opt/data/.local/homebrew/Cellar
@@ -160,19 +160,12 @@ spec:
             securityContext:
               allowPrivilegeEscalation: false
               capabilities:
-                add:
-                  - CHOWN
-                  - DAC_OVERRIDE
-                  - FOWNER
-                  - FSETID
-                  - SETGID
-                  - SETUID
                 drop:
                   - ALL
               readOnlyRootFilesystem: false
-              runAsGroup: 0
-              runAsNonRoot: false
-              runAsUser: 0
+              runAsGroup: 2000
+              runAsNonRoot: true
+              runAsUser: 2000
           codeserver:
             image:
               repository: ghcr.io/coder/code-server

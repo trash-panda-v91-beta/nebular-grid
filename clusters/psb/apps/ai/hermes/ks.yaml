@@ -8,7 +8,11 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: hermes
+  components:
+    - ../../../../components/kopiur/backup
   dependsOn:
+    - name: kopiur
+      namespace: system
     - name: litellm
       namespace: ai
     - name: memini
@@ -20,6 +24,7 @@ spec:
   postBuild:
     substitute:
       APP: hermes
+      KOPIUR_CAPACITY: 20Gi
   prune: true
   sourceRef:
     kind: GitRepository

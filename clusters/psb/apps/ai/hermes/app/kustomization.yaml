@@ -5,7 +5,4 @@ kind: Kustomization
 resources:
   - ./ocirepository.yaml
   - ./helmrelease.yaml
-  - ./pvc.yaml
   - ./externalsecret.yaml
-  - ./backup/snapshotpolicy.yaml
-  - ./backup/snapshotschedule.yaml
