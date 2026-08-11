@@ -1,0 +1,18 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/refs/heads/main/cert-manager.io/certificate_v1.json
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: "idm.nebular-grid.space"
+spec:
+  secretName: "idm-nebular-grid-space-tls"
+  issuerRef:
+    name: letsencrypt-production
+    kind: ClusterIssuer
+  commonName: "idm.nebular-grid.space"
+  dnsNames:
+    - "idm.nebular-grid.space"
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+    rotationPolicy: Always
