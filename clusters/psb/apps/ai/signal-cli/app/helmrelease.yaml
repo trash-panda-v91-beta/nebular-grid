@@ -26,7 +26,7 @@ spec:
           app:
             image:
               repository: docker.io/bbernhard/signal-cli-rest-api
-              tag: "0.92"
+              tag: "0.100@sha256:2399d449123cdad56c4d859277e3b9127e1a00c4d2ab4601c239882609286cf8"
             env:
               MODE: json-rpc
               TZ: Europe/Prague
