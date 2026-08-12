@@ -39,7 +39,9 @@ spec:
             - path: /data/thumbs
       controllers:
         main:
-          strategy: Recreate
+          strategy:
+            rollingUpdate:
+              maxUnavailable: 100%
           pod:
             resourceClaims:
               - name: gpu
