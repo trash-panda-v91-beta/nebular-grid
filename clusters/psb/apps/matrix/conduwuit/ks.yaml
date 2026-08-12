@@ -20,7 +20,7 @@ spec:
       APP: conduwuit
       APP_NAMESPACE: matrix
       SUBDOMAIN: matrix
-      OIDC_CALLBACK: /_continuwuit/oidc/complete
+      OIDC_CALLBACK: /_continuwuity/oidc/complete
       OIDC_DISPLAY_NAME: Continuwuity
       OIDC_SHORT_USERNAME: "true"
   prune: true
