@@ -31,6 +31,19 @@ spec:
               ACTUAL_PORT: &httpPort 5006
               ACTUAL_UPLOAD_FILE_SYNC_SIZE_LIMIT_MB: 80
               NODE_OPTIONS: --max-old-space-size=768
+              # Kanidm OIDC SSO
+              ACTUAL_OPENID_DISCOVERY_URL: https://idm.nebular-grid.space/oauth2/openid/actual/.well-known/openid-configuration
+              ACTUAL_OPENID_CLIENT_ID:
+                secretKeyRef:
+                  name: kanidm-actual-oidc
+                  key: client-id
+              ACTUAL_OPENID_CLIENT_SECRET:
+                secretKeyRef:
+                  name: kanidm-actual-oidc
+                  key: client-secret
+              ACTUAL_OPENID_SERVER_HOSTNAME: https://actual.nebular-grid.space
+              ACTUAL_OPENID_ENFORCE: "true"
+              ACTUAL_USER_CREATION_MODE: login
             probes:
               liveness:
                 enabled: true
