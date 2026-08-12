@@ -29,7 +29,7 @@ spec:
               tag: "0.92"
             env:
               MODE: json-rpc
-              TZ: America/Chicago
+              TZ: Europe/Prague
             probes:
               readiness:
                 enabled: true
