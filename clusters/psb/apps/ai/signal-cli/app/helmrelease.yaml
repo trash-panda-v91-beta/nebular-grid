@@ -1,0 +1,68 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: signal-cli
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: signal-cli
+  interval: 30m
+  values:
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+    controllers:
+      signal-cli:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        type: statefulset
+        containers:
+          app:
+            image:
+              repository: docker.io/bbernhard/signal-cli-rest-api
+              tag: "0.92"
+            env:
+              MODE: json-rpc
+              TZ: Europe/Prague
+            probes:
+              readiness:
+                enabled: true
+                custom: true
+                spec:
+                  tcpSocket:
+                    port: 8080
+                  periodSeconds: 5
+                  timeoutSeconds: 5
+                  failureThreshold: 30
+            resources:
+              requests:
+                cpu: 10m
+                memory: 128Mi
+              limits:
+                memory: 512Mi
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop:
+                  - ALL
+    service:
+      app:
+        controller: signal-cli
+        ports:
+          jsonrpc:
+            port: 8080
+    persistence:
+      data:
+        enabled: true
+        type: persistentVolumeClaim
+        existingClaim: "{{ .Release.Name }}"
+        advancedMounts:
+          signal-cli:
+            app:
+              - path: /home/.local/share/signal-cli
