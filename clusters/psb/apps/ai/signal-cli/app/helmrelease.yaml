@@ -15,6 +15,7 @@ spec:
         runAsNonRoot: false
         runAsUser: 0
         runAsGroup: 0
+        fsGroup: 2000
         fsGroupChangePolicy: OnRootMismatch
     controllers:
       signal-cli:
@@ -29,6 +30,9 @@ spec:
             env:
               MODE: json-rpc
               TZ: Europe/Prague
+              # entrypoint remaps its built-in signal-api user to match fsGroup; repo convention is 2000
+              SIGNAL_CLI_UID: "2000"
+              SIGNAL_CLI_GID: "2000"
             probes:
               readiness:
                 enabled: true
@@ -50,6 +54,11 @@ spec:
               capabilities:
                 drop:
                   - ALL
+                add:
+                  # entrypoint runs usermod/groupmod/chown then setpriv down to signal-api (uid 2000)
+                  - CHOWN
+                  - SETUID
+                  - SETGID
     service:
       app:
         controller: signal-cli
