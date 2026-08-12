@@ -39,9 +39,9 @@ spec:
             - path: /data/thumbs
       controllers:
         main:
-          strategy:
-            rollingUpdate:
-              maxUnavailable: 100%
+          strategy: RollingUpdate
+          rollingUpdate:
+            maxUnavailable: 100%
           pod:
             resourceClaims:
               - name: gpu
