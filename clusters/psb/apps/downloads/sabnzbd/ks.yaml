@@ -24,6 +24,7 @@ spec:
   postBuild:
     substitute:
       APP: sabnzbd
+      APP_NAMESPACE: downloads
       KOPIUR_CLAIM: sabnzbd-config
       OIDC_DISPLAY_NAME: SABnzbd
       OIDC_GROUP: admins
