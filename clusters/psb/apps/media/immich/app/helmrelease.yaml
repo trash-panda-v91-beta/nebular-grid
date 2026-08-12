@@ -39,6 +39,7 @@ spec:
             - path: /data/thumbs
       controllers:
         main:
+          strategy: Recreate
           pod:
             resourceClaims:
               - name: gpu
