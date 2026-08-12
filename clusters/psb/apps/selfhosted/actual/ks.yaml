@@ -27,6 +27,7 @@ spec:
       KOPIUR_CLAIM: actual-data
       OIDC_DISPLAY_NAME: Actual Budget
       OIDC_CALLBACK: /openid/callback
+      OIDC_LEGACY_CRYPTO: "true"
   prune: true
   sourceRef:
     kind: GitRepository
