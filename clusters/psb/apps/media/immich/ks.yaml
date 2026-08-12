@@ -31,8 +31,7 @@ spec:
       APP_NAMESPACE: media
       SUBDOMAIN: immich
       OIDC_DISPLAY_NAME: "Immich"
-      OIDC_CALLBACK: /auth/login
-      OIDC_EXTRA_CALLBACKS: "[\"app.immich:///oauth-callback\", \"https://immich.nebular-grid.space/user-settings\"]"
+      OIDC_REDIRECTS: "[\"https://immich.nebular-grid.space/auth/login\", \"app.immich:///oauth-callback\", \"https://immich.nebular-grid.space/user-settings\"]"
       OIDC_LEGACY_CRYPTO: "true"
       OIDC_CLAIM_MAPS: |
         {

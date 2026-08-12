@@ -14,7 +14,7 @@ data:
         "oauth2": {
           "${APP}": {
             "displayName": "${DISPLAY_NAME}",
-            "originUrl": ["${DOMAIN:=https://${SUBDOMAIN}.nebular-grid.space}${CALLBACK}"],
+            "originUrl": ${REDIRECTS:=["${DOMAIN:=https://${SUBDOMAIN}.nebular-grid.space}${CALLBACK}"]},
             "originLanding": "${DOMAIN:=https://${SUBDOMAIN}.nebular-grid.space}${ORIGIN}",
             "removeOrphanedClaimMaps": true,
             "public": ${PUBLIC},
@@ -37,7 +37,6 @@ data:
         "oauth2": {
           "${APP}": {
             "k8s": { "clientIdKey": "${CLIENT_ID_KEY}", "clientSecretKey": "${CLIENT_SECRET_KEY}", "imageUrl": "${IMAGE_URL:=}" },
-            "originUrl": ${EXTRA_CALLBACKS:=${emptyArray}},
             "scopeMaps": ${SCOPE_MAPS:=${emptyState}}
           }
         }

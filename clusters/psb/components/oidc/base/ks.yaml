@@ -26,6 +26,7 @@ spec:
 
       ORIGIN: ${OIDC_ORIGIN:=/}
       EXTRA_CALLBACKS: ${q:='}${OIDC_EXTRA_CALLBACKS:=}${q:='}
+      REDIRECTS: ${OIDC_REDIRECTS:=}
       SHORT_USERNAME: ${q:="}${OIDC_SHORT_USERNAME:=false}${q:="}
 
       LOCALHOST: ${q:="}${OIDC_LOCALHOST:=false}${q:="}
