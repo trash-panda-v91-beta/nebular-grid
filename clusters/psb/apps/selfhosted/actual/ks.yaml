@@ -10,17 +10,23 @@ spec:
       app.kubernetes.io/name: actual
   components:
     - ../../../../components/kopiur/backup
+    - ../../../../components/oidc
   dependsOn:
     - name: kopiur
       namespace: system
     - name: rook-ceph-cluster
       namespace: rook-ceph
+    - name: kanidm
+      namespace: security
   interval: 1h
   path: "./clusters/psb/apps/selfhosted/actual/app"
   postBuild:
     substitute:
       APP: actual
+      APP_NAMESPACE: selfhosted
       KOPIUR_CLAIM: actual-data
+      OIDC_DISPLAY_NAME: Actual Budget
+      OIDC_CALLBACK: /openid/callback
   prune: true
   sourceRef:
     kind: GitRepository
