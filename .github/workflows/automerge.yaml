@@ -26,6 +26,7 @@ jobs:
           app-id: ${{ vars.TRASHBOT_APP_ID }}
           private-key: ${{ secrets.TRASHBOT_APP_PRIVATE_KEY }}
           permission-pull-requests: write
+          permission-contents: write
 
       - name: Enable Auto Merge (squash via gh)
         env:
