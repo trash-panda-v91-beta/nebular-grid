@@ -1,9 +1,7 @@
 [env]
 _.fnox-env = { tools = true }
 FLATE_PATH = "{{config_root}}/clusters/psb/flux/cluster"
-KUBECONFIG = "{{config_root}}/kubeconfig"
 MINIJINJA_CONFIG_FILE = "{{config_root}}/.minijinja.toml"
-TALOSCONFIG = "{{config_root}}/talosconfig"
 
 [plugins]
 fnox-env = "https://github.com/jdx/mise-env-fnox"
