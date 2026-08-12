@@ -41,7 +41,7 @@ spec:
         main:
           strategy: RollingUpdate
           rollingUpdate:
-            maxUnavailable: 100%
+            unavailable: 100%
           pod:
             resourceClaims:
               - name: gpu
