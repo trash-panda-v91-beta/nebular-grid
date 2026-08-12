@@ -27,7 +27,7 @@ spec:
       KOPIUR_CLAIM: prowlarr-config
       OIDC_DISPLAY_NAME: Prowlarr
       OIDC_GROUP: admins
-      OIDC_SCOPES: '["openid", "profile"]'
+      OIDC_SCOPES: "[\"openid\", \"profile\"]"
   prune: true
   sourceRef:
     kind: GitRepository

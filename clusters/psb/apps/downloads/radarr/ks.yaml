@@ -29,7 +29,7 @@ spec:
       KOPIUR_CAPACITY: 2Gi
       OIDC_DISPLAY_NAME: Radarr
       OIDC_GROUP: admins
-      OIDC_SCOPES: '["openid", "profile"]'
+      OIDC_SCOPES: "[\"openid\", \"profile\"]"
   prune: true
   sourceRef:
     kind: GitRepository

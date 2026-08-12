@@ -47,7 +47,7 @@ spec:
       CUSTOM_STATE: ${q:='}${OIDC_CUSTOM_STATE:=}${q:='}
       emptyState: "{}"
       emptyArray: "[]"
-      defaultScopes: '["openid", "profile", "email", "groups"]'
+      defaultScopes: "[\"openid\", \"profile\", \"email\", \"groups\"]"
   prune: true
   retryInterval: 2m
   sourceRef:

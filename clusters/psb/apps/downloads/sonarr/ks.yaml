@@ -28,7 +28,7 @@ spec:
       KOPIUR_CLAIM: sonarr-config
       OIDC_DISPLAY_NAME: Sonarr
       OIDC_GROUP: admins
-      OIDC_SCOPES: '["openid", "profile"]'
+      OIDC_SCOPES: "[\"openid\", \"profile\"]"
   prune: true
   sourceRef:
     kind: GitRepository
