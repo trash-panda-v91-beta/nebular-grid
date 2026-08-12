@@ -33,7 +33,7 @@ spec:
       LEGACY_CRYPTO: ${q:="}${OIDC_LEGACY_CRYPTO:=false}${q:="}
       DISABLE_PKCE: ${q:="}${OIDC_DISABLE_PKCE:=false}${q:="}
 
-      GROUP: "${OIDC_GROUP:=users}"
+      GROUP: "${OIDC_GROUP:=adults}"
       SCOPES: ${q:='}${OIDC_SCOPES:=}${q:='}
 
       SCOPE_MAPS: ${q:='}${OIDC_SCOPE_MAPS:=}${q:='}

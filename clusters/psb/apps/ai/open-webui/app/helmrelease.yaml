@@ -58,7 +58,7 @@ spec:
                     key: client-secret
               ENABLE_OAUTH_ROLE_MANAGEMENT: "true"
               OAUTH_ROLES_CLAIM: groups
-              OAUTH_ALLOWED_ROLES: users@idm.nebular-grid.space,admins@idm.nebular-grid.space
+              OAUTH_ALLOWED_ROLES: adults@idm.nebular-grid.space,admins@idm.nebular-grid.space
             envFrom:
               - secretRef:
                   name: open-webui-secret
