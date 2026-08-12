@@ -132,17 +132,6 @@ spec:
                     name: hermes-config
                     key: LITELLM_API_KEY
               MATRIX_ENCRYPTION: "true"
-              SIGNAL_HTTP_URL: http://signal-cli.ai.svc.cluster.local:8080
-              SIGNAL_ACCOUNT:
-                valueFrom:
-                  secretKeyRef:
-                    name: hermes-config
-                    key: SIGNAL_ACCOUNT
-              SIGNAL_ALLOWED_USERS:
-                valueFrom:
-                  secretKeyRef:
-                    name: hermes-config
-                    key: SIGNAL_ALLOWED_USERS
               API_SERVER_KEY:
                 valueFrom:
                   secretKeyRef:
