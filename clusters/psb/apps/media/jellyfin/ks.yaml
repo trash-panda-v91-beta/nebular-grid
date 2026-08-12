@@ -35,12 +35,17 @@ spec:
       OIDC_CALLBACK: /sso/OID/redirect/kanidm
       OIDC_ORIGIN: /sso/OID/start/kanidm
       OIDC_SHORT_USERNAME: "true"
+      OIDC_SCOPE_MAPS: |
+        {
+          "children": ["openid", "profile", "email", "groups"]
+        }
       OIDC_CLAIM_MAPS: |
         {
           "roles": {
             "joinType": "array",
             "valuesByGroup": {
-              "users@idm.nebular-grid.space": ["user"],
+              "adults@idm.nebular-grid.space": ["user"],
+              "children@idm.nebular-grid.space": ["user"],
               "admins@idm.nebular-grid.space": ["admin"]
             }
           }

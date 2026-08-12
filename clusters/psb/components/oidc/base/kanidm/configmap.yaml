@@ -50,7 +50,7 @@ data:
         "oauth2": {
           "${APP}": {
             "scopeMaps": {
-              "users": [],
+              "adults": [],
               "admins": []
             }
           }
