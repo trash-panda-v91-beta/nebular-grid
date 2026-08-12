@@ -10,6 +10,7 @@ spec:
       app.kubernetes.io/name: home-assistant
   components:
     - ../../../../components/kopiur/backup
+    - ../../../../components/oidc
   dependsOn:
     - name: kopiur
       namespace: system
@@ -17,11 +18,18 @@ spec:
       namespace: network
     - name: rook-ceph-cluster
       namespace: rook-ceph
+    - name: kanidm
+      namespace: security
   interval: 1h
   path: "./clusters/psb/apps/home-automation/home-assistant/app"
   postBuild:
     substitute:
       APP: home-assistant
+      APP_NAMESPACE: home-automation
+      SUBDOMAIN: hass
+      OIDC_DISPLAY_NAME: Home Assistant
+      OIDC_GROUP: admins
+      OIDC_CALLBACK: /auth/oidc/callback
       KOPIUR_MOVER_GID: "2000"
       KOPIUR_MOVER_UID: "2000"
       KOPIUR_CAPACITY: 20Gi
