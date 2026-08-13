@@ -146,6 +146,15 @@ spec:
           provision:
             app:
               - path: /data/icons
+      branding:
+        type: configMap
+        name: kanidm-branding
+        advancedMounts:
+          kanidm:
+            app:
+              - path: /hpkg/override.css
+                subPath: override.css
+                readOnly: true
     rbac:
       roles:
         kanidm-write-secret:

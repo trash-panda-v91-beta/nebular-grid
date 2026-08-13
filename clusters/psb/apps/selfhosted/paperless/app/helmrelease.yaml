@@ -46,21 +46,6 @@ spec:
               PAPERLESS_DATA_DIR: /data/local/data
               PAPERLESS_EXPORT_DIR: /data/nas/export
               PAPERLESS_MEDIA_ROOT: /data/local/media
-              # Configure folder importer
-              PAPERLESS_CONSUMER_POLLING: "60"
-              PAPERLESS_CONSUMER_RECURSIVE: "true"
-              PAPERLESS_CONSUMER_SUBDIRS_AS_TAGS: "true"
-              # Configure OCR
-              PAPERLESS_OCR_LANGUAGES:
-                valueFrom:
-                  secretKeyRef:
-                    name: paperless-secret
-                    key: PAPERLESS_OCR_LANGUAGE
-              PAPERLESS_OCR_LANGUAGE:
-                valueFrom:
-                  secretKeyRef:
-                    name: paperless-secret
-                    key: PAPERLESS_OCR_LANGUAGE
               PAPERLESS_REDIS: redis://paperless-dragonfly.selfhosted.svc.cluster.local:6379
               # Configure user permissions
               USERMAP_UID: "2000"
