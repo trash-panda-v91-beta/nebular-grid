@@ -27,6 +27,10 @@ uvx = true
 description = "Run all checks"
 run = "hk check --all"
 
+[tasks.test]
+description = "Run tests (none configured yet)"
+run = "echo no tests configured"
+
 [tasks.fix]
 description = "Fix all issues"
 run = "hk fix --all"
