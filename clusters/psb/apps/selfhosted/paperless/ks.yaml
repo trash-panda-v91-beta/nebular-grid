@@ -35,6 +35,7 @@ spec:
       OIDC_DISPLAY_NAME: "Paperless"
       OIDC_CALLBACK: /accounts/oidc/kanidm/login/callback/
       OIDC_REDIRECTS: "[\"https://paperless.nebular-grid.space/accounts/oidc/kanidm/login/callback/\", \"x-paperless://oidc-callback\"]"
+      OIDC_PUBLIC_CLIENT: "true"
       OIDC_DISABLE_PKCE: "true"
       OIDC_IMAGE_NAME: paperless-ngx
   prune: true
