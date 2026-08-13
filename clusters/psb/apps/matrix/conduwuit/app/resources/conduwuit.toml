@@ -28,3 +28,5 @@ client_id = "conduwuit"
 client_secret_file = "/etc/continuwuit/oidc_secret"
 additional_scopes = ["email", "openid", "profile"]
 prompt_for_localpart = false
+profile_key_import_mode = "on_registration"
+profile_key_map = { displayname = "name" }
