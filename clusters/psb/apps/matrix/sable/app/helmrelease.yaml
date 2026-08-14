@@ -1,0 +1,86 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+# Sable: Matrix web client (fork of Cinny, https://github.com/SableClient/Sable).
+# Stateless static site served by bundled Caddy on :8080; config.json points it
+# at our conduwuit homeserver (matrix.nebular-grid.space). Mirrors
+# eleboucher/homelab's sable app, adapted to the repo's envoy gateway + Prague TZ.
+# The image strips Caddy's NET_BIND_SERVICE cap and listens on :8080, so it runs
+# unprivileged (runAsUser 1000) with RO rootfs + emptyDirs for Caddy's /config & /data.
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: sable
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: sable
+  interval: 1h
+  values:
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+    controllers:
+      sable:
+        containers:
+          app:
+            image:
+              repository: ghcr.io/sableclient/sable
+              tag: 1.20.0
+            env:
+              TZ: Europe/Prague
+            probes:
+              liveness:
+                enabled: true
+              readiness:
+                enabled: true
+            resources:
+              requests:
+                cpu: 10m
+                memory: 32Mi
+              limits:
+                memory: 128Mi
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - "ALL"
+    persistence:
+      config-json:
+        type: configMap
+        name: sable-configmap
+        globalMounts:
+          - path: /app/config.json
+            subPath: config.json
+            readOnly: true
+      caddy-config:
+        type: emptyDir
+        globalMounts:
+          - path: /config
+      caddy-data:
+        type: emptyDir
+        globalMounts:
+          - path: /data
+    route:
+      app:
+        annotations:
+          external-dns.alpha.kubernetes.io/cloudflare-proxied: "false"
+        hostnames:
+          - "sable.nebular-grid.space"
+        parentRefs:
+          - name: envoy-internal-public-dns
+            namespace: network
+        rules:
+          - backendRefs:
+              - identifier: app
+                port: 8080
+    service:
+      app:
+        controller: sable
+        ports:
+          http:
+            port: 8080
