@@ -9,6 +9,11 @@ allow_encryption = true
 # Federation is enabled so the server can join rooms on other homeservers
 # (e.g. #sable:sable.moe). Keep well-known pointing at matrix.nebular-grid.space.
 allow_federation = true
+# Federation privacy hardening (matches bouch): don't expose the public room
+# directory or profiles to other servers; only federate into rooms we join.
+allow_public_room_directory_over_federation = false
+lockdown_public_room_directory = true
+require_auth_for_profile_requests = true
 # Registration is closed. The HelmRelease sets CONDUWUIT_ALLOW_REGISTRATION=false
 # (env overrides the config file), and the runtime account is created via the admin
 # command below. No public sign-ups.
@@ -20,6 +25,9 @@ allow_registration = false
 
 [global.well_known]
 client = "https://matrix.nebular-grid.space"
+# Inbound federation: remote servers (e.g. sable.moe) reach us on 443 via the
+# envoy gateway, no separate 8448 port. Matches bouch's setup.
+server = "matrix.nebular-grid.space:443"
 
 [global.oauth]
 compatibility_mode = "hybrid"
