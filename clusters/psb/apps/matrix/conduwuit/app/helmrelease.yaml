@@ -104,12 +104,10 @@ spec:
         type: emptyDir
     route:
       app:
-        annotations:
-          external-dns.alpha.kubernetes.io/cloudflare-proxied: "false"
         hostnames:
           - matrix.nebular-grid.space
         parentRefs:
-          - name: envoy-internal-public-dns
+          - name: envoy-external
             namespace: network
         rules:
           - backendRefs:
