@@ -18,7 +18,11 @@ spec:
               - hostname: "*.nebular-grid.space"
                 originRequest:
                   http2Origin: true
+                  # Match onedr0p's long keep-alives so Matrix streaming sync
+                  # survives the tunnel without being torn down.
+                  keepAliveTimeout: 3600s
                   originServerName: ingress-ext-psb.nebular-grid.space
+                  tcpKeepAlive: 7200s
                 service: https://envoy-external.{{ .Release.Namespace }}.svc.cluster.local:443
               - service: http_status:404
     controllers:
