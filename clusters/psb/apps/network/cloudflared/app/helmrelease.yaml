@@ -42,7 +42,10 @@ spec:
               NO_AUTOUPDATE: "true"
               TUNNEL_METRICS: 0.0.0.0:8080
               TUNNEL_POST_QUANTUM: true
-              TUNNEL_TRANSPORT_PROTOCOL: quic
+              # http2 instead of quic: QUIC tunnels are unstable behind home ISPs
+              # ("Incoming request ended abruptly: context canceled"), which broke the
+              # Matrix browser client's streaming sync. http2 is the documented fix.
+              TUNNEL_TRANSPORT_PROTOCOL: http2
             envFrom:
               - secretRef:
                   name: cloudflared-secret
