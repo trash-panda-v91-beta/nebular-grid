@@ -6,12 +6,7 @@ port = 8080
 database_path = "/data"
 
 allow_encryption = true
-# Federation on so we can join remote rooms.
-allow_federation = true
-# Don't expose room directory or profiles to other servers.
-allow_public_room_directory_over_federation = false
-lockdown_public_room_directory = true
-require_auth_for_profile_requests = true
+allow_federation = false
 # Registration is closed. The HelmRelease sets CONDUWUIT_ALLOW_REGISTRATION=false
 # (env overrides the config file), and the runtime account is created via the admin
 # command below. No public sign-ups.
@@ -23,8 +18,6 @@ allow_registration = false
 
 [global.well_known]
 client = "https://matrix.nebular-grid.space"
-# Reachable for inbound federation via the gateway on 443.
-server = "matrix.nebular-grid.space:443"
 
 [global.oauth]
 compatibility_mode = "hybrid"
