@@ -4,7 +4,7 @@
   "allowCustomHomeservers": true,
 
   "slidingSync": {
-    "enabled": true
+    "enabled": false
   },
 
   "hashRouter": {
