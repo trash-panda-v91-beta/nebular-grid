@@ -1,5 +1,5 @@
 [global]
-server_name = "nebular-grid.space"
+server_name = "matrix.nebular-grid.space"
 address = ["::"]
 port = 8080
 
@@ -18,7 +18,7 @@ require_auth_for_profile_requests = true
 allow_registration = false
 
 # ponytail: single-user homeserver for hermes. Create the bot user via admin command:
-# kubectl exec -n matrix statefulset/conduwuit -- /conduwuit register @hermes:nebular-grid.space
+# kubectl exec -n matrix statefulset/conduwuit -- /conduwuit register @hermes:matrix.nebular-grid.space
 # Then get the access token from the output.
 
 [global.well_known]
