@@ -106,6 +106,7 @@ spec:
       app:
         hostnames:
           - matrix.nebular-grid.space
+          - nebular-grid.space
         parentRefs:
           - name: envoy-external
             namespace: network
