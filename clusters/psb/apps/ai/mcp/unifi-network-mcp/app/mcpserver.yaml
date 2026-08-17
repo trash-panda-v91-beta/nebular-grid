@@ -7,7 +7,7 @@ metadata:
 spec:
   alias: unifi_network_mcp
   workload:
-    image: ghcr.io/sirkirby/unifi-network-mcp:0.26.1@sha256:eab72f043ded9c1af65cd10776c863a8358a427ad038b9396e9dfa8d3fe394f2
+    image: ghcr.io/sirkirby/unifi-network-mcp:0.27.1@sha256:91f2a5f2f63b721e17606d8a47270a809c11bdf731497ebaf255caf39cc150ab
     port: 3000
     env:
       - name: UNIFI_HOST
