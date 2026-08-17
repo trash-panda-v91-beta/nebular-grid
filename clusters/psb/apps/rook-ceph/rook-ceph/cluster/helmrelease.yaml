@@ -59,7 +59,7 @@ spec:
       resources:
         mgr:
           limits:
-            memory: 2Gi
+            memory: 4Gi
         mgr-sidecar:
           limits:
             memory: 256Mi
