@@ -47,6 +47,24 @@ spec:
                   secretKeyRef:
                     name: donetick
                     key: jwt_secret
+              # OIDC via Kanidm. Client id/secret are provisioned by Kanidm into
+              # the kanidm-donetick-oidc secret (see kanidm-write-secret RBAC).
+              DT_OAUTH2_NAME: Kanidm
+              DT_OAUTH2_SCOPE: openid profile email
+              DT_OAUTH2_REDIRECT_URL: https://donetick.nebular-grid.space/auth/oauth2
+              DT_OAUTH2_AUTH_URL: https://idm.nebular-grid.space/ui/oauth2
+              DT_OAUTH2_TOKEN_URL: https://idm.nebular-grid.space/oauth2/token
+              DT_OAUTH2_INFO_URL: https://idm.nebular-grid.space/oauth2/openid/donetick/userinfo
+              DT_OAUTH2_CLIENT_ID:
+                valueFrom:
+                  secretKeyRef:
+                    name: kanidm-donetick-oidc
+                    key: client-id
+              DT_OAUTH2_CLIENT_SECRET:
+                valueFrom:
+                  secretKeyRef:
+                    name: kanidm-donetick-oidc
+                    key: client-secret
             probes:
               liveness: &probe
                 enabled: true
