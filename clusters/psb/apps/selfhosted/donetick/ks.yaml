@@ -10,6 +10,7 @@ spec:
       app.kubernetes.io/name: donetick
   components:
     - ../../../../components/kopiur/backup
+    - ../../../../components/oidc
   dependsOn:
     - name: external-secrets
       namespace: external-secrets
@@ -17,13 +18,19 @@ spec:
       namespace: rook-ceph
     - name: kopiur
       namespace: system
+    - name: kanidm
+      namespace: security
   interval: 1h
   path: ./clusters/psb/apps/selfhosted/donetick/app
   postBuild:
     substitute:
       APP: donetick
+      APP_NAMESPACE: selfhosted
       KOPIUR_CLAIM: donetick-data
       KOPIUR_CAPACITY: 1Gi
+      OIDC_DISPLAY_NAME: Donetick
+      OIDC_CALLBACK: /auth/oauth2
+      OIDC_SCOPE_MAPS: "{\"children\": [], \"admins\": []}"
   prune: true
   sourceRef:
     kind: GitRepository
