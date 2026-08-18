@@ -54,7 +54,7 @@ spec:
               DT_OAUTH2_REDIRECT_URL: https://donetick.nebular-grid.space/auth/oauth2
               DT_OAUTH2_AUTH_URL: https://idm.nebular-grid.space/ui/oauth2
               DT_OAUTH2_TOKEN_URL: https://idm.nebular-grid.space/oauth2/token
-              DT_OAUTH2_INFO_URL: https://idm.nebular-grid.space/oauth2/openid/donetick/userinfo
+              DT_OAUTH2_USER_INFO_URL: https://idm.nebular-grid.space/oauth2/openid/donetick/userinfo
               DT_OAUTH2_CLIENT_ID:
                 valueFrom:
                   secretKeyRef:
