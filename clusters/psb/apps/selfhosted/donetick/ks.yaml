@@ -30,6 +30,9 @@ spec:
       KOPIUR_CAPACITY: 1Gi
       OIDC_DISPLAY_NAME: Donetick
       OIDC_CALLBACK: /auth/oauth2
+      # Mobile is a Capacitor app that redirects to the donetick:// deep link;
+      # register it alongside the web callback so Kanidm accepts it on iOS/Android.
+      OIDC_REDIRECTS: "[\"https://donetick.nebular-grid.space/auth/oauth2\", \"donetick://auth/oauth2\"]"
       # Donetick's OAuth2 client (v0.1.76) doesn't implement PKCE; allow the
       # plain code flow so Kanidm doesn't reject the authorize request.
       OIDC_DISABLE_PKCE: "true"
