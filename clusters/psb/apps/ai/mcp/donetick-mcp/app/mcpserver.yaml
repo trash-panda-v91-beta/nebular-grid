@@ -1,0 +1,30 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmcpserver_v1alpha1.json
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMMCPServer
+metadata:
+  name: donetick-mcp
+spec:
+  alias: donetick_mcp
+  transport: http
+  workload:
+    image: ghcr.io/trash-panda-v91-beta/donetick-mcp:latest@sha256:ac678b3a0bcafe6049d272d06cd0003b779cc4071862da23a2e74f3ce49c2168
+    port: 8000
+    path: /mcp
+    env:
+      - name: DONETICK_BASE_URL
+        value: https://donetick.nebular-grid.space
+      - name: DONETICK_API_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: donetick-mcp-secret
+            key: DONETICK_API_TOKEN
+      # FastMCP serves streamable-http from FASTMCP_* env vars - no code change
+      - name: FASTMCP_TRANSPORT
+        value: streamable-http
+      - name: FASTMCP_HOST
+        value: 0.0.0.0
+      - name: FASTMCP_PORT
+        value: "8000"
+      - name: FASTMCP_STREAMABLE_HTTP_PATH
+        value: /mcp
