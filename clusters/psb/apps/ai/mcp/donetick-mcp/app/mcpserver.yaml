@@ -8,7 +8,7 @@ spec:
   alias: donetick_mcp
   transport: http
   workload:
-    image: ghcr.io/trash-panda-v91-beta/donetick-mcp:v1.1.0@sha256:0ba1eaa21d17a9ac4ea651126da28f0163c40e77edf972761ef4ca2132be3cdf
+    image: ghcr.io/trash-panda-v91-beta/donetick-mcp:v1.2.0@sha256:d1bdd9328bfcbc32dc592366dc5713b44d230d28f616dac40ba1f3182b00e537
     port: 8000
     path: /mcp
     env:
