@@ -13,7 +13,10 @@ spec:
     path: /mcp
     env:
       - name: DONETICK_BASE_URL
-        value: https://donetick.nebular-grid.space
+        value: http://donetick.selfhosted.svc.cluster.local:2021
+      # internal traffic is plaintext http; opt out of the https-only default
+      - name: ALLOW_INSECURE_HTTP
+        value: "true"
       - name: DONETICK_API_TOKEN
         valueFrom:
           secretKeyRef:
