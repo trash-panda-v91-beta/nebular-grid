@@ -30,6 +30,9 @@ spec:
       KOPIUR_CAPACITY: 1Gi
       OIDC_DISPLAY_NAME: Donetick
       OIDC_CALLBACK: /auth/oauth2
+      # Donetick's OAuth2 client (v0.1.76) doesn't implement PKCE; allow the
+      # plain code flow so Kanidm doesn't reject the authorize request.
+      OIDC_DISABLE_PKCE: "true"
       OIDC_SCOPE_MAPS: "{\"children\": [], \"admins\": []}"
   prune: true
   sourceRef:
