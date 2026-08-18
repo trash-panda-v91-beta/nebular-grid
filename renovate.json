@@ -23,6 +23,12 @@
   "minimumReleaseAgeBehaviour": "timestamp-optional",
   "packageRules": [
     {
+      "description": "Disable docker digest pinning - resolving digests for every image (incl. private/self-hosted registries) fails and poisons the pinned branches with update failures",
+      "matchDatasources": ["docker"],
+      "matchUpdateTypes": ["pinDigest"],
+      "enabled": false
+    },
+    {
       "description": "Configure Emby versioning",
       "matchDatasources": ["docker"],
       "matchPackageNames": ["ghcr.io/home-operations/emby"],
