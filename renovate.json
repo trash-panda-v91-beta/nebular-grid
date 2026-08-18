@@ -21,6 +21,7 @@
     "enabled": true
   },
   "minimumReleaseAgeBehaviour": "timestamp-optional",
+  "ignorePaths": ["clusters/psb/talos/machineconfig.yaml.j2"],
   "packageRules": [
     {
       "description": "Configure Emby versioning",
