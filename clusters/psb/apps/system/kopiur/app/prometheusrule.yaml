@@ -12,7 +12,7 @@ spec:
           annotations:
             summary: Kopiur controller has disappeared from Prometheus target discovery.
           expr: |
-            absent(up{job="kopiur-metrics"})
+            absent(up{job="kopiur-controller-metrics"})
           for: 15m
           labels:
             severity: critical

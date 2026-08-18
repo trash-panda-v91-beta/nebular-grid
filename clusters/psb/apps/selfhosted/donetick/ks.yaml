@@ -1,6 +1,6 @@
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/kustomize.toolkit.fluxcd.io/kustomization_v1.json
-apiVersion: kustomize.toolkit.fluxcd.io/v2
+apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: donetick
@@ -10,6 +10,7 @@ spec:
       app.kubernetes.io/name: donetick
   components:
     - ../../../../components/kopiur/backup
+    - ../../../../components/oidc
   dependsOn:
     - name: external-secrets
       namespace: external-secrets
@@ -17,13 +18,25 @@ spec:
       namespace: rook-ceph
     - name: kopiur
       namespace: system
+    - name: kanidm
+      namespace: security
   interval: 1h
   path: ./clusters/psb/apps/selfhosted/donetick/app
   postBuild:
     substitute:
       APP: donetick
+      APP_NAMESPACE: selfhosted
       KOPIUR_CLAIM: donetick-data
       KOPIUR_CAPACITY: 1Gi
+      OIDC_DISPLAY_NAME: Donetick
+      OIDC_CALLBACK: /auth/oauth2
+      # Mobile is a Capacitor app that redirects to the donetick:// deep link;
+      # register it alongside the web callback so Kanidm accepts it on iOS/Android.
+      OIDC_REDIRECTS: "[\"https://donetick.nebular-grid.space/auth/oauth2\", \"donetick://auth/oauth2\"]"
+      # Donetick's OAuth2 client (v0.1.76) doesn't implement PKCE; allow the
+      # plain code flow so Kanidm doesn't reject the authorize request.
+      OIDC_DISABLE_PKCE: "true"
+      OIDC_SCOPE_MAPS: "{\"children\": [], \"admins\": []}"
   prune: true
   sourceRef:
     kind: GitRepository

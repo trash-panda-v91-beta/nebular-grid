@@ -12,6 +12,7 @@ spec:
     - ../../../../components/kopiur/backup
     - ../../../../components/zeroscaler/nas-nfs-scaler
     - ../../../../components/dragonfly
+    - ../../../../components/oidc
   dependsOn:
     - name: kopiur
       namespace: system
@@ -19,15 +20,24 @@ spec:
       namespace: rook-ceph
     - name: dragonfly-operator
       namespace: database
+    - name: kanidm
+      namespace: security
   interval: 1h
   path: "./clusters/psb/apps/selfhosted/paperless/app"
   postBuild:
     substitute:
       APP: paperless
+      APP_NAMESPACE: selfhosted
       KOPIUR_MOVER_UID: "2000"
       KOPIUR_MOVER_GID: "2000"
       KOPIUR_CLAIM: paperless-data
       KOPIUR_CAPACITY: 15Gi
+      OIDC_DISPLAY_NAME: "Paperless"
+      OIDC_CALLBACK: /accounts/oidc/kanidm/login/callback/
+      OIDC_REDIRECTS: "[\"https://paperless.nebular-grid.space/accounts/oidc/kanidm/login/callback/\", \"x-paperless://oidc-callback\"]"
+      OIDC_PUBLIC_CLIENT: "true"
+      OIDC_LEGACY_CRYPTO: "true"
+      OIDC_IMAGE_NAME: paperless-ngx
   prune: true
   sourceRef:
     kind: GitRepository

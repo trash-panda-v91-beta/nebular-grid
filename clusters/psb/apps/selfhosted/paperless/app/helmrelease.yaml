@@ -23,11 +23,19 @@ spec:
               tag: 3.0.5@sha256:65a4cabf0169ea7fbd90ab7bb28ba3f8b5909613635acda1a03ad606f34b456b
             env:
               # Configure application
+              PAPERLESS_APPS: allauth.socialaccount.providers.openid_connect
               PAPERLESS_SECRET_KEY:
                 valueFrom:
                   secretKeyRef:
                     name: paperless-secret
                     key: PAPERLESS_SECRET_KEY
+              PAPERLESS_SOCIALACCOUNT_PROVIDERS:
+                valueFrom:
+                  secretKeyRef:
+                    name: paperless-secret
+                    key: PAPERLESS_SOCIALACCOUNT_PROVIDERS
+              PAPERLESS_SOCIAL_AUTO_SIGNUP: "true"
+              PAPERLESS_SOCIALACCOUNT_ALLOW_SIGNUPS: "true"
               PAPERLESS_URL: https://paperless.nebular-grid.space
               PAPERLESS_PORT: "8000"
               PAPERLESS_TIME_ZONE: "Europe/Prague"
@@ -38,21 +46,6 @@ spec:
               PAPERLESS_DATA_DIR: /data/local/data
               PAPERLESS_EXPORT_DIR: /data/nas/export
               PAPERLESS_MEDIA_ROOT: /data/local/media
-              # Configure folder importer
-              PAPERLESS_CONSUMER_POLLING: "60"
-              PAPERLESS_CONSUMER_RECURSIVE: "true"
-              PAPERLESS_CONSUMER_SUBDIRS_AS_TAGS: "true"
-              # Configure OCR
-              PAPERLESS_OCR_LANGUAGES:
-                valueFrom:
-                  secretKeyRef:
-                    name: paperless-secret
-                    key: PAPERLESS_OCR_LANGUAGE
-              PAPERLESS_OCR_LANGUAGE:
-                valueFrom:
-                  secretKeyRef:
-                    name: paperless-secret
-                    key: PAPERLESS_OCR_LANGUAGE
               PAPERLESS_REDIS: redis://paperless-dragonfly.selfhosted.svc.cluster.local:6379
               # Configure user permissions
               USERMAP_UID: "2000"

@@ -10,6 +10,6 @@ spec:
     mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
     operation: copy
   ref:
-    tag: 0.10.0
-    digest: sha256:5ce7e1ef30a218264f6095f09f4d659e6a7d872fb310cefff87ee86dc305f2bb
+    tag: 0.10.3
+    digest: sha256:c2bc4be57fb912312860d0016552975df74d81045084cf349175a2a0f513c7c3
   url: oci://ghcr.io/home-operations/charts/kopiur

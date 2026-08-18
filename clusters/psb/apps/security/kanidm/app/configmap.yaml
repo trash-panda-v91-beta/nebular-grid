@@ -1,0 +1,17 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kanidm-branding
+data:
+  override.css: |-
+    /* Nebular Grid branding - cyberdream palette from the logo.
+       Kanidm UI is Bootstrap-driven; override its CSS custom properties. */
+    :root {
+      --bs-body-bg: #16181a;
+      --bs-body-color: #ffffff;
+      --bs-primary: #5ef1ff;
+      --bs-primary-rgb: 94, 241, 255;
+      --bs-link-color: #5ea1ff;
+      --bs-emphasis-color: #ffffff;
+    }

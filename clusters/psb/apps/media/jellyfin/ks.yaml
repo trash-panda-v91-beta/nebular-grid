@@ -12,6 +12,7 @@ spec:
     - ../../../../components/gpu
     - ../../../../components/kopiur/backup
     - ../../../../components/zeroscaler/nas-nfs-scaler
+    - ../../../../components/oidc
   dependsOn:
     - name: kopiur
       namespace: system
@@ -19,13 +20,36 @@ spec:
       namespace: kube-system
     - name: rook-ceph-cluster
       namespace: rook-ceph
+    - name: kanidm
+      namespace: security
   interval: 1h
   path: "./clusters/psb/apps/media/jellyfin/app"
   postBuild:
     substitute:
       APP: jellyfin
+      APP_NAMESPACE: media
+      SUBDOMAIN: jf
       KOPIUR_CLAIM: jellyfin
       KOPIUR_CAPACITY: 10Gi
+      OIDC_DISPLAY_NAME: "Jellyfin"
+      OIDC_CALLBACK: /sso/OID/redirect/kanidm
+      OIDC_ORIGIN: /sso/OID/start/kanidm
+      OIDC_SHORT_USERNAME: "true"
+      OIDC_SCOPE_MAPS: |
+        {
+          "children": ["openid", "profile", "email", "groups"]
+        }
+      OIDC_CLAIM_MAPS: |
+        {
+          "roles": {
+            "joinType": "array",
+            "valuesByGroup": {
+              "adults@idm.nebular-grid.space": ["user"],
+              "children@idm.nebular-grid.space": ["user"],
+              "admins@idm.nebular-grid.space": ["admin"]
+            }
+          }
+        }
   prune: true
   sourceRef:
     kind: GitRepository

@@ -1,0 +1,27 @@
+---
+# Unauthenticated /api route for API clients (helmarr, LunaSea, etc).
+# The oidc/envoy component's SecurityPolicy only targetRefs the
+# app-template-generated route named "sonarr", so this separate route is never
+# OIDC-attached. Sonarr gates /api with its own X-Api-Key. Longest-prefix match
+# routes /api/* here and everything else to the OIDC-protected route.
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: sonarr-api
+  namespace: downloads
+  annotations:
+    external-dns.alpha.kubernetes.io/cloudflare-proxied: "false"
+spec:
+  parentRefs:
+    - name: envoy-internal-public-dns
+      namespace: network
+  hostnames:
+    - sonarr.nebular-grid.space
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /api
+      backendRefs:
+        - name: sonarr
+          port: 8989

@@ -8,3 +8,4 @@ components:
 resources:
   - ./namespace.yaml
   - ./conduwuit/ks.yaml
+  - ./sable/ks.yaml

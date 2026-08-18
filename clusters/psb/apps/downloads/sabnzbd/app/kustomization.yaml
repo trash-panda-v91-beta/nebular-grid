@@ -6,6 +6,7 @@ resources:
   - ./ocirepository.yaml
   - ./helmrelease.yaml
   - ./externalsecret.yaml
+  - ./httproute-api.yaml
 generatorOptions:
   disableNameSuffixHash: true
   annotations:

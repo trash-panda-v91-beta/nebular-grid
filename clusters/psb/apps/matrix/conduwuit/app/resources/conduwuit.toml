@@ -18,3 +18,15 @@ allow_registration = false
 
 [global.well_known]
 client = "https://matrix.nebular-grid.space"
+
+[global.oauth]
+compatibility_mode = "hybrid"
+
+[global.oauth.oidc]
+discovery_url = "https://idm.nebular-grid.space/oauth2/openid/conduwuit"
+client_id = "conduwuit"
+client_secret_file = "/etc/continuwuit/oidc_secret"
+additional_scopes = ["email", "openid", "profile"]
+prompt_for_localpart = false
+profile_key_import_mode = "on_registration"
+profile_key_map = { displayname = "name" }

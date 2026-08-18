@@ -11,18 +11,25 @@ spec:
   components:
     - ../../../../components/kopiur/backup
     - ../../../../components/zeroscaler/nas-nfs-scaler
+    - ../../../../components/oidc/envoy
   dependsOn:
     - name: kopiur
       namespace: system
     - name: rook-ceph-cluster
       namespace: rook-ceph
+    - name: kanidm
+      namespace: security
   interval: 1h
   path: "./clusters/psb/apps/downloads/radarr/app"
   postBuild:
     substitute:
       APP: radarr
+      APP_NAMESPACE: downloads
       KOPIUR_CLAIM: radarr-config
       KOPIUR_CAPACITY: 2Gi
+      OIDC_DISPLAY_NAME: Radarr
+      OIDC_GROUP: admins
+      OIDC_SCOPES: "[\"openid\", \"profile\"]"
   prune: true
   sourceRef:
     kind: GitRepository

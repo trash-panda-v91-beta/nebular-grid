@@ -11,6 +11,7 @@ spec:
   components:
     - ../../../../components/kopiur/backup
     - ../../../../components/zeroscaler/nas-nfs-scaler
+    - ../../../../components/oidc/envoy
   dependsOn:
     - name: kopiur
       namespace: system
@@ -23,7 +24,11 @@ spec:
   postBuild:
     substitute:
       APP: sabnzbd
+      APP_NAMESPACE: downloads
       KOPIUR_CLAIM: sabnzbd-config
+      OIDC_DISPLAY_NAME: SABnzbd
+      OIDC_GROUP: admins
+      OIDC_SCOPES: "[\"openid\", \"profile\"]"
   prune: true
   sourceRef:
     kind: GitRepository

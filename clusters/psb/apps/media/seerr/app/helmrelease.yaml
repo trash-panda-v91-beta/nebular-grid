@@ -68,10 +68,12 @@ spec:
             port: *port
     route:
       app:
+        annotations:
+          external-dns.alpha.kubernetes.io/cloudflare-proxied: "false"
         hostnames:
           - seerr.nebular-grid.space
         parentRefs:
-          - name: envoy-internal
+          - name: envoy-internal-public-dns
             namespace: network
     persistence:
       config:

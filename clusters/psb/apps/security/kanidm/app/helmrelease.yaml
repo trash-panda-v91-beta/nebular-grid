@@ -1,0 +1,197 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: kanidm
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: kanidm
+  interval: 30m
+  values:
+    defaultPodOptions:
+      automountServiceAccountToken: true
+    controllers:
+      kanidm:
+        type: statefulset
+        replicas: 1
+        pod:
+          annotations:
+            reloader.stakater.com/auto: "true"
+          securityContext:
+            fsGroup: 1000
+            fsGroupChangePolicy: OnRootMismatch
+            runAsGroup: 1000
+            runAsNonRoot: true
+            runAsUser: 1000
+        containers:
+          app:
+            image:
+              repository: docker.io/kanidm/server
+              tag: 1.11.1@sha256:7d7c671f5148cb09426f02d6d7610369a64f69e7a95fac8400fd74c6963bc3a0
+            env:
+              KANIDM_ADMIN_BIND_PATH: /var/run/kanidmd.sock
+              KANIDM_BINDADDRESS: "[::]:8443"
+              KANIDM_DB_PATH: /data/kanidm.db
+              KANIDM_DOMAIN: idm.nebular-grid.space
+              KANIDM_LDAPBINDADDRESS: "[::]:3636"
+              KANIDM_ORIGIN: https://idm.nebular-grid.space
+              KANIDM_TLS_CHAIN: /certs/tls.crt
+              KANIDM_TLS_KEY: /certs/tls.key
+            resources:
+              requests:
+                cpu: 50m
+                memory: 150Mi
+              limits:
+                memory: 300Mi
+            probes:
+              liveness: &probe
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /status
+                    port: 8443
+                    scheme: HTTPS
+                  initialDelaySeconds: 5
+                  periodSeconds: 10
+                  timeoutSeconds: 1
+                  failureThreshold: 3
+              readiness: *probe
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - ALL
+      provision:
+        pod:
+          securityContext:
+            fsGroup: 1000
+            fsGroupChangePolicy: OnRootMismatch
+            runAsGroup: 1000
+            runAsNonRoot: true
+            runAsUser: 1000
+        containers:
+          app:
+            image:
+              repository: ghcr.io/m00nwtchr/kanidm-provision
+              tag: main@sha256:1271844f1db6c3b7656f8954595591ab2c968b005ac4420127343fcb6a7d190f
+            env:
+              KANIDM_INSTANCE: https://idm.nebular-grid.space
+              KANIDM_NAMESPACE: security
+              KANIDM_TOKEN:
+                valueFrom:
+                  secretKeyRef:
+                    name: kanidm-provision-token
+                    key: token
+            resources:
+              requests:
+                cpu: 10m
+                memory: 50Mi
+              limits:
+                memory: 150Mi
+            securityContext:
+              capabilities:
+                drop:
+                  - ALL
+    service:
+      app:
+        controller: kanidm
+        ipFamilies:
+          - IPv4
+        ports:
+          http:
+            port: 8443
+          ldap:
+            port: 3636
+    route:
+      app:
+        annotations:
+          external-dns.alpha.kubernetes.io/cloudflare-proxied: "false"
+        hostnames:
+          - idm.nebular-grid.space
+        parentRefs:
+          - name: envoy-internal-public-dns
+            namespace: network
+        rules:
+          - backendRefs:
+              - identifier: app
+                port: 8443
+    persistence:
+      data:
+        existingClaim: kanidm
+        advancedMounts:
+          kanidm:
+            app:
+              - path: /data
+      certs:
+        type: secret
+        name: idm-nebular-grid-space-tls
+        defaultMode: 400
+        advancedMounts:
+          kanidm:
+            app:
+              - path: /certs
+      empty:
+        type: emptyDir
+        globalMounts:
+          - path: /var/run
+      icon-cache:
+        accessMode: ReadWriteOnce
+        size: 1Gi
+        suffix: icon-cache
+        advancedMounts:
+          provision:
+            app:
+              - path: /data/icons
+      branding:
+        type: configMap
+        name: kanidm-branding
+        advancedMounts:
+          kanidm:
+            app:
+              - path: /hpkg/override.css
+                subPath: override.css
+                readOnly: true
+    rbac:
+      roles:
+        kanidm-write-secret:
+          type: ClusterRole
+          rules:
+            - apiGroups:
+                - ""
+              resources:
+                - secrets
+              verbs:
+                - create
+                - patch
+        kanidm-read-cm:
+          type: ClusterRole
+          rules:
+            - apiGroups:
+                - ""
+              resources:
+                - configmaps
+              verbs:
+                - get
+                - list
+                - watch
+      bindings:
+        kanidm-write-secret:
+          type: ClusterRoleBinding
+          roleRef:
+            identifier: kanidm-write-secret
+          subjects:
+            - identifier: kanidm
+              serviceAccount: kanidm
+        kanidm-read-cm:
+          type: ClusterRoleBinding
+          roleRef:
+            identifier: kanidm-read-cm
+          subjects:
+            - identifier: kanidm
+              serviceAccount: kanidm
+    serviceAccount:
+      kanidm: {}

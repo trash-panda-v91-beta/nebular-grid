@@ -11,17 +11,23 @@ spec:
   components:
     - ../../../../components/kopiur/backup
     - ../../../../components/zeroscaler/nas-nfs-scaler
+    - ../../../../components/oidc/envoy
   dependsOn:
     - name: kopiur
       namespace: system
     - name: rook-ceph-cluster
       namespace: rook-ceph
+    - name: kanidm
+      namespace: security
   interval: 1h
   path: "./clusters/psb/apps/downloads/bazarr/app"
   postBuild:
     substitute:
       APP: bazarr
+      APP_NAMESPACE: downloads
       KOPIUR_CLAIM: bazarr-config
+      OIDC_DISPLAY_NAME: Bazarr
+      OIDC_GROUP: admins
   prune: true
   sourceRef:
     kind: GitRepository

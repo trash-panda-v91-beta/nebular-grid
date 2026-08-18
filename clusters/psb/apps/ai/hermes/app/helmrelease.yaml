@@ -14,10 +14,10 @@ spec:
       automountServiceAccountToken: true
       terminationGracePeriodSeconds: 120
       securityContext:
-        fsGroup: 1000
+        fsGroup: 2000
         fsGroupChangePolicy: "OnRootMismatch"
-        runAsGroup: 1000
-        runAsUser: 1000
+        runAsGroup: 2000
+        runAsUser: 2000
         seccompProfile:
           type: RuntimeDefault
     controllers:
@@ -31,7 +31,7 @@ spec:
           copy-agent-source:
             image:
               repository: nousresearch/hermes-agent
-              tag: v2026.8.3@sha256:16788311e2fa3035456bdc1bafb8ec2b1777db64ebf020af9bb7eb73c3712c9e
+              tag: v2026.8.13@sha256:68e15ae2a6d894d0ccbd9f8aacbbe13d4d28fa5dc9b6a303970b67bb2499b1a6
             command:
               - /bin/sh
               - -c
@@ -47,8 +47,8 @@ spec:
               capabilities:
                 drop:
                   - ALL
-              runAsGroup: 1000
-              runAsUser: 1000
+              runAsGroup: 2000
+              runAsUser: 2000
           init:
             image:
               repository: docker.io/library/alpine
@@ -64,12 +64,12 @@ spec:
               capabilities:
                 drop:
                   - ALL
-              runAsGroup: 1000
-              runAsUser: 1000
+              runAsGroup: 2000
+              runAsUser: 2000
           install-tools:
             image:
               repository: nousresearch/hermes-agent
-              tag: v2026.8.3@sha256:16788311e2fa3035456bdc1bafb8ec2b1777db64ebf020af9bb7eb73c3712c9e
+              tag: v2026.8.13@sha256:68e15ae2a6d894d0ccbd9f8aacbbe13d4d28fa5dc9b6a303970b67bb2499b1a6
             command:
               - /bin/sh
               - -c
@@ -103,13 +103,13 @@ spec:
               capabilities:
                 drop:
                   - ALL
-              runAsGroup: 1000
-              runAsUser: 1000
+              runAsGroup: 2000
+              runAsUser: 2000
         containers:
           app:
             image:
               repository: nousresearch/hermes-agent
-              tag: v2026.8.3@sha256:16788311e2fa3035456bdc1bafb8ec2b1777db64ebf020af9bb7eb73c3712c9e
+              tag: v2026.8.13@sha256:68e15ae2a6d894d0ccbd9f8aacbbe13d4d28fa5dc9b6a303970b67bb2499b1a6
             args:
               - gateway
               - run
@@ -118,9 +118,9 @@ spec:
               API_SERVER_ENABLED: "true"
               API_SERVER_HOST: 0.0.0.0
               GOPATH: /opt/data/go
-              HERMES_GID: "1000"
+              HERMES_GID: "2000"
               HERMES_HOME: /opt/data
-              HERMES_UID: "1000"
+              HERMES_UID: "2000"
               HERMES_CRON_TIMEOUT: 0
               HOME: /opt/data
               HOMEBREW_CELLAR: /opt/data/.local/homebrew/Cellar
@@ -150,6 +150,18 @@ spec:
               TERM: xterm-256color
               TERMINAL_MAX_FOREGROUND_TIMEOUT: "1800"
               HERMES_DASHBOARD: "1"
+              HERMES_DASHBOARD_PUBLIC_URL: https://hermes.nebular-grid.space
+              HERMES_DASHBOARD_OIDC_ISSUER: https://idm.nebular-grid.space/oauth2/openid/hermes
+              HERMES_DASHBOARD_OIDC_CLIENT_ID:
+                valueFrom:
+                  secretKeyRef:
+                    name: kanidm-hermes-oidc
+                    key: client-id
+              HERMES_DASHBOARD_OIDC_CLIENT_SECRET:
+                valueFrom:
+                  secretKeyRef:
+                    name: kanidm-hermes-oidc
+                    key: client-secret
               TZ: "America/Chicago"
             resources:
               requests:
@@ -176,7 +188,7 @@ spec:
           codeserver:
             image:
               repository: ghcr.io/coder/code-server
-              tag: 4.132.0@sha256:b88ed46a6ace76a0294a17a24f39aa88032ed0a3692c3d8ab5433b47ab57ccbf
+              tag: 4.133.0@sha256:e073a441c61c85821a7f16b64cf93b4e77b4092899bb1f3bed906fbd558afd62
             args:
               - --auth
               - none
@@ -199,6 +211,8 @@ spec:
               capabilities:
                 drop:
                   - ALL
+              runAsUser: 0
+              runAsNonRoot: false
     service:
       app:
         controller: hermes
@@ -213,20 +227,24 @@ spec:
             port: 9119
     route:
       app:
+        annotations:
+          external-dns.alpha.kubernetes.io/cloudflare-proxied: "false"
         hostnames:
           - hermes.nebular-grid.space
         parentRefs:
-          - name: envoy-internal
+          - name: envoy-internal-public-dns
             namespace: network
         rules:
           - backendRefs:
               - identifier: app
                 port: 9119
       codeserver:
+        annotations:
+          external-dns.alpha.kubernetes.io/cloudflare-proxied: "false"
         hostnames:
           - hermes-code.nebular-grid.space
         parentRefs:
-          - name: envoy-internal
+          - name: envoy-internal-public-dns
             namespace: network
         rules:
           - backendRefs:
