@@ -12,7 +12,7 @@
     "managerFilePatterns": ["/^clusters/.+\\.yaml(?:\\.j2)?$/"]
   },
   "helm-values": {
-    "managerFilePatterns": ["/^clusters/.+\\.yaml(?:\\.j2)?$/"]
+    "managerFilePatterns": ["/^clusters/(?!psb/talos/).+\\.yaml(?:\\.j2)?$/"]
   },
   "kubernetes": {
     "managerFilePatterns": ["/^clusters/.+\\.yaml(?:\\.j2)?$/"]
