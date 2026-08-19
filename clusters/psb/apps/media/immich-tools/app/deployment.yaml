@@ -20,7 +20,7 @@ spec:
         fsGroupChangePolicy: OnRootMismatch
       containers:
         - name: immich-tools
-          image: ghcr.io/trash-panda-v91-beta/immich-tools:v0.2.1
+          image: ghcr.io/trash-panda-v91-beta/immich-tools:v0.2.2
           args:
             - "serve"
           env:
@@ -36,6 +36,11 @@ spec:
                 secretKeyRef:
                   name: immich-tools-secret
                   key: pcloud_token
+            - name: API_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: immich-tools-secret
+                  key: api_token
             - name: CONFIG
               value: /data/config.toml
             - name: STATE_DIR
