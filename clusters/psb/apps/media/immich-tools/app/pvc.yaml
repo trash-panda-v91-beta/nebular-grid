@@ -58,3 +58,33 @@ spec:
       storage: 100Gi
   storageClassName: ""
   volumeName: immich-upload
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: immich-tools-data
+spec:
+  accessModes:
+    - ReadWriteMany
+  capacity:
+    storage: 5Gi
+  nfs:
+    path: /mnt/tank/stores/photos/immich-tools
+    server: asc.internal
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: ""
+  volumeMode: Filesystem
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: immich-tools-data
+  namespace: media
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 5Gi
+  storageClassName: ""
+  volumeName: immich-tools-data
