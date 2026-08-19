@@ -2,25 +2,27 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: immich-watch-upload
+  name: immich-tools
+  labels:
+    app.kubernetes.io/name: immich-tools
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app.kubernetes.io/name: immich-watch-upload
+      app.kubernetes.io/name: immich-tools
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: immich-watch-upload
+        app.kubernetes.io/name: immich-tools
     spec:
       securityContext:
         fsGroup: 2000
         fsGroupChangePolicy: OnRootMismatch
       containers:
-        - name: watcher
-          image: ghcr.io/trash-panda-v91-beta/immich-tools:2b1e68c
+        - name: immich-tools
+          image: ghcr.io/trash-panda-v91-beta/immich-tools:v0.2.1
           args:
-            - "watch-upload"
+            - "serve"
           env:
             - name: IMMICH_URL
               value: http://immich-server.media.svc.cluster.local:2283
@@ -29,11 +31,30 @@ spec:
                 secretKeyRef:
                   name: immich-tools-secret
                   key: api_key
-            - name: WATCH_DIR
-              value: /upload
+            - name: PCLOUD_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: immich-tools-secret
+                  key: pcloud_token
+            - name: CONFIG
+              value: /data/config.toml
+            - name: STATE_DIR
+              value: /data/state
+            - name: FAVORITES_DIR
+              value: /favorites
+            - name: SYNC_INTERVAL
+              valueFrom:
+                configMapKeyRef:
+                  name: immich-tools-config
+                  key: sync_interval
+          ports:
+            - name: http
+              containerPort: 8080
           volumeMounts:
-            - name: upload
-              mountPath: /upload
+            - name: data
+              mountPath: /data
+            - name: favorites
+              mountPath: /favorites
           resources:
             requests:
               cpu: 10m
@@ -41,6 +62,9 @@ spec:
             limits:
               memory: 256Mi
       volumes:
-        - name: upload
+        - name: data
           persistentVolumeClaim:
-            claimName: immich-upload
+            claimName: immich-tools-data
+        - name: favorites
+          persistentVolumeClaim:
+            claimName: immich-favorites

@@ -1,0 +1,8 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: immich-tools-config
+data:
+  # How often the background favorites sync re-runs. Edit to reschedule - Flux reapplies it.
+  sync_interval: "6h"
