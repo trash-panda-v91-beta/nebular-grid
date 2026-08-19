@@ -19,7 +19,7 @@ spec:
             fsGroupChangePolicy: OnRootMismatch
           containers:
             - name: sync
-              image: ghcr.io/trash-panda-v91-beta/immich-tools:7f6c917
+              image: ghcr.io/trash-panda-v91-beta/immich-tools:2b1e68c
               args:
                 - "sync-favorites"
               env:
