@@ -41,6 +41,8 @@ spec:
         modules:
           - name: diskprediction_local
             enabled: true
+          - name: insights
+            enabled: false
           - name: pg_autoscaler
             enabled: true
           - name: rook
