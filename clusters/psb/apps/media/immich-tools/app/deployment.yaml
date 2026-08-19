@@ -36,6 +36,8 @@ spec:
                 secretKeyRef:
                   name: immich-tools-secret
                   key: pcloud_token
+            - name: PCLOUD_HOST
+              value: eapi.pcloud.com
             - name: API_TOKEN
               valueFrom:
                 secretKeyRef:
