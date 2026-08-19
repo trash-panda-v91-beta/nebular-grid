@@ -47,7 +47,13 @@ spec:
         enabled: false
     modelCache:
       enabled: true
+      # perService gives each InferenceService its own node-local cache that
+      # binds on the node its pod schedules to. WaitForFirstConsumer forces the
+      # rollout pod onto that same node, so a single-replica RWO workload never
+      # deadlocks on a second pod that cannot mount the RWO volume (the bug that
+      # kept qwen3-reranker stuck in Init:0/3).
+      mode: perService
       size: 100Gi
-      storageClass: ceph-block
+      storageClass: openebs-hostpath
       accessMode: ReadWriteOnce
       mountPath: /models
