@@ -20,7 +20,7 @@ spec:
         fsGroupChangePolicy: OnRootMismatch
       containers:
         - name: immich-tools
-          image: ghcr.io/trash-panda-v91-beta/immich-tools:v0.2.3
+          image: ghcr.io/trash-panda-v91-beta/immich-tools:v0.2.4
           args:
             - "serve"
           env:
