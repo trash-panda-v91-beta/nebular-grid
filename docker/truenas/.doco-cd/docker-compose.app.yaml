@@ -2,8 +2,6 @@
 # Deployed through the TrueNAS UI - doco-cd cannot manage itself
 
 secrets:
-  1pw_token:
-    file: /home/truenas_admin/.config/doco-cd/1pw_token
   webhook_secret:
     file: /home/truenas_admin/.config/doco-cd/webhook_secret
 
@@ -18,8 +16,6 @@ services:
         - url: https://github.com/trash-panda-v91-beta/nebular-grid.git
           reference: refs/heads/main
           interval: 3600
-      SECRET_PROVIDER: 1password
-      SECRET_PROVIDER_ACCESS_TOKEN_FILE: /run/secrets/1pw_token
       TZ: Europe/Prague
       WEBHOOK_SECRET_FILE: /run/secrets/webhook_secret
     healthcheck:
@@ -36,7 +32,6 @@ services:
       - 8080:8080
     restart: unless-stopped
     secrets:
-      - 1pw_token
       - webhook_secret
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
