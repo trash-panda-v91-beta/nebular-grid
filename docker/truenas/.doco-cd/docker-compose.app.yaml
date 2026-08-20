@@ -1,39 +1,46 @@
 ---
-# Deployed through the TrueNAS UI
+# Deployed through the TrueNAS UI - doco-cd cannot manage itself
 
-configs:
-  poll-config.yml:
-    content: |
-      - run_once: true
-        url: https://github.com/trash-panda-v91-beta/nebular-grid
 secrets:
+  1pw_token:
+    file: /home/truenas_admin/.config/doco-cd/1pw_token
   webhook_secret:
     file: /home/truenas_admin/.config/doco-cd/webhook_secret
+
 services:
   app:
-    configs:
-      - source: poll-config.yml
-        target: /poll-config.yml
     container_name: doco-cd
     environment:
+      DEPLOY_CONFIG_BASE_DIR: ./docker/truenas/
       HTTP_PORT: 8080
       LOG_LEVEL: info
-      POLL_CONFIG_FILE: /poll-config.yml
+      POLL_CONFIG: |-
+        - url: https://github.com/trash-panda-v91-beta/nebular-grid.git
+          reference: refs/heads/main
+          interval: 3600
+      SECRET_PROVIDER: 1password
+      SECRET_PROVIDER_ACCESS_TOKEN_FILE: /run/secrets/1pw_token
+      TZ: Europe/Prague
       WEBHOOK_SECRET_FILE: /run/secrets/webhook_secret
-      DEPLOY_CONFIG_BASE_DIR: ./docker/truenas/
     healthcheck:
-      interval: 30s
-      retries: 3
+      test:
+        - CMD
+        - /doco-cd
+        - healthcheck
       start_period: 15s
+      interval: 30s
       timeout: 5s
+      retries: 3
     image: ghcr.io/kimdre/doco-cd:0.109.2@sha256:1c7941bd12fe94aea3c2560cb85f775e48928be102f990dfae3aebe5bcb170b3
     ports:
       - 8080:8080
     restart: unless-stopped
     secrets:
+      - 1pw_token
       - webhook_secret
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - data:/data
+
 volumes:
   data: {}
