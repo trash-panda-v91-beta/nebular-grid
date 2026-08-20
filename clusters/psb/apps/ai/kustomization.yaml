@@ -16,6 +16,7 @@ resources:
   - ./hermes/ks.yaml
   - ./mcp/searxng-mcp/ks.yaml
   - ./mcp/donetick-mcp/ks.yaml
+  - ./mcp/truenas-mcp/ks.yaml
   - ./mcp/context7-mcp/ks.yaml
   - ./mcp/ha-mcp/ks.yaml
   - ./mcp/grafana-mcp/ks.yaml
