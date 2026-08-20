@@ -1,7 +1,13 @@
 ---
 working_dir: ./docker/truenas
 
-auto_discover: true
-auto_discover_opts:
+auto_discovery:
+  enabled: true
   depth: 1
   delete: true
+
+force_recreate: false
+
+reconciliation:
+  enabled: true
+  interval: 3600
