@@ -8,7 +8,7 @@ spec:
   alias: truenas_mcp
   transport: http
   workload:
-    image: ghcr.io/trash-panda-v91-beta/truenas-mcp:v0.1.3
+    image: ghcr.io/trash-panda-v91-beta/truenas-mcp:v0.1.4@sha256:0f2e0017498d15283b2e2bcf608620d64bccba607011e6bbb8f642644727d2f2
     port: 8000
     path: /mcp
     env:
