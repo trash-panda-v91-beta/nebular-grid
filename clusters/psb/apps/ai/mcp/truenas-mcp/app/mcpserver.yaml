@@ -1,0 +1,34 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmcpserver_v1alpha1.json
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMMCPServer
+metadata:
+  name: truenas-mcp
+spec:
+  alias: truenas_mcp
+  transport: http
+  workload:
+    image: ghcr.io/trash-panda-v91-beta/truenas-mcp:v0.1.3
+    port: 8000
+    path: /mcp
+    env:
+      # TrueNAS middleware websocket; asc.internal is the NAS (in-cluster DNS, also the NFS server)
+      - name: TRUENAS_URI
+        value: wss://asc.internal/api/current
+      # TrueNAS serves a self-signed cert - skip verification on the internal link
+      - name: TRUENAS_VERIFY_SSL
+        value: "false"
+      - name: TRUENAS_API_KEY
+        valueFrom:
+          secretKeyRef:
+            name: truenas-mcp-secret
+            key: TRUENAS_API_KEY
+      # FastMCP serves streamable-http from FASTMCP_* env vars - no code change
+      - name: FASTMCP_TRANSPORT
+        value: streamable-http
+      - name: FASTMCP_HOST
+        value: 0.0.0.0
+      - name: FASTMCP_PORT
+        value: "8000"
+      - name: FASTMCP_STREAMABLE_HTTP_PATH
+        value: /mcp
