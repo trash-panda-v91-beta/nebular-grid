@@ -24,6 +24,7 @@ spec:
               PGID: "2000"
               DEVICE_NAME: nebular-grid
               CONFLICT_STRATEGY: merge
+              PERIODIC_SCAN: 60s
               VAULT_NAME:
                 valueFrom:
                   secretKeyRef:
