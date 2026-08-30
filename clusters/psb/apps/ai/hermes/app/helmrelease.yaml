@@ -469,6 +469,7 @@ spec:
                 - pods/exec
               verbs:
                 - create
+                - get
       bindings:
         hermes-read-all:
           type: ClusterRoleBinding
