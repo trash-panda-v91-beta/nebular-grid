@@ -425,6 +425,18 @@ spec:
                 - pods
               verbs:
                 - delete
+        hermes-storage-fix:
+          type: ClusterRole
+          rules:
+            - apiGroups:
+                - "storage.k8s.io"
+              resources:
+                - volumeattachments
+              verbs:
+                - get
+                - list
+                - watch
+                - delete
         hermes-exec-deploy:
           type: Role
           rules:
@@ -453,6 +465,13 @@ spec:
           type: ClusterRoleBinding
           roleRef:
             identifier: hermes-pod-delete
+          subjects:
+            - identifier: hermes
+              serviceAccount: hermes
+        hermes-storage-fix:
+          type: ClusterRoleBinding
+          roleRef:
+            identifier: hermes-storage-fix
           subjects:
             - identifier: hermes
               serviceAccount: hermes
