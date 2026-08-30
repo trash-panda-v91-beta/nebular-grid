@@ -453,6 +453,21 @@ spec:
               verbs:
                 - patch
                 - update
+        hermes-ceph-exec:
+          type: Role
+          rules:
+            - apiGroups:
+                - ""
+              resources:
+                - pods
+              verbs:
+                - get
+            - apiGroups:
+                - ""
+              resources:
+                - pods/exec
+              verbs:
+                - create
       bindings:
         hermes-read-all:
           type: ClusterRoleBinding
@@ -483,5 +498,13 @@ spec:
             - identifier: hermes
               serviceAccount: hermes
               namespace: ai
+        hermes-ceph-exec:
+          type: RoleBinding
+          roleRef:
+            identifier: hermes-ceph-exec
+          subjects:
+            - identifier: hermes
+              serviceAccount: hermes
+              namespace: rook-ceph
     serviceAccount:
       hermes: {}
