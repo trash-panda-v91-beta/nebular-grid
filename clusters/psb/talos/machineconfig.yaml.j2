@@ -64,6 +64,8 @@ machine:
         - net.ipv6.conf.*
       maxPods: 150
       serializeImagePulls: false
+      imageGCHighThresholdPercent: 60
+      imageGCLowThresholdPercent: 55
     image: ghcr.io/siderolabs/kubelet:v1.37.0@sha256:d87c090ff7d915c308bf71ad2fe7d63a21cbf8e2481066d2c4b41feea2ddc5c9
     nodeIP:
       validSubnets:
