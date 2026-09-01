@@ -10,6 +10,6 @@ spec:
     mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
     operation: copy
   ref:
-    tag: 0.0.16
-    digest: sha256:b5ee7586b9a0dcecb4c8243bb1de59c4f432fb8eb71b71e6a09f476fedb979ca
+    tag: 0.0.19
+    digest: sha256:8fb437bcf4477daa02ca4f2d0c0c6ac29847b2b1aa7cf016656159c813a950ec
   url: oci://ghcr.io/home-operations/charts/litellm-operator
