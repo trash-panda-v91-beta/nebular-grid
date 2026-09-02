@@ -10,6 +10,6 @@ spec:
     mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
     operation: copy
   ref:
-    tag: v0.7.21
-    digest: sha256:2aba914e6026b5f9cd456c18c5d864f3fcadb1e6ef0cdb662d789bb0f6129b61
+    tag: v0.7.22
+    digest: sha256:31bf537bf57e994a0bb028c4845a8ce771ddd7ff867ea2212ba89f8681c0d474
   url: oci://registry.erwanleboucher.dev/eleboucher/charts/memini
