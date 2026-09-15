@@ -10,6 +10,6 @@ spec:
     mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
     operation: copy
   ref:
-    tag: 91.0.0
-    digest: sha256:5ac18049e3f57b9df65808c9d6a4a19143f658ef732095a1933aecc2ccd64c7f
+    tag: 91.4.0
+    digest: sha256:0032315f2580f488ce433ff9d18de24ce631857ff7f1d73693171eeeb7affd52
   url: oci://ghcr.io/prometheus-community/charts/kube-prometheus-stack
