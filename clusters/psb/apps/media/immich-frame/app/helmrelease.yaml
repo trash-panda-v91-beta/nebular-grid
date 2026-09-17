@@ -51,6 +51,11 @@ spec:
 
     persistence:
       config:
+        type: persistentVolumeClaim
+        existingClaim: immich-frame
+        globalMounts:
+          - path: /config
+      settings:
         type: secret
         name: immich-frame-secret
         globalMounts:
