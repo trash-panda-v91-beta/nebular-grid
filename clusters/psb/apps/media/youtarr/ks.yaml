@@ -1,0 +1,33 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: youtarr
+spec:
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: youtarr
+  components:
+    - ../../../../components/kopiur/backup
+  dependsOn:
+    - name: external-secrets
+      namespace: external-secrets
+    - name: rook-ceph-cluster
+      namespace: rook-ceph
+    - name: kopiur
+      namespace: system
+  interval: 1h
+  path: ./clusters/psb/apps/media/youtarr/app
+  postBuild:
+    substitute:
+      APP: youtarr
+      KOPIUR_CAPACITY: 10Gi
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+  targetNamespace: media
+  timeout: 5m
+  wait: false
