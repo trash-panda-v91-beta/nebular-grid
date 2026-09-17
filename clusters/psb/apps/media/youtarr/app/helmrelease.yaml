@@ -1,0 +1,172 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: youtarr
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: youtarr
+  interval: 30m
+  values:
+    defaultPodOptions:
+      securityContext:
+        fsGroup: 2000
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile:
+          type: RuntimeDefault
+    controllers:
+      youtarr:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        containers:
+          app:
+            dependsOn: db
+            image:
+              repository: docker.io/dialmaster/youtarr
+              tag: v1.83.1
+            env:
+              AUTH_ENABLED: "true"
+              DB_HOST: localhost
+              DB_NAME: youtarr
+              DB_PASSWORD:
+                valueFrom:
+                  secretKeyRef:
+                    name: youtarr-secret
+                    key: DB_PASSWORD
+              DB_PORT: "3321"
+              DB_USER: root
+              IN_DOCKER_CONTAINER: "1"
+              LOG_LEVEL: info
+              TRUST_PROXY: "1"
+              TZ: Europe/Prague
+              YOUTARR_GID: "2000"
+              YOUTARR_UID: "2000"
+              YOUTUBE_OUTPUT_DIR: /usr/src/app/data
+            probes:
+              liveness: &appProbe
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /api/health
+                    port: &httpPort 3011
+                  periodSeconds: 30
+                  timeoutSeconds: 5
+                  failureThreshold: 3
+              readiness: *appProbe
+              startup:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /api/health
+                    port: *httpPort
+                  periodSeconds: 10
+                  timeoutSeconds: 5
+                  failureThreshold: 30
+            resources:
+              requests:
+                cpu: 50m
+                memory: 512Mi
+              limits:
+                memory: 2Gi
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              runAsGroup: 2000
+              runAsNonRoot: true
+              runAsUser: 2000
+              capabilities:
+                drop:
+                  - ALL
+          db:
+            image:
+              repository: docker.io/library/mariadb
+              tag: "10.3"
+            args:
+              - "--port=3321"
+              - "--character-set-server=utf8mb4"
+              - "--collation-server=utf8mb4_unicode_ci"
+              - "--innodb-file-per-table=1"
+              - "--innodb-large-prefix=ON"
+            env:
+              MYSQL_DATABASE: youtarr
+              MYSQL_ROOT_PASSWORD:
+                valueFrom:
+                  secretKeyRef:
+                    name: youtarr-secret
+                    key: MYSQL_ROOT_PASSWORD
+              MYSQL_TCP_PORT: &dbPort 3321
+            probes:
+              liveness: &dbProbe
+                enabled: true
+                custom: true
+                spec:
+                  tcpSocket:
+                    port: *dbPort
+                  periodSeconds: 30
+                  timeoutSeconds: 5
+                  failureThreshold: 3
+              readiness: *dbProbe
+              startup:
+                enabled: true
+                custom: true
+                spec:
+                  tcpSocket:
+                    port: *dbPort
+                  periodSeconds: 10
+                  timeoutSeconds: 5
+                  failureThreshold: 30
+            resources:
+              requests:
+                cpu: 50m
+                memory: 256Mi
+              limits:
+                memory: 1Gi
+    service:
+      app:
+        controller: youtarr
+        ports:
+          http:
+            port: *httpPort
+    persistence:
+      data:
+        existingClaim: youtarr
+        advancedMounts:
+          youtarr:
+            app:
+              - path: /app/config
+                subPath: config
+              - path: /app/jobs
+                subPath: jobs
+              - path: /app/server/images
+                subPath: images
+            db:
+              - path: /var/lib/mysql
+                subPath: database
+      media:
+        type: nfs
+        server: asc.internal
+        path: /mnt/tank/media
+        advancedMounts:
+          youtarr:
+            app:
+              - path: /usr/src/app/data
+                subPath: tube
+      tmpfs:
+        type: emptyDir
+        advancedMounts:
+          youtarr:
+            app:
+              - path: /tmp
+    route:
+      app:
+        annotations:
+          external-dns.alpha.kubernetes.io/cloudflare-proxied: "false"
+        hostnames:
+          - youtarr.nebular-grid.space
+        parentRefs:
+          - name: envoy-internal-public-dns
+            namespace: network
