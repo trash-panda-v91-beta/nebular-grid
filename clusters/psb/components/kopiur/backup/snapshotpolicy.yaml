@@ -9,6 +9,9 @@ metadata:
 spec:
   credentialProjection:
     enabled: true
+  errorHandling:
+    ignoreDirErrors: true
+    ignoreFileErrors: true
   mover:
     securityContext:
       runAsUser: ${KOPIUR_MOVER_UID:=2000}
