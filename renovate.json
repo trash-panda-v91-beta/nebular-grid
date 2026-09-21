@@ -21,6 +21,7 @@
     "enabled": true
   },
   "minimumReleaseAgeBehaviour": "timestamp-optional",
+  "pinDigests": true,
   "packageRules": [
     {
       "description": "Configure Emby versioning",
