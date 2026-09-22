@@ -30,7 +30,7 @@ spec:
           app:
             image:
               repository: ghcr.io/huggingface/text-embeddings-inference
-              tag: cpu-latest@sha256:cb570aabbfa016b86684f576b5bd72d1ee96cc0b7a00b0ad221b298762b32157
+              tag: cpu-latest@sha256:cc1f06b5b2e38d979aca1cc054675426bf4d94247f6d22e399d73e09131dfe79
             args:
               - --model-id
               - sentence-transformers/all-MiniLM-L6-v2
