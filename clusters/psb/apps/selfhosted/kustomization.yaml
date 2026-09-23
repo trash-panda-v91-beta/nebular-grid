@@ -10,6 +10,8 @@ resources:
   - ./actual/ks.yaml
   - ./paperless/ks.yaml
   - ./searxng/ks.yaml
+  - ./sparkyfitness/ks.yaml
   - ./tidyquest/ks.yaml
   - ./obsidian-livesync/ks.yaml
   - ./donetick/ks.yaml
+  - ./mealie/ks.yaml
