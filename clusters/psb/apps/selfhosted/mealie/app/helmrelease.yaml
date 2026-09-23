@@ -1,0 +1,87 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: mealie
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: mealie
+  interval: 30m
+  values:
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+    controllers:
+      mealie:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        containers:
+          app:
+            image:
+              repository: ghcr.io/mealie-recipes/mealie
+              tag: v3.27.0
+            env:
+              TZ: Europe/Prague
+              BASE_URL: https://mealie.nebular-grid.space
+              DB_ENGINE: postgres
+              POSTGRES_URL_OVERRIDE:
+                valueFrom:
+                  secretKeyRef:
+                    name: mealie-postgres
+                    key: url
+              OIDC_AUTH_ENABLED: "true"
+              OIDC_AUTO_REDIRECT: "false"
+              OIDC_PROVIDER_NAME: Kanidm
+              OIDC_CONFIGURATION_URL: https://idm.nebular-grid.space/oauth2/openid/mealie/.well-known/openid-configuration
+              OIDC_CLIENT_ID:
+                valueFrom:
+                  secretKeyRef:
+                    name: kanidm-mealie-oidc
+                    key: client-id
+              OIDC_CLIENT_SECRET:
+                valueFrom:
+                  secretKeyRef:
+                    name: kanidm-mealie-oidc
+                    key: client-secret
+              OIDC_USER_GROUP: adults@idm.nebular-grid.space
+              OIDC_ADMIN_GROUP: admins@idm.nebular-grid.space
+              OIDC_GROUPS_CLAIM: groups
+              OIDC_REMEMBER_ME: "true"
+            probes:
+              liveness:
+                enabled: true
+              readiness:
+                enabled: true
+            resources:
+              requests:
+                cpu: 50m
+                memory: 250Mi
+              limits:
+                memory: 1Gi
+    service:
+      app:
+        controller: mealie
+        ports:
+          http:
+            port: 9000
+            protocol: HTTP
+    persistence:
+      data:
+        existingClaim: mealie-data
+        advancedMounts:
+          mealie:
+            app:
+              - path: /app/data
+    route:
+      app:
+        hostnames:
+          - mealie.nebular-grid.space
+        parentRefs:
+          - name: envoy-internal
+            namespace: network

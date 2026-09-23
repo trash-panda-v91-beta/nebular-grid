@@ -74,3 +74,10 @@ spec:
         disablePassword: false
         passwordSecret:
           name: sparkyfitness-postgres
+      - name: mealie
+        ensure: present
+        login: true
+        superuser: false
+        disablePassword: false
+        passwordSecret:
+          name: mealie-postgres
