@@ -53,6 +53,26 @@ spec:
               SPARKY_FITNESS_DISABLE_SIGNUP: "false"
               NODE_ENV: production
               SERVER_UPLOADS_PATH: /uploads
+              SPARKY_FITNESS_OIDC_AUTH_ENABLED: "true"
+              SPARKY_FITNESS_OIDC_PROVIDER_SLUG: kanidm
+              SPARKY_FITNESS_OIDC_PROVIDER_NAME: Kanidm
+              SPARKY_FITNESS_OIDC_ISSUER_URL: https://idm.nebular-grid.space/oauth2/openid/sparkyfitness
+              SPARKY_FITNESS_OIDC_SCOPE: openid profile email
+              SPARKY_FITNESS_OIDC_DOMAIN: fitness.nebular-grid.space
+              SPARKY_FITNESS_OIDC_AUTO_REGISTER: "true"
+              SPARKY_FITNESS_OIDC_TOKEN_AUTH_METHOD: client_secret_basic
+              SPARKY_FITNESS_OIDC_ID_TOKEN_SIGNED_ALG: ES256
+              SPARKY_FITNESS_OIDC_USERINFO_SIGNED_ALG: ES256
+              SPARKY_FITNESS_OIDC_CLIENT_ID:
+                valueFrom:
+                  secretKeyRef:
+                    name: kanidm-sparkyfitness-oidc
+                    key: client-id
+              SPARKY_FITNESS_OIDC_CLIENT_SECRET:
+                valueFrom:
+                  secretKeyRef:
+                    name: kanidm-sparkyfitness-oidc
+                    key: client-secret
             envFrom:
               - secretRef:
                   name: sparkyfitness-secrets
