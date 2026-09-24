@@ -66,7 +66,7 @@ machine:
       serializeImagePulls: false
       imageGCHighThresholdPercent: 60
       imageGCLowThresholdPercent: 55
-    image: ghcr.io/siderolabs/kubelet:v1.37.0@sha256:d87c090ff7d915c308bf71ad2fe7d63a21cbf8e2481066d2c4b41feea2ddc5c9
+    image: ghcr.io/siderolabs/kubelet:v1.37.1@sha256:3777bdaaa352e1f425dff9d8868a970923c66d0629bad16f935c41018a83d9d8
     nodeIP:
       validSubnets:
         - 10.1.1.0/24
@@ -132,7 +132,7 @@ cluster:
     key: "op://NebularGrid/6i7sewsv3lus3qxpwddknc7jem/aggregator ca key"
   allowSchedulingOnControlPlanes: true
   apiServer:
-    image: registry.k8s.io/kube-apiserver:v1.37.0@sha256:d1045e5c6d2f016797d22143eba7502e1bb712a4681836a7c35763a9c192dd70
+    image: registry.k8s.io/kube-apiserver:v1.37.1@sha256:e190f914a6cc21cab9268485d1ae7282fdeab1315ac64b668aa42d732fd1061d
     extraArgs:
       enable-aggregator-routing: "true"
       feature-gates: MutatingAdmissionPolicy=true,HPAScaleToZero=true
@@ -143,7 +143,7 @@ cluster:
       - psb.internal
     disablePodSecurityPolicy: true
   controllerManager:
-    image: registry.k8s.io/kube-controller-manager:v1.37.0@sha256:997c997924eb8574f63f204a0b0af133aaf33c10df84009c32d34037f4e0e077
+    image: registry.k8s.io/kube-controller-manager:v1.37.1@sha256:d470c1b85aebb466e971c06239cc6a31a4ac337a78600cef80375a79a1be1641
     extraArgs:
       bind-address: 0.0.0.0
       feature-gates: HPAScaleToZero=true
@@ -159,7 +159,7 @@ cluster:
       listen-metrics-urls: http://0.0.0.0:2381
   proxy:
     disabled: true
-    image: registry.k8s.io/kube-proxy:v1.37.0@sha256:77bf2b08ff8ac1a4a446cffaa85e79e87379c8cb54fcf60f2cb6c62c966829c8
+    image: registry.k8s.io/kube-proxy:v1.37.1@sha256:b9ae667ed9c160c9d5b66f55e8afec97fc5483a12db0ada5286541b0385cb9f4
   scheduler:
     config:
       apiVersion: kubescheduler.config.k8s.io/v1
@@ -180,7 +180,7 @@ cluster:
           schedulerName: default-scheduler
     extraArgs:
       bind-address: 0.0.0.0
-    image: registry.k8s.io/kube-scheduler:v1.37.0@sha256:a27622f132aa09cf2461ba077894a070c0186ec607366d14e805912d4804d11f
+    image: registry.k8s.io/kube-scheduler:v1.37.1@sha256:b6e2474a6c20309f0df1e7337364281fda95c6a0722259ba7f032a1e177d3f29
   secretboxEncryptionSecret: "op://NebularGrid/6i7sewsv3lus3qxpwddknc7jem/secretbox encryption secret"
   serviceAccount:
     key: "op://NebularGrid/6i7sewsv3lus3qxpwddknc7jem/service account"
