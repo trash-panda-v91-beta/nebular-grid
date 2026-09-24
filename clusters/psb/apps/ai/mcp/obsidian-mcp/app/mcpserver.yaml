@@ -8,7 +8,7 @@ spec:
   alias: obsidian_mcp
   transport: sse
   workload:
-    image: docker.io/supercorp/supergateway:3.4.3
+    image: docker.io/supercorp/supergateway:4.0.0@sha256:407344de762a449f129c576fa1e3934b63c43fef417322687972ffc43ec675df
     port: 8000
     path: /sse
     args:
