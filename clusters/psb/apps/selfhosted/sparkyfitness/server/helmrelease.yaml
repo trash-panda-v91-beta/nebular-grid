@@ -52,6 +52,7 @@ spec:
               SPARKY_FITNESS_FRONTEND_URL: https://fitness.nebular-grid.space
               SPARKY_FITNESS_DISABLE_SIGNUP: "false"
               NODE_ENV: production
+              SPARKY_FITNESS_ADMIN_EMAIL: petr@nebular-grid.space
               SPARKY_FITNESS_CUSTOM_UPLOADS_DIRECTORY: /app/SparkyFitnessServer/uploads
               SPARKY_FITNESS_OIDC_AUTH_ENABLED: "true"
               SPARKY_FITNESS_OIDC_PROVIDER_SLUG: kanidm
