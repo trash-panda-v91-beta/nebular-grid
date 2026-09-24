@@ -1,0 +1,16 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmcpserver_v1alpha1.json
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMMCPServer
+metadata:
+  name: sparkyfit-mcp
+spec:
+  alias: sparky_fitness
+  # served in-process by the SparkyFitness server; the docs allow hitting the
+  # server port directly at /mcp. Plain http inside the cluster is fine.
+  url: http://sparkyfitness.selfhosted.svc.cluster.local:3010/mcp
+  transport: http
+  authType: bearer_token
+  authTokenRef:
+    name: sparkyfit-mcp-secret
+    key: SPARKY_FITNESS_MCP_TOKEN
