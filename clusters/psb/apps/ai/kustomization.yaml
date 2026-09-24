@@ -22,3 +22,4 @@ resources:
   - ./mcp/actual-mcp/ks.yaml
   - ./mcp/obsidian-mcp/ks.yaml
   - ./mcp/unifi-network-mcp/ks.yaml
+  - ./mcp/sparkyfit-mcp/ks.yaml
