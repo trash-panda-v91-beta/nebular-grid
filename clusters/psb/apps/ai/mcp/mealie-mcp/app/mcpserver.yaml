@@ -1,0 +1,33 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmcpserver_v1alpha1.json
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMMCPServer
+metadata:
+  name: mealie-mcp
+spec:
+  alias: mealie_mcp
+  transport: http
+  workload:
+    image: ghcr.io/trash-panda-v91-beta/mealie-mcp:v0.1.2@sha256:e06cb0513bde9608e3a744f9ce07998d4b433c5a640854da6800b237a3cf4d11
+    port: 8000
+    path: /mcp
+    env:
+      - name: MEALIE_BASE_URL
+        value: http://mealie.selfhosted.svc.cluster.local:9000
+      # internal traffic is plaintext http; opt out of the https-only default
+      - name: ALLOW_INSECURE_HTTP
+        value: "true"
+      - name: MEALIE_API_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: mealie-mcp-secret
+            key: MEALIE_API_TOKEN
+      # FastMCP serves streamable-http from FASTMCP_* env vars - no code change
+      - name: FASTMCP_TRANSPORT
+        value: streamable-http
+      - name: FASTMCP_HOST
+        value: 0.0.0.0
+      - name: FASTMCP_PORT
+        value: "8000"
+      - name: FASTMCP_STREAMABLE_HTTP_PATH
+        value: /mcp
