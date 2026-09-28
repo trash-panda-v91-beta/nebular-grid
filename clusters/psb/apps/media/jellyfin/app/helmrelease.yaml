@@ -114,6 +114,8 @@ spec:
                 subPath: tube
               - path: /data/nas-media/tv
                 subPath: tv
+              - path: /data/nas-media/dvr
+                subPath: dvr
       tmpfs:
         type: emptyDir
         advancedMounts:
