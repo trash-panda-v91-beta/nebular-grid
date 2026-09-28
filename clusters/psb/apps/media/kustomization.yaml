@@ -7,7 +7,9 @@ components:
   - ../../components/flux-alerts
 resources:
   - ./namespace.yaml
+  - ./dispatcharr/ks.yaml
   - ./jellyfin/ks.yaml
+  - ./oneplay/ks.yaml
   - ./seerr/ks.yaml
   - ./maintainerr/ks.yaml
   - ./tracearr/ks.yaml
