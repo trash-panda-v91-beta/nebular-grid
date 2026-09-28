@@ -15,7 +15,6 @@ spec:
         annotations:
           reloader.stakater.com/auto: "true"
         pod:
-          hostUsers: false
           resourceClaims:
             - name: gpu
               resourceClaimTemplateName: dispatcharr-gpu
