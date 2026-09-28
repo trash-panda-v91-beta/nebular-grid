@@ -30,6 +30,8 @@ spec:
               DISPATCHARR_LOG_LEVEL: info
               DISPATCHARR_PORT: &port 9191
               DISPATCHARR_TRUSTED_PROXIES: 10.244.0.0/16
+              PGID: 2000
+              PUID: 2000
               REDIS_HOST: localhost
             resources:
               claims:
@@ -47,6 +49,15 @@ spec:
             app:
               - path: /data
                 subPath: data
+      recordings:
+        type: nfs
+        server: asc.internal
+        path: /mnt/tank/media
+        advancedMounts:
+          dispatcharr:
+            app:
+              - path: /data/recordings
+                subPath: dvr
       tmpfs:
         type: emptyDir
         advancedMounts:
