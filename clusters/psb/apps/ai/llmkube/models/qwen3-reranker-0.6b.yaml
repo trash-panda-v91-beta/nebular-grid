@@ -32,6 +32,11 @@ spec:
     - --pooling
     - rank
     - --embedding
+    - --cache-ram
+    - "0"
+    - --no-mmap
+    - --sleep-idle-seconds
+    - "300"
   resources:
     cpu: 100m
     memory: 8Gi
