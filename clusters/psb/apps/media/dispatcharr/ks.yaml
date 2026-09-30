@@ -25,8 +25,8 @@ spec:
       APP: dispatcharr
       KOPIUR_CLAIM: dispatcharr
       KOPIUR_CAPACITY: 10Gi
-      KOPIUR_MOVER_UID: "0"
-      KOPIUR_MOVER_GID: "0"
+      KOPIUR_MOVER_UID: "1000"
+      KOPIUR_MOVER_GID: "1000"
   prune: true
   sourceRef:
     kind: GitRepository
