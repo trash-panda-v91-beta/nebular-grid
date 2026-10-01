@@ -86,6 +86,15 @@ spec:
                 enabled: true
               readiness:
                 enabled: true
+              startup:
+                enabled: true
+                custom: true
+                spec:
+                  tcpSocket:
+                    port: 3010
+                  periodSeconds: 10
+                  failureThreshold: 30
+                  timeoutSeconds: 1
             resources:
               requests:
                 cpu: 20m
