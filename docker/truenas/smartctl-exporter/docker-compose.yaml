@@ -1,7 +1,7 @@
 ---
 services:
   smartctl-exporter:
-    image: quay.io/prometheuscommunity/smartctl-exporter:v0.14.0
+    image: quay.io/prometheuscommunity/smartctl-exporter:v0.14.0@sha256:cfe22c36d7d2fac48ebf619707305acb65eb0fb670656eb80f356e606d782bc1
     ports:
       - "9633:9633"
     privileged: true
