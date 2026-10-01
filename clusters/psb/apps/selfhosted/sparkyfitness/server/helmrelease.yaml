@@ -26,7 +26,7 @@ spec:
           app:
             image:
               repository: ghcr.io/codewithcj/sparkyfitness-server
-              tag: v1.7.3
+              tag: v1.7.3@sha256:2ccde3aed3faa3d5cbdd6bf97397da30677690e5540fafb5e2c4a852f03db12e
             env:
               SPARKY_FITNESS_DB_NAME: sparkyfitness
               SPARKY_FITNESS_DB_USER:
