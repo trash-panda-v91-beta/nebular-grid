@@ -1,0 +1,14 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmcpserver_v1alpha1.json
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMMCPServer
+metadata:
+  name: rohlik
+spec:
+  alias: rohlik
+  url: https://mcp.rohlik.cz/mcp
+  transport: http
+  params:
+    static_headers:
+      rhl-email: os.environ/ROHLIK_EMAIL
+      rhl-pass: os.environ/ROHLIK_PASS
