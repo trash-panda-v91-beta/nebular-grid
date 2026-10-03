@@ -18,7 +18,7 @@ spec:
           app:
             image:
               repository: ghcr.io/waladir/script.oneplay.server
-              tag: 2.1.9@sha256:512c7f96e9c82858b55e2ef09043a0b8df7a3e242e9b34ea8f185a322ea79f07
+              tag: 2.1.9@sha256:aebbbb2e7c9ab9b07d84582436398a731256c20c7fdbe6fad787910c7de62f82
             env:
               TZ: Europe/Prague
               # is_docker() misdetects under cgroup v2, so force the env/config path
