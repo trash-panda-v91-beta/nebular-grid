@@ -45,16 +45,6 @@ spec:
       value: "True"
     - name: NO_OPENAPI
       value: "True"
-    - name: ROHLIK_EMAIL
-      valueFrom:
-        secretKeyRef:
-          name: litellm
-          key: ROHLIK_EMAIL
-    - name: ROHLIK_PASS
-      valueFrom:
-        secretKeyRef:
-          name: litellm
-          key: ROHLIK_PASS
   resources:
     requests:
       cpu: 100m

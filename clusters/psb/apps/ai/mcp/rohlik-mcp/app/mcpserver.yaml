@@ -9,6 +9,6 @@ spec:
   url: https://mcp.rohlik.cz/mcp
   transport: http
   params:
-    static_headers:
-      rhl-email: os.environ/ROHLIK_EMAIL
-      rhl-pass: os.environ/ROHLIK_PASS
+    extra_headers:
+      - rhl-email
+      - rhl-pass
