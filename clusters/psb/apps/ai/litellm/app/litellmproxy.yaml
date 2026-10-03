@@ -39,6 +39,12 @@ spec:
         secretKeyRef:
           name: litellm
           key: LITELLM_MASTER_KEY
+    - name: NO_DOCS
+      value: "True"
+    - name: NO_REDOC
+      value: "True"
+    - name: NO_OPENAPI
+      value: "True"
     - name: ROHLIK_EMAIL
       valueFrom:
         secretKeyRef:
@@ -62,5 +68,5 @@ spec:
     hostnames:
       - litellm.nebular-grid.space
     parentRefs:
-      - name: envoy-external
+      - name: envoy-internal-public-dns
         namespace: network
