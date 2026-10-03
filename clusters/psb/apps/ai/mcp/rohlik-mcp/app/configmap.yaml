@@ -1,0 +1,24 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: rohlik-mcp-nginx
+data:
+  # nginx's entrypoint envsubst's every *.template here into conf.d; the name matters,
+  # default.conf.template replaces the image's own server block
+  default.conf.template: |-
+    server {
+        listen 8080;
+
+        location /mcp {
+            proxy_pass https://mcp.rohlik.cz/mcp;
+            proxy_http_version 1.1;
+            proxy_set_header Host mcp.rohlik.cz;
+            proxy_set_header rhl-email ${RHL_EMAIL};
+            proxy_set_header rhl-pass ${RHL_PASS};
+            proxy_set_header Connection "";
+            proxy_ssl_server_name on;
+            proxy_buffering off;
+            proxy_read_timeout 3600s;
+        }
+    }

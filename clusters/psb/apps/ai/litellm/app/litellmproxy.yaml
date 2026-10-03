@@ -39,16 +39,6 @@ spec:
         secretKeyRef:
           name: litellm
           key: LITELLM_MASTER_KEY
-    - name: ROHLIK_EMAIL
-      valueFrom:
-        secretKeyRef:
-          name: litellm
-          key: ROHLIK_EMAIL
-    - name: ROHLIK_PASS
-      valueFrom:
-        secretKeyRef:
-          name: litellm
-          key: ROHLIK_PASS
   resources:
     requests:
       cpu: 100m

@@ -6,9 +6,33 @@ metadata:
   name: rohlik
 spec:
   alias: rohlik
-  url: https://mcp.rohlik.cz/mcp
   transport: http
-  params:
-    static_headers:
-      rhl-email: os.environ/ROHLIK_EMAIL
-      rhl-pass: os.environ/ROHLIK_PASS
+  workload:
+    image: docker.io/nginxinc/nginx-unprivileged:1.30.5-alpine@sha256:ed04ec1ff34502c339ee5c3ae3f855442398edc1d05591e2b98981dcbbd20b1e
+    port: 8080
+    path: /mcp
+    env:
+      - name: RHL_EMAIL
+        valueFrom:
+          secretKeyRef:
+            name: rohlik-mcp-secret
+            key: RHL_EMAIL
+      - name: RHL_PASS
+        valueFrom:
+          secretKeyRef:
+            name: rohlik-mcp-secret
+            key: RHL_PASS
+    volumes:
+      - name: nginx-template
+        configMap:
+          name: rohlik-mcp-nginx
+    volumeMounts:
+      - name: nginx-template
+        mountPath: /etc/nginx/templates
+        readOnly: true
+    resources:
+      requests:
+        cpu: 10m
+        memory: 32Mi
+      limits:
+        memory: 64Mi
