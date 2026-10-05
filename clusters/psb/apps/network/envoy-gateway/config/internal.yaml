@@ -5,12 +5,12 @@ kind: Gateway
 metadata:
   name: envoy-internal
   annotations:
-    external-dns.alpha.kubernetes.io/target: &hostname ingress-int-psb.nebular-grid.space
+    external-dns.kubernetes.io/target: &hostname ingress-int-psb.nebular-grid.space
 spec:
   gatewayClassName: envoy
   infrastructure:
     annotations:
-      external-dns.alpha.kubernetes.io/hostname: *hostname
+      external-dns.kubernetes.io/hostname: *hostname
       lbipam.cilium.io/ips: 10.1.6.42
   listeners:
     - name: http
