@@ -41,18 +41,18 @@ spec:
               ODSTRANIT_HD: 0
               POUZIVAT_CISLA_KANALU: 0
               PORADI_SLUZBY: -1
-              DEBUG: 0
+              DEBUG: 1
             probes:
               liveness:
                 enabled: true
                 custom: true
                 spec:
                   httpGet:
-                    path: /health
+                    path: /play/Prima%20HD.m3u8
                     port: *port
-                  periodSeconds: 30
-                  timeoutSeconds: 5
-                  failureThreshold: 5
+                  periodSeconds: 60
+                  timeoutSeconds: 10
+                  failureThreshold: 3
               readiness:
                 enabled: true
                 custom: true
