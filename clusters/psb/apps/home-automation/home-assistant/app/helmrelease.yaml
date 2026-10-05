@@ -124,7 +124,7 @@ spec:
     route:
       app:
         annotations:
-          external-dns.alpha.kubernetes.io/cloudflare-proxied: "false"
+          external-dns.kubernetes.io/cloudflare-proxied: "false"
         hostnames:
           - hass.nebular-grid.space
         parentRefs:
@@ -137,7 +137,7 @@ spec:
                 port: 8123
       code:
         annotations:
-          external-dns.alpha.kubernetes.io/cloudflare-proxied: "false"
+          external-dns.kubernetes.io/cloudflare-proxied: "false"
         hostnames:
           - hass-code.nebular-grid.space
         parentRefs:

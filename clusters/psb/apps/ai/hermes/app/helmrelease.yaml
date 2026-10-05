@@ -228,7 +228,7 @@ spec:
     route:
       app:
         annotations:
-          external-dns.alpha.kubernetes.io/cloudflare-proxied: "false"
+          external-dns.kubernetes.io/cloudflare-proxied: "false"
         hostnames:
           - hermes.nebular-grid.space
         parentRefs:
@@ -240,7 +240,7 @@ spec:
                 port: 9119
       codeserver:
         annotations:
-          external-dns.alpha.kubernetes.io/cloudflare-proxied: "false"
+          external-dns.kubernetes.io/cloudflare-proxied: "false"
         hostnames:
           - hermes-code.nebular-grid.space
         parentRefs:
