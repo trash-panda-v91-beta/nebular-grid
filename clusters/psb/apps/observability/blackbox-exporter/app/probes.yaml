@@ -14,7 +14,7 @@ spec:
         - asc.internal
         - door.gar.bas.internal
         - heat-pump.mar.bas.internal
-        - zigbee-adapter.drr.nws.internal
+        - slzb-mr5u.drr.nes.internal
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/monitoring.coreos.com/probe_v1.json
 apiVersion: monitoring.coreos.com/v1

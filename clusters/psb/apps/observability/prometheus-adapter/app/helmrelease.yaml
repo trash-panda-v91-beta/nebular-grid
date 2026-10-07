@@ -23,9 +23,9 @@ spec:
           name:
             as: probe_success_nfs
           metricsQuery: max_over_time(probe_success{instance="asc.internal:2049"}[1m])
-        - seriesQuery: "{__name__=\"probe_success\",instance=\"zigbee-adapter.drr.nws.internal\"}"
+        - seriesQuery: "{__name__=\"probe_success\",instance=\"slzb-mr5u.drr.nes.internal\"}"
           resources:
             namespaced: false
           name:
             as: probe_success_zigbee
-          metricsQuery: max_over_time(probe_success{instance="zigbee-adapter.drr.nws.internal"}[1m])
+          metricsQuery: max_over_time(probe_success{instance="slzb-mr5u.drr.nes.internal"}[1m])
