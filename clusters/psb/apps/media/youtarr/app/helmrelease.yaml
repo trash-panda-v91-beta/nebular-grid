@@ -25,7 +25,7 @@ spec:
             dependsOn: db
             image:
               repository: docker.io/dialmaster/youtarr
-              tag: v1.87.0
+              tag: v1.87.0@sha256:522d66525bc65051913518bd628df13666409398f6d8f8fe010ad980f49b18f1
             env:
               AUTH_ENABLED: "true"
               DB_HOST: localhost
@@ -84,7 +84,7 @@ spec:
           db:
             image:
               repository: docker.io/library/mariadb
-              tag: "13.0"
+              tag: "13.0@sha256:f1bba652ba57bea3099ca2fe1af692af537c27d96e0bcde39dce29e2ba1ec4f3"
             args:
               - "--port=3321"
               - "--character-set-server=utf8mb4"
