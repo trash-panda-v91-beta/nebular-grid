@@ -28,8 +28,8 @@ spec:
         containers:
           app:
             image:
-              repository: ghcr.io/sableclient/sable-next
-              tag: dev@sha256:33ed7971c4f92989d61ae0f063d4e121f9276b07c0aa5e69d8a164462122e4fd
+              repository: git.sable.moe/sableclient/sable-next
+              tag: 2.0.0@sha256:ae61e56a0eee96ecc12a9e460571e04232f22bf72abf0cf396168afe9a923732
             env:
               TZ: Europe/Prague
             probes:
