@@ -13,11 +13,11 @@ spec:
     cni-plugins:
       image:
         repository: ghcr.io/home-operations/cni-plugins
-        tag: 1.9.1
+        tag: 1.9.1@sha256:e17cc64a81579a163646425d25d2e48065cfb0dc449d2de447b1fd29e9c2ca0f
     multus:
       image:
         repository: ghcr.io/k8snetworkplumbingwg/multus-cni
-        tag: v4.3.1
+        tag: v4.3.1@sha256:9dc8ca645a78552ed4151cf67c2998d18f260f172cc541580d8acce2ee3495c2
       resources:
         requests:
           cpu: 10m
