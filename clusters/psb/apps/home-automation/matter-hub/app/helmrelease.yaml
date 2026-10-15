@@ -86,10 +86,12 @@ spec:
           - path: /tmp
     route:
       app:
+        annotations:
+          external-dns.kubernetes.io/cloudflare-proxied: "false"
         hostnames:
           - matter-hub.nebular-grid.space
         parentRefs:
-          - name: envoy-internal
+          - name: envoy-internal-public-dns
             namespace: network
         rules:
           - backendRefs:
