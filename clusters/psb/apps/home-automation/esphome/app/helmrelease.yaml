@@ -47,6 +47,13 @@ spec:
                 enabled: false
               startup:
                 enabled: false
+            env:
+              # ESPHome compiles one source per core, and these nodes report 20.
+              # Measured peaks for the fleet's configs: 20 jobs -> 3.27Gi (heat
+              # pump), 8 jobs -> 1.64Gi, 4 jobs -> 1.17Gi. The default overshoots
+              # the 3Gi limit, and an OOM here crash-loops the pod because the
+              # dashboard resumes the interrupted job on start.
+              ESPHOME_DEFAULT_COMPILE_PROCESS_LIMIT: "8"
             resources:
               requests:
                 cpu: 5m
