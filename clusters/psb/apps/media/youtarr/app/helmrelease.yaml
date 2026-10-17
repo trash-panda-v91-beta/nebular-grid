@@ -25,7 +25,7 @@ spec:
             dependsOn: db
             image:
               repository: docker.io/dialmaster/youtarr
-              tag: v1.87.1@sha256:0c7bbac98e68a2a762b32073a78f9c6e64f3c078882197b265e7ff2d8bca3d4f
+              tag: v1.88.0@sha256:32918919a1c1e74cd52bdd06977fac6358b4212064132df9b4b1f11a271cca1e
             env:
               AUTH_ENABLED: "true"
               DB_HOST: localhost
