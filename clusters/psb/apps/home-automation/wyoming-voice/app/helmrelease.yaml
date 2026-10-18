@@ -1,0 +1,170 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: wyoming-voice
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: wyoming-voice
+  interval: 30m
+  values:
+    controllers:
+      wyoming-voice:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        # The claim is ReadWriteOnce, so a rolling update would wedge waiting for
+        # the old pod to release it.
+        strategy: Recreate
+        pod:
+          securityContext:
+            fsGroup: 2000
+            fsGroupChangePolicy: OnRootMismatch
+            runAsGroup: 2000
+            runAsNonRoot: true
+            runAsUser: 2000
+            seccompProfile:
+              type: RuntimeDefault
+          terminationGracePeriodSeconds: 1
+        containers:
+          whisper:
+            image:
+              repository: docker.io/rhasspy/wyoming-whisper
+              tag: 3.8.1
+            args:
+              - --uri
+              - tcp://0.0.0.0:10300
+              - --model
+              - small-int8
+              - --data-dir
+              - /data
+              - --download-dir
+              - /data
+            env:
+              HOME: /tmp
+              XDG_CACHE_HOME: /tmp
+            ports:
+              - name: whisper
+                containerPort: 10300
+            probes:
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  tcpSocket:
+                    port: 10300
+                  periodSeconds: 30
+                  failureThreshold: 3
+              readiness:
+                enabled: true
+                custom: true
+                spec:
+                  tcpSocket:
+                    port: 10300
+                  periodSeconds: 10
+                  failureThreshold: 3
+              startup:
+                enabled: true
+                custom: true
+                spec:
+                  tcpSocket:
+                    port: 10300
+                  periodSeconds: 10
+                  failureThreshold: 60
+            resources:
+              requests:
+                cpu: 100m
+                memory: 1Gi
+              limits:
+                memory: 4Gi
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - ALL
+          piper:
+            image:
+              repository: docker.io/rhasspy/wyoming-piper
+              tag: 2.5.2
+            args:
+              - --uri
+              - tcp://0.0.0.0:10200
+              - --voice
+              - cs_CZ-kasandra-medium
+              - --data-dir
+              - /data
+              - --download-dir
+              - /data
+            env:
+              HOME: /tmp
+              XDG_CACHE_HOME: /tmp
+            ports:
+              - name: piper
+                containerPort: 10200
+            probes:
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  tcpSocket:
+                    port: 10200
+                  periodSeconds: 30
+                  failureThreshold: 3
+              readiness:
+                enabled: true
+                custom: true
+                spec:
+                  tcpSocket:
+                    port: 10200
+                  periodSeconds: 10
+                  failureThreshold: 3
+              startup:
+                enabled: true
+                custom: true
+                spec:
+                  tcpSocket:
+                    port: 10200
+                  periodSeconds: 10
+                  failureThreshold: 60
+            resources:
+              requests:
+                cpu: 50m
+                memory: 256Mi
+              limits:
+                memory: 1Gi
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - ALL
+
+    service:
+      whisper:
+        controller: wyoming-voice
+        ports:
+          whisper:
+            port: 10300
+      piper:
+        controller: wyoming-voice
+        ports:
+          piper:
+            port: 10200
+
+    persistence:
+      data:
+        existingClaim: wyoming-voice
+        advancedMounts:
+          wyoming-voice:
+            whisper:
+              - path: /data
+                subPath: whisper
+            piper:
+              - path: /data
+                subPath: piper
+      tmpfs:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp
