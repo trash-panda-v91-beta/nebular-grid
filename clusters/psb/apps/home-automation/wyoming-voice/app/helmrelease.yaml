@@ -36,7 +36,7 @@ spec:
               - --uri
               - tcp://0.0.0.0:10300
               - --model
-              - small-int8
+              - medium-int8
               - --cpu-threads
               - "8"
               - --vad-filter
