@@ -10,6 +10,20 @@
       "ignoreTests": true
     },
     {
+      "description": "Auto merge all minors",
+      "automerge": true,
+      "automergeType": "pr",
+      "matchUpdateTypes": ["minor"],
+      "minimumReleaseAge": "3 days",
+      "ignoreTests": true
+    },
+    {
+      "description": "zer0ver: 0.x minors can break at any time, keep those manual",
+      "automerge": false,
+      "matchUpdateTypes": ["minor"],
+      "matchCurrentVersion": "/^v?0\\./"
+    },
+    {
       "description": "Auto merge container digests",
       "matchDatasources": ["docker"],
       "automerge": true,
@@ -19,19 +33,6 @@
         "ghcr.io/onedr0p",
         "ghcr.io/bjw-s",
         "ghcr.io/bjw-s-labs"
-      ],
-      "minimumReleaseAge": "3 days",
-      "ignoreTests": true
-    },
-    {
-      "description": "Auto merge minors and patches",
-      "matchDatasources": ["docker"],
-      "automerge": true,
-      "automergeType": "pr",
-      "matchUpdateTypes": ["minor", "patch"],
-      "matchPackageNames": [
-        "/kube-prometheus-stack/",
-        "ghcr.io/bjw-s-labs/wrangler"
       ],
       "minimumReleaseAge": "3 days",
       "ignoreTests": true
