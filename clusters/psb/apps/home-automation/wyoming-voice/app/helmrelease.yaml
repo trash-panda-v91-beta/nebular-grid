@@ -31,7 +31,7 @@ spec:
           whisper:
             image:
               repository: docker.io/rhasspy/wyoming-whisper
-              tag: 3.8.1
+              tag: 3.8.1@sha256:ba6fcb6056ebe237d15a325381763a80af2fc8fcedaa04f6a714a7375eb20d80
             args:
               - --uri
               - tcp://0.0.0.0:10300
@@ -90,7 +90,7 @@ spec:
           piper:
             image:
               repository: docker.io/rhasspy/wyoming-piper
-              tag: 2.5.2
+              tag: 2.5.2@sha256:7d39aafac409c2b6b09d999ed04d84c311d632e558b35baa60fad6aac722af7a
             args:
               - --uri
               - tcp://0.0.0.0:10200
