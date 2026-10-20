@@ -2,6 +2,11 @@
 area/ci:
   - changed-files:
       - any-glob-to-any-file: ".github/**/*"
-area/kubernetes:
+area/nix:
   - changed-files:
-      - any-glob-to-any-file: "clusters/**/*"
+      - any-glob-to-any-file: "**/*.nix"
+  - changed-files:
+      - any-glob-to-any-file: "flake.lock"
+area/docker:
+  - changed-files:
+      - any-glob-to-any-file: "Dockerfile"
