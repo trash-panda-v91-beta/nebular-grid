@@ -289,7 +289,6 @@ spec:
         path: /mnt/tank/apps/vault
         globalMounts:
           - path: /vault
-            readOnly: true
     rbac:
       roles:
         hermes-read-all:
