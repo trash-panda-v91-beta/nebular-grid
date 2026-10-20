@@ -1,0 +1,44 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: rss-bridge
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: rss-bridge
+  interval: 30m
+  values:
+    controllers:
+      rss-bridge:
+        containers:
+          app:
+            image:
+              repository: ghcr.io/rss-bridge/rss-bridge
+              tag: latest@sha256:fcd6ac6335ef0e4f4688b41244e925735195bd41df70808d27d891910f2c0be8
+            probes:
+              liveness:
+                enabled: true
+              readiness:
+                enabled: true
+            resources:
+              requests:
+                cpu: 10m
+                memory: 64Mi
+              limits:
+                memory: 256Mi
+    service:
+      app:
+        controller: rss-bridge
+        ports:
+          http:
+            port: 80
+            protocol: HTTP
+    route:
+      app:
+        hostnames:
+          - rss.nebular-grid.space
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
