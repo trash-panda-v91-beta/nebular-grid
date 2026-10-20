@@ -1,9 +1,5 @@
 ---
-ignore: |
-  *.sops.*
-
 extends: default
-
 rules:
   brackets:
     max-spaces-inside: 1
