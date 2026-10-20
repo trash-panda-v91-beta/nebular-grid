@@ -283,6 +283,13 @@ spec:
         type: emptyDir
         globalMounts:
           - path: /tmp
+      vault:
+        type: nfs
+        server: asc.internal
+        path: /mnt/tank/apps/vault
+        globalMounts:
+          - path: /vault
+            readOnly: true
     rbac:
       roles:
         hermes-read-all:
