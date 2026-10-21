@@ -41,7 +41,7 @@ spec:
             value: "128"
       containers:
         - name: matter-server
-          image: ghcr.io/matter-js/matterjs-server:1.4.0@sha256:1b8e824d9b6c8afed012fd7047ece1f924778c257afc2e5e56435a51a914664a
+          image: ghcr.io/matter-js/matterjs-server:1.5.2@sha256:12d2581142ab040349d7d4287f203310e4d9ed57dc8c1158b59978e0ee0b61db
           imagePullPolicy: IfNotPresent
           args:
             - --storage-path=/data
