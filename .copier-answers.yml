@@ -6,5 +6,5 @@ container: false
 github_user: trash-panda-v91-beta
 language: nix
 release_please: false
-repo_name: .
+repo_name: nebular-grid
 tooling: false
