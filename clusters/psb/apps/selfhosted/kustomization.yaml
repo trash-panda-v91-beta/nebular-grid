@@ -15,4 +15,3 @@ resources:
   - ./obsidian-livesync/ks.yaml
   - ./donetick/ks.yaml
   - ./mealie/ks.yaml
-  - ./feeds/ks.yaml
