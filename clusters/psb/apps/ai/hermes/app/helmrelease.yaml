@@ -105,6 +105,56 @@ spec:
                   - ALL
               runAsGroup: 2000
               runAsUser: 2000
+          install-himalaya:
+            image:
+              repository: nousresearch/hermes-agent
+              tag: v2026.9.24@sha256:fca358f12efd65bfaaca05884166f15c0e2788375ca30d77061ac1ebc96452b7
+            command:
+              - /bin/sh
+              - -c
+              - |
+                set -euo pipefail
+                mkdir -p /opt/data/.local/bin /opt/data/.config/himalaya
+
+                if [ ! -x /opt/data/.local/bin/himalaya ]; then
+                  cd /tmp
+                  curl -fsSL -o himalaya.tgz \
+                    https://github.com/pimalaya/himalaya/releases/download/v2.2.1/himalaya.x86_64-linux.tgz
+                  echo "5c5ba2724c162f82d0a0c71b6c03224ed44f8bef7b14ace5da0635d3af2665a0  himalaya.tgz" | sha256sum -c -
+                  tar xzf himalaya.tgz himalaya
+                  mv himalaya /opt/data/.local/bin/
+                  rm -f himalaya.tgz
+                fi
+
+                cat > /tmp/himalaya.toml <<'HIMALAYA'
+                [accounts.icloud]
+                default = true
+
+                imap.server = "imaps://imap.mail.me.com:993"
+                imap.sasl.plain.username = "@@ICLOUD_USER@@"
+                imap.sasl.plain.password.command = ["sh", "-c", "set -a; [ -f /opt/data/.env ] && . /opt/data/.env; printf %s \"${ICLOUD_CAL:-}\""]
+
+                mailbox.alias.sent = "Sent Messages"
+                mailbox.alias.drafts = "Drafts"
+                mailbox.alias.trash = "Deleted Messages"
+                mailbox.alias.archive = "Archive"
+                HIMALAYA
+
+                set -a
+                [ -f /opt/data/.env ] && . /opt/data/.env
+                set +a
+                if [ -n "${ICLOUD_USER:-}" ]; then
+                  sed "s|@@ICLOUD_USER@@|${ICLOUD_USER%@*}|" /tmp/himalaya.toml > /opt/data/.config/himalaya/config.toml
+                else
+                  echo "ICLOUD_USER not set in /opt/data/.env, himalaya account not configured" >&2
+                fi
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop:
+                  - ALL
+              runAsGroup: 2000
+              runAsUser: 2000
         containers:
           app:
             image:
@@ -268,6 +318,8 @@ spec:
             init:
               - path: /opt/data
             install-tools:
+              - path: /opt/data
+            install-himalaya:
               - path: /opt/data
             app:
               - path: /opt/data
