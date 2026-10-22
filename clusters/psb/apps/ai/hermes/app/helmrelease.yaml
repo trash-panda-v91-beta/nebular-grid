@@ -431,6 +431,15 @@ spec:
                 - pods
               verbs:
                 - delete
+        hermes-job-delete:
+          type: ClusterRole
+          rules:
+            - apiGroups:
+                - "batch"
+              resources:
+                - jobs
+              verbs:
+                - delete
         hermes-storage-fix:
           type: ClusterRole
           rules:
@@ -488,6 +497,13 @@ spec:
           type: ClusterRoleBinding
           roleRef:
             identifier: hermes-pod-delete
+          subjects:
+            - identifier: hermes
+              serviceAccount: hermes
+        hermes-job-delete:
+          type: ClusterRoleBinding
+          roleRef:
+            identifier: hermes-job-delete
           subjects:
             - identifier: hermes
               serviceAccount: hermes
