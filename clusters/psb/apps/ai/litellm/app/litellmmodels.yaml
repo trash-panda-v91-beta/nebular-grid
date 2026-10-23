@@ -20,18 +20,17 @@ spec:
 apiVersion: litellm.home-operations.com/v1alpha1
 kind: LiteLLMModel
 metadata:
-  name: neuralwatt-kimi-k2-6
+  name: neuralwatt-nw-flash-flex
 spec:
   proxyRef: litellm
-  modelName: neuralwatt/kimi-k2.6
+  modelName: neuralwatt/nw-flash-flex
   params:
-    model: openai/moonshotai/Kimi-K2.6
+    model: openai/nw-flash-flex
     apiBase: https://api.neuralwatt.com/v1
     apiKeyRef:
       name: litellm
       key: NEURALWATT_API_KEY
   info:
-    maxInputTokens: 262144
     supportsFunctionCalling: true
 ---
 apiVersion: litellm.home-operations.com/v1alpha1
@@ -66,23 +65,6 @@ spec:
       key: NEURALWATT_API_KEY
   info:
     maxInputTokens: 1048560
-    supportsFunctionCalling: true
----
-apiVersion: litellm.home-operations.com/v1alpha1
-kind: LiteLLMModel
-metadata:
-  name: neuralwatt-gpt-oss-20b
-spec:
-  proxyRef: litellm
-  modelName: neuralwatt/gpt-oss-20b
-  params:
-    model: openai/openai/gpt-oss-20b
-    apiBase: https://api.neuralwatt.com/v1
-    apiKeyRef:
-      name: litellm
-      key: NEURALWATT_API_KEY
-  info:
-    maxInputTokens: 16384
     supportsFunctionCalling: true
 ---
 apiVersion: litellm.home-operations.com/v1alpha1
