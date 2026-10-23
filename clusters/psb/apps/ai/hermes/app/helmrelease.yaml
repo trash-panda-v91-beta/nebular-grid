@@ -59,6 +59,18 @@ spec:
               - |
                 set -euo pipefail
                 mkdir -p /opt/data
+                cp /run/config/config.yaml /opt/data/config.yaml
+                cp /run/config/env /opt/data/.env
+                chmod 600 /opt/data/.env
+                cat > /opt/data/.kopiaignore <<'EOF'
+                .env*
+                .keys
+                .ssh
+                mcp-tokens
+                .room-link-grant-secret
+                auth.json
+                /config.yaml
+                EOF
             securityContext:
               allowPrivilegeEscalation: false
               capabilities:
@@ -137,6 +149,71 @@ spec:
                   secretKeyRef:
                     name: hermes-config
                     key: API_SERVER_KEY
+              MATRIX_ACCESS_TOKEN:
+                valueFrom:
+                  secretKeyRef:
+                    name: hermes-config
+                    key: MATRIX_ACCESS_TOKEN
+              MATRIX_PASSWORD:
+                valueFrom:
+                  secretKeyRef:
+                    name: hermes-config
+                    key: MATRIX_PASSWORD
+              MATRIX_RECOVERY_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: hermes-config
+                    key: MATRIX_RECOVERY_KEY
+              MCP_LITELLM_API_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: hermes-config
+                    key: MCP_LITELLM_API_KEY
+              MEMINI_API_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: hermes-config
+                    key: MEMINI_API_KEY
+              NEURALWATT_API_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: hermes-config
+                    key: NEURALWATT_API_KEY
+              TAVILY_API_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: hermes-config
+                    key: TAVILY_API_KEY
+              EXA_API_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: hermes-config
+                    key: EXA_API_KEY
+              SPARKY_FITNESS_API_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: hermes-config
+                    key: SPARKY_FITNESS_API_KEY
+              IMMICH_TOOLS_API_TOKEN:
+                valueFrom:
+                  secretKeyRef:
+                    name: hermes-config
+                    key: IMMICH_TOOLS_API_TOKEN
+              DISPATCHARR_API_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: hermes-config
+                    key: DISPATCHARR_API_KEY
+              ICLOUD_CAL:
+                valueFrom:
+                  secretKeyRef:
+                    name: hermes-config
+                    key: ICLOUD_CAL
+              SIGNAL_ACCOUNT:
+                valueFrom:
+                  secretKeyRef:
+                    name: hermes-config
+                    key: SIGNAL_ACCOUNT
               PATH: /opt/hermes/.venv/bin:/opt/data/.local/bin:/opt/data/.local/go/bin:/opt/data/.local/homebrew/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
               PIP_BREAK_SYSTEM_PACKAGES: "1"
               SEARXNG_URL: http://searxng.selfhosted.svc.cluster.local:8080
@@ -273,6 +350,42 @@ spec:
               - path: /opt/data
             codeserver:
               - path: /opt/data
+      config-yaml:
+        type: configMap
+        name: hermes-configmap
+        defaultMode: 0o755
+        advancedMounts:
+          hermes:
+            init:
+              - path: /run/config/config.yaml
+                subPath: config.yaml
+      config-env:
+        type: secret
+        name: hermes-config
+        defaultMode: 0o400
+        advancedMounts:
+          hermes:
+            init:
+              - path: /run/config/env
+                subPath: env
+      github-app-key:
+        type: secret
+        name: hermes-config
+        defaultMode: 0o440
+        advancedMounts:
+          hermes:
+            app:
+              - path: /opt/data/.keys/github-app.pem
+                subPath: github-app-pem
+      room-link-secret:
+        type: secret
+        name: hermes-config
+        defaultMode: 0o440
+        advancedMounts:
+          hermes:
+            app:
+              - path: /opt/data/.room-link-grant-secret
+                subPath: room-link-grant-secret
       run:
         type: emptyDir
         advancedMounts:
