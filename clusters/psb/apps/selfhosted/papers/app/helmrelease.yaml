@@ -39,6 +39,9 @@ spec:
               PAPERS_HOUR: "6"
               PAPERS_FEED_URL: https://papers.nebular-grid.space/daily.xml
               PAPERS_LLM_URL: http://litellm.ai.svc.cluster.local:4000/v1
+              # LiteLLM is DB-less: only the master key authenticates, and it
+              # must be one of the model_list entries (see ai/litellm config)
+              PAPERS_LLM_MODEL: neuralwatt/glm-5.2
               PAPERS_LLM_KEY:
                 valueFrom:
                   secretKeyRef:
