@@ -3,6 +3,10 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: hermes-configmap
+  annotations:
+    # config.yaml uses ${VAR} env refs expanded by hermes-agent at runtime;
+    # flux postBuild substitution must not touch them
+    kustomize.toolkit.fluxcd.io/substitute: disabled
 data:
   env: |-
     MATRIX_HOMESERVER=https://matrix.nebular-grid.space
