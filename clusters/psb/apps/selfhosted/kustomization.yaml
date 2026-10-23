@@ -9,6 +9,7 @@ resources:
   - ./namespace.yaml
   - ./actual/ks.yaml
   - ./paperless/ks.yaml
+  - ./papers/ks.yaml
   - ./searxng/ks.yaml
   - ./sparkyfitness/ks.yaml
   - ./tidyquest/ks.yaml
