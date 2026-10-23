@@ -1,0 +1,37 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: papers
+spec:
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: papers
+  components:
+    - ../../../../components/kopiur/backup
+  dependsOn:
+    - name: external-secrets
+      namespace: external-secrets
+    - name: kopiur
+      namespace: system
+    - name: rook-ceph-cluster
+      namespace: rook-ceph
+  interval: 1h
+  path: ./clusters/psb/apps/selfhosted/papers/app
+  postBuild:
+    substitute:
+      APP: papers
+      # papers.db plus 30 days of rendered XML fit easily in 1Gi
+      KOPIUR_CAPACITY: 1Gi
+      # papers runs as uid/gid 1000, not the kopiur default 2000
+      KOPIUR_MOVER_UID: "1000"
+      KOPIUR_MOVER_GID: "1000"
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+  targetNamespace: selfhosted
+  timeout: 5m
+  wait: false

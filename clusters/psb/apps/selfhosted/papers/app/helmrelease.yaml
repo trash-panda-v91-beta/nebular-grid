@@ -1,0 +1,119 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+# papers: fetches sources, ranks what is worth reading, serves the daily Atom
+# feed at /daily.xml with a /add route that requests titles in Seerr. The feed
+# and /add sit behind Envoy basic auth (securitypolicy.yaml). sources.toml
+# lives in a ConfigMap; reloader restarts the pod when it changes.
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: papers
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: papers
+  interval: 30m
+  values:
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile:
+          type: RuntimeDefault
+    controllers:
+      papers:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        containers:
+          app:
+            image:
+              repository: ghcr.io/trash-panda-v91-beta/papers
+              tag: v0.2.1@sha256:29b43535bfc6cd0507aa56ee6eac0276c29ce28c11e98dca2a357dd9656b5b2e
+            env:
+              TZ: Europe/Prague
+              PAPERS_PORT: &httpPort 8080
+              PAPERS_CONFIG: /config/sources.toml
+              PAPERS_HOUR: "6"
+              PAPERS_FEED_URL: https://papers.nebular-grid.space/daily.xml
+              PAPERS_LLM_URL: http://litellm.ai.svc.cluster.local:4000/v1
+              PAPERS_LLM_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: papers-secret
+                    key: llm_key
+              SEERR_API_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: papers-secret
+                    key: seerr_key
+            probes:
+              liveness: &probe
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    port: *httpPort
+                    path: /healthz
+                  periodSeconds: 30
+                  timeoutSeconds: 5
+                  failureThreshold: 3
+              readiness: *probe
+              startup:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    port: *httpPort
+                    path: /healthz
+                  periodSeconds: 5
+                  timeoutSeconds: 5
+                  failureThreshold: 60
+            resources:
+              requests:
+                cpu: 10m
+                memory: 64M
+              limits:
+                memory: 256Mi
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - ALL
+    service:
+      app:
+        controller: papers
+        ports:
+          http:
+            port: *httpPort
+            protocol: HTTP
+    persistence:
+      data:
+        existingClaim: papers
+        advancedMounts:
+          papers:
+            app:
+              - path: /data
+      config:
+        type: configMap
+        name: papers-configmap
+        globalMounts:
+          - path: /config/sources.toml
+            subPath: sources.toml
+            readOnly: true
+      tmpfs:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp
+    route:
+      app:
+        annotations:
+          external-dns.kubernetes.io/cloudflare-proxied: "false"
+        hostnames:
+          - papers.nebular-grid.space
+        parentRefs:
+          - name: envoy-internal-public-dns
+            namespace: network
