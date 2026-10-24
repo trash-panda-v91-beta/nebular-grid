@@ -39,6 +39,9 @@ spec:
               PAPERS_HOUR: "6"
               PAPERS_FEED_URL: https://papers.nebular-grid.space/daily.xml
               PAPERS_LLM_URL: http://litellm.ai.svc.cluster.local:4000/v1
+              # nw-flash-flex: cheapest neuralwatt tier, verified json_object
+              # against the live upstream; gpt-oss/kimi-k2.6 are retired (410)
+              PAPERS_LLM_MODEL: neuralwatt/nw-flash-flex
               PAPERS_LLM_KEY:
                 valueFrom:
                   secretKeyRef:
