@@ -20,14 +20,15 @@ weight = 6
 max_per_fetch = 40
 
 [[sources]]
-name = "kubernetes-blog"
+name = "selfh-st"
 kind = "feed"
-url = "https://kubernetes.io/feed.xml"
+url = "https://selfh.st/rss/"
 weight = 9
 
 [[sources]]
 name = "seerr-trending"
 kind = "seerr"
 url = "http://seerr.media.svc.cluster.local"
+feed = "media"
 weight = 7
 max_per_fetch = 10
