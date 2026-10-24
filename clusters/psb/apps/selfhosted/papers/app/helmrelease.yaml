@@ -31,13 +31,18 @@ spec:
           app:
             image:
               repository: ghcr.io/trash-panda-v91-beta/papers
-              tag: v0.2.1@sha256:29b43535bfc6cd0507aa56ee6eac0276c29ce28c11e98dca2a357dd9656b5b2e
+              tag: v0.2.2@sha256:1b20605066e57633c314da7b25b1b1aa825267cfca0bdbc936e7995eb036c802
             env:
               TZ: Europe/Prague
               PAPERS_PORT: &httpPort 8080
               PAPERS_CONFIG: /config/sources.toml
               PAPERS_HOUR: "6"
               PAPERS_FEED_URL: https://papers.nebular-grid.space/daily.xml
+              PAPERS_ADMIN_TOKEN:
+                valueFrom:
+                  secretKeyRef:
+                    name: papers-secret
+                    key: admin_token
               PAPERS_LLM_URL: http://litellm.ai.svc.cluster.local:4000/v1
               # nw-flash-flex: cheapest neuralwatt tier, verified json_object
               # against the live upstream; gpt-oss/kimi-k2.6 are retired (410)
