@@ -25,7 +25,7 @@ spec:
       key: KOPIA_PASSWORD
   moverDefaults:
     cache:
-      capacity: 1Mi
+      capacity: 5Gi
       mode: Ephemeral
       storageClassName: openebs-hostpath
     podSecurityContext:
