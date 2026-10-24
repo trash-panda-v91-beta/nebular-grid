@@ -144,6 +144,12 @@ spec:
                     name: hermes-config
                     key: LITELLM_API_KEY
               MATRIX_ENCRYPTION: "true"
+              PAPERS_URL: http://papers.selfhosted.svc.cluster.local:8080
+              PAPERS_ADMIN_TOKEN:
+                valueFrom:
+                  secretKeyRef:
+                    name: hermes-config
+                    key: PAPERS_ADMIN_TOKEN
               API_SERVER_KEY:
                 valueFrom:
                   secretKeyRef:
