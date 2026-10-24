@@ -35,7 +35,6 @@ spec:
             env:
               TZ: Europe/Prague
               PAPERS_PORT: &httpPort 8080
-              PAPERS_CONFIG: /config/sources.toml
               PAPERS_HOUR: "6"
               PAPERS_FEED_URL: https://papers.nebular-grid.space/daily.xml
               PAPERS_ADMIN_TOKEN:
@@ -105,13 +104,6 @@ spec:
           papers:
             app:
               - path: /data
-      config:
-        type: configMap
-        name: papers-configmap
-        globalMounts:
-          - path: /config/sources.toml
-            subPath: sources.toml
-            readOnly: true
       tmpfs:
         type: emptyDir
         globalMounts:
