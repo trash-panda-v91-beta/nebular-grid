@@ -31,7 +31,7 @@ spec:
           app:
             image:
               repository: ghcr.io/trash-panda-v91-beta/papers
-              tag: v0.3.1@sha256:1c0d4706e82e70f1a3f4097400098540a4225751c17ce696a23c3450e84593df
+              tag: v0.3.2@sha256:5df508d94fb53461f71151fbe8b55af084468fa509f4f3753112e6503aa6e850
             env:
               TZ: Europe/Prague
               PAPERS_PORT: &httpPort 8080
