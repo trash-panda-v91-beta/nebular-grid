@@ -1,0 +1,31 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+name: Reject Fork PRs
+
+on:
+  pull_request_target:
+    types:
+      - opened
+      - reopened
+
+permissions:
+  pull-requests: write
+
+jobs:
+  close:
+    name: Close
+    runs-on: ubuntu-latest
+    # pull_request_target on purpose: the pull_request token is read-only on
+    # forks, so it cannot close anything. Nothing from the fork is checked out
+    # or executed here - only the PR number is read.
+    if: >-
+      github.event.pull_request.head.repo.full_name != github.repository &&
+      github.event.pull_request.head.repo.owner.login != github.repository_owner
+    steps:
+      - name: Close pull request
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          PR: ${{ github.event.pull_request.number }}
+        run: |-
+          gh pr close "$PR" --comment 'Pull requests from forks are not accepted. This is a single-maintainer homelab and main deploys straight to the cluster.'
