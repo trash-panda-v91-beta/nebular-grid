@@ -19,3 +19,24 @@ spec:
         - path:
             type: PathPrefix
             value: /hook/
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/gateway.networking.k8s.io/httproute_v1.json
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: konflate-webhook
+spec:
+  hostnames:
+    - konflate.nebular-grid.space
+  parentRefs:
+    - name: envoy-external
+      namespace: network
+  rules:
+    - backendRefs:
+        - name: konflate
+          namespace: flux-system
+          port: 8080
+      matches:
+        - path:
+            type: PathPrefix
+            value: /hooks
