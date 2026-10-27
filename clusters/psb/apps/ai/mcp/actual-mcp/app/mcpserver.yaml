@@ -7,13 +7,20 @@ metadata:
 spec:
   alias: actual_mcp
   transport: http
+  authType: bearer_token
+  authTokenRef:
+    name: actual-mcp-secret
+    key: MCP_TOKEN
   workload:
     image: ghcr.io/agigante80/actual-mcp-server:0.24.1@sha256:fd3259754a5f443a783ef68d0db4174970d5d80452891ae5108d2a815a90c3d9
     port: 3600
     path: /http
     env:
-      - name: MCP_ALLOW_UNAUTHENTICATED
-        value: "true"
+      - name: MCP_SSE_AUTHORIZATION
+        valueFrom:
+          secretKeyRef:
+            name: actual-mcp-secret
+            key: MCP_TOKEN
       - name: ACTUAL_SERVER_URL
         value: http://actual.selfhosted.svc.cluster.local:5006
       - name: ACTUAL_PASSWORD
