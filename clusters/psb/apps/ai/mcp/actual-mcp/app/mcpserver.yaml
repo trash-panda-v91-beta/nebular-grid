@@ -26,6 +26,15 @@ spec:
           secretKeyRef:
             name: actual-mcp-secret
             key: ACTUAL_BUDGET_SYNC_ID
+      - name: ACTUAL_BUDGET_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: actual-mcp-secret
+            key: ACTUAL_BUDGET_PASSWORD
+      # Upstream is http on the cluster network, which the image refuses once an
+      # encryption password is set. Pod-to-pod is the trust boundary here.
+      - name: ALLOW_INSECURE_UPSTREAM
+        value: "true"
       # Session management - prevent pool exhaustion during burst MCP calls
       # Explicitly enable connection pooling (image default is true, but make it
       # explicit so sessions are reused from the pool instead of spawned per call).
