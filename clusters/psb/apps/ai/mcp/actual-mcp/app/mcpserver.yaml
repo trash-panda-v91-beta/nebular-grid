@@ -7,13 +7,20 @@ metadata:
 spec:
   alias: actual_mcp
   transport: http
+  authType: bearer_token
+  authTokenRef:
+    name: actual-mcp-secret
+    key: MCP_TOKEN
   workload:
-    image: ghcr.io/agigante80/actual-mcp-server:0.24.0@sha256:903a3e89c9803607f5cb1bc7ccf88ce115ba546f75ec6af53450beae31c7fec0
+    image: ghcr.io/agigante80/actual-mcp-server:0.24.4@sha256:13b66982ef20bc73bc85e69282a71c26e56f7b1084cacb77b13158d2093c7eb5
     port: 3600
     path: /http
     env:
-      - name: MCP_ALLOW_UNAUTHENTICATED
-        value: "true"
+      - name: MCP_SSE_AUTHORIZATION
+        valueFrom:
+          secretKeyRef:
+            name: actual-mcp-secret
+            key: MCP_TOKEN
       - name: ACTUAL_SERVER_URL
         value: http://actual.selfhosted.svc.cluster.local:5006
       - name: ACTUAL_PASSWORD
@@ -26,6 +33,15 @@ spec:
           secretKeyRef:
             name: actual-mcp-secret
             key: ACTUAL_BUDGET_SYNC_ID
+      - name: ACTUAL_BUDGET_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: actual-mcp-secret
+            key: ACTUAL_BUDGET_PASSWORD
+      # Upstream is http on the cluster network, which the image refuses once an
+      # encryption password is set. Pod-to-pod is the trust boundary here.
+      - name: ALLOW_INSECURE_UPSTREAM
+        value: "true"
       # Session management - prevent pool exhaustion during burst MCP calls
       # Explicitly enable connection pooling (image default is true, but make it
       # explicit so sessions are reused from the pool instead of spawned per call).

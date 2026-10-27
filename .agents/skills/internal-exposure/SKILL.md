@@ -23,6 +23,20 @@ includes public DNS records, Cloudflare-proxied routes, public gateways, and
 | `envoy-internal-vpn` | UniFi DNS record (manual) | VPN only |
 | `envoy-internal-public-dns` | external-dns creates a **public** record | Externally - **only on explicit request** |
 
+## Public gateway needs a namespace label
+
+`envoy-external` only accepts HTTPRoutes from namespaces labelled
+`expose: public`. Adding that label is the decision to let a namespace publish,
+so ask first.
+
+`flux-system` cannot carry the label: flux-operator owns that namespace and
+marks it `kustomize.toolkit.fluxcd.io/ssa: Ignore`, so kustomize-controller skips
+it and any label added from git is ignored. A hand-applied label is stripped by
+the operator too. Public routes for services that run in `flux-system` therefore
+live in `network` (`envoy-gateway/config/public-routes.yaml`) and reach the
+backend through a `ReferenceGrant` in `flux-system`. Do the same for anything
+else that has to publish from an operator-owned namespace.
+
 ## Internal service checklist
 
 1. Route `parentRefs` -> `envoy-internal` (or `envoy-internal-vpn`)

@@ -26,7 +26,10 @@ spec:
       port: 443
       allowedRoutes:
         namespaces:
-          from: All
+          from: Selector
+          selector:
+            matchLabels:
+              expose: public
       tls:
         certificateRefs:
           - kind: Secret
