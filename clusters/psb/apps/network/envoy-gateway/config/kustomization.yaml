@@ -8,4 +8,5 @@ resources:
   - ./internal.yaml
   - ./internal-public-dns.yaml
   - ./external.yaml
+  - ./public-routes.yaml
   - ./podmonitor.yaml

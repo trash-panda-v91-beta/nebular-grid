@@ -1,0 +1,21 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/gateway.networking.k8s.io/referencegrant_v1.json
+# Routes that publish to the internet live in the network namespace, because
+# flux-system belongs to flux-operator and cannot carry the exposure label.
+apiVersion: gateway.networking.k8s.io/v1
+kind: ReferenceGrant
+metadata:
+  name: public-routes
+  namespace: flux-system
+spec:
+  from:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      namespace: network
+  to:
+    - group: ""
+      kind: Service
+      name: webhook-receiver
+    - group: ""
+      kind: Service
+      name: konflate
