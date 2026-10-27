@@ -23,6 +23,18 @@ includes public DNS records, Cloudflare-proxied routes, public gateways, and
 | `envoy-internal-vpn` | UniFi DNS record (manual) | VPN only |
 | `envoy-internal-public-dns` | external-dns creates a **public** record | Externally - **only on explicit request** |
 
+## Public gateway needs a namespace label
+
+`envoy-external` only accepts HTTPRoutes from namespaces labelled
+`expose: public`. Adding that label is the decision to let a namespace publish,
+so ask first.
+
+`flux-system` is the exception: its label is set by hand
+(`kubectl label ns flux-system expose=public`) because flux-operator owns the
+namespace and marks it `kustomize.toolkit.fluxcd.io/ssa: Ignore`, so nothing in
+git can label it. Re-apply after a cluster rebuild, or the GitHub and konflate
+webhooks stop being accepted.
+
 ## Internal service checklist
 
 1. Route `parentRefs` -> `envoy-internal` (or `envoy-internal-vpn`)
