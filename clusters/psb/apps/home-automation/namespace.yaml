@@ -7,3 +7,4 @@ metadata:
     kustomize.toolkit.fluxcd.io/prune: disabled
   labels:
     resource.kubernetes.io/admin-access: "true"
+    pod-security.kubernetes.io/enforce: privileged
