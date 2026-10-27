@@ -7,4 +7,3 @@ metadata:
     kustomize.toolkit.fluxcd.io/prune: disabled
   labels:
     expose: public
-    pod-security.kubernetes.io/enforce: privileged
