@@ -7,5 +7,6 @@ components:
   - ../../components/flux-alerts
 resources:
   - ./namespace.yaml
+  - ./networkpolicy.yaml
   - ./conduwuit/ks.yaml
   - ./sable/ks.yaml
