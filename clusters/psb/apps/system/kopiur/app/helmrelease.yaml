@@ -29,7 +29,7 @@ spec:
           matchLabels:
             dashboards: grafana
       prometheusRule:
-        enabled: true
+        enabled: false # rules carried in ./prometheusrule-controller.yaml
       serviceMonitor:
         enabled: true
     podSecurityContext:
