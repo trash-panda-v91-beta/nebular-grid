@@ -8,13 +8,8 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: metrics-server
-  interval: 1h
   path: "./clusters/psb/apps/kube-system/metrics-server/app"
   prune: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-    namespace: flux-system
   targetNamespace: kube-system
   timeout: 5m
   wait: false

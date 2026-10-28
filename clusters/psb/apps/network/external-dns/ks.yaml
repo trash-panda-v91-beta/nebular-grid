@@ -8,13 +8,8 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: externaldns-cloudflare
-  interval: 1h
   path: "./clusters/psb/apps/network/external-dns/cloudflare"
   prune: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-    namespace: flux-system
   targetNamespace: network
   timeout: 5m
   wait: false
@@ -28,13 +23,8 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: externaldns-cloudflare
-  interval: 1h
   path: "./clusters/psb/apps/network/external-dns/unifi"
   prune: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-    namespace: flux-system
   targetNamespace: network
   timeout: 5m
   wait: false

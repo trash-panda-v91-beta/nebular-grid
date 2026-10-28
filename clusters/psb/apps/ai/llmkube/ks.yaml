@@ -13,13 +13,8 @@ spec:
       kind: HelmRelease
       name: llmkube
       namespace: ai
-  interval: 1h
   path: ./clusters/psb/apps/ai/llmkube/app
   prune: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-    namespace: flux-system
   targetNamespace: ai
   timeout: 5m
 ---
@@ -35,12 +30,7 @@ spec:
   dependsOn:
     - name: llmkube
       namespace: ai
-  interval: 1h
   path: ./clusters/psb/apps/ai/llmkube/models
   prune: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-    namespace: flux-system
   targetNamespace: ai
   timeout: 5m

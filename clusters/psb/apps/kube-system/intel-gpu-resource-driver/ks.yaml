@@ -8,13 +8,8 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: intel-gpu-resource-driver
-  interval: 1h
   path: "./clusters/psb/apps/kube-system/intel-gpu-resource-driver/app"
   prune: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-    namespace: flux-system
   targetNamespace: kube-system
   timeout: 5m
   wait: false

@@ -13,16 +13,11 @@ spec:
       namespace: external-secrets
     - name: immich
       namespace: media
-  interval: 1h
   path: "./clusters/psb/apps/media/immich-frame/app"
   postBuild:
     substitute:
       APP: immich-frame
   prune: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-    namespace: flux-system
   targetNamespace: media
   timeout: 5m
   wait: false

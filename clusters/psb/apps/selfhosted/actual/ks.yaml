@@ -18,7 +18,6 @@ spec:
       namespace: rook-ceph
     - name: kanidm
       namespace: security
-  interval: 1h
   path: "./clusters/psb/apps/selfhosted/actual/app"
   postBuild:
     substitute:
@@ -29,10 +28,6 @@ spec:
       OIDC_CALLBACK: /openid/callback
       OIDC_LEGACY_CRYPTO: "true"
   prune: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-    namespace: flux-system
   targetNamespace: selfhosted
   timeout: 5m
   wait: false

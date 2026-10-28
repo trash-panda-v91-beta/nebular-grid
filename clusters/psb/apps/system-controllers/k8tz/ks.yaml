@@ -11,13 +11,8 @@ spec:
   dependsOn:
     - name: cert-manager
       namespace: cert-manager
-  interval: 1h
   path: "./clusters/psb/apps/system-controllers/k8tz/app"
   prune: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-    namespace: flux-system
   targetNamespace: system-controllers
   timeout: 5m
   wait: false

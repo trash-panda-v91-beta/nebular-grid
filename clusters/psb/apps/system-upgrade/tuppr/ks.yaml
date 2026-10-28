@@ -13,13 +13,8 @@ spec:
       kind: HelmRelease
       name: tuppr
       namespace: system-upgrade
-  interval: 1h
   path: "./clusters/psb/apps/system-upgrade/tuppr/app"
   prune: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-    namespace: flux-system
   targetNamespace: system-upgrade
   timeout: 5m
 ---
@@ -34,13 +29,8 @@ spec:
       app.kubernetes.io/name: tuppr
   dependsOn:
     - name: tuppr
-  interval: 1h
   path: "./clusters/psb/apps/system-upgrade/tuppr/upgrades"
   prune: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-    namespace: flux-system
   targetNamespace: system-upgrade
   timeout: 5m
   wait: false

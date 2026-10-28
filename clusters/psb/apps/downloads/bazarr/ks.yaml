@@ -19,7 +19,6 @@ spec:
       namespace: rook-ceph
     - name: kanidm
       namespace: security
-  interval: 1h
   path: "./clusters/psb/apps/downloads/bazarr/app"
   postBuild:
     substitute:
@@ -29,10 +28,6 @@ spec:
       OIDC_DISPLAY_NAME: Bazarr
       OIDC_GROUP: admins
   prune: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-    namespace: flux-system
   targetNamespace: downloads
   timeout: 5m
   wait: false

@@ -11,13 +11,8 @@ spec:
   dependsOn:
     - name: external-secrets
       namespace: external-secrets
-  interval: 1h
   path: ./clusters/psb/apps/selfhosted/obsidian-livesync/app
   prune: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-    namespace: flux-system
   targetNamespace: selfhosted
   timeout: 5m
   wait: false

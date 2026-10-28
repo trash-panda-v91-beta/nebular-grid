@@ -7,13 +7,8 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: ksgate
-  interval: 1h
   path: "./clusters/psb/apps/system/ksgate/app"
   prune: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-    namespace: flux-system
   targetNamespace: system
   timeout: 5m
   wait: false

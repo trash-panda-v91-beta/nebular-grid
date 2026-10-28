@@ -8,13 +8,8 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: kromgo
-  interval: 1h
   path: "./clusters/psb/apps/observability/kromgo/app"
   prune: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-    namespace: flux-system
   targetNamespace: observability
   timeout: 5m
   wait: false

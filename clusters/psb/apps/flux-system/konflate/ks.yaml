@@ -10,13 +10,8 @@ spec:
       app.kubernetes.io/name: konflate
   dependsOn:
     - name: flux-operator
-  interval: 1h
   path: ./clusters/psb/apps/flux-system/konflate/app
   prune: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-    namespace: flux-system
   targetNamespace: flux-system
   timeout: 5m
   wait: false

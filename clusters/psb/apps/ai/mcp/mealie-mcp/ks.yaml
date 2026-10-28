@@ -11,13 +11,8 @@ spec:
   dependsOn:
     - name: litellm-operator
       namespace: ai
-  interval: 1h
   path: ./clusters/psb/apps/ai/mcp/mealie-mcp/app
   prune: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-    namespace: flux-system
   targetNamespace: ai
   timeout: 5m
   wait: false

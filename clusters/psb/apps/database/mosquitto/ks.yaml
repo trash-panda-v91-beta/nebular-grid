@@ -11,12 +11,7 @@ spec:
   dependsOn:
     - name: rook-ceph-cluster
       namespace: rook-ceph
-  interval: 1h
   path: "./clusters/psb/apps/database/mosquitto/app"
   prune: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-    namespace: flux-system
   targetNamespace: database
   timeout: 5m

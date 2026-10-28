@@ -13,12 +13,7 @@ spec:
       kind: HelmRelease
       name: snapshot-controller
       namespace: system-controllers
-  interval: 1h
   path: "./clusters/psb/apps/system-controllers/snapshot-controller/app"
   prune: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-    namespace: flux-system
   targetNamespace: system-controllers
   timeout: 5m

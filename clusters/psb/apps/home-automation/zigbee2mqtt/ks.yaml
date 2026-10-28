@@ -16,17 +16,12 @@ spec:
       namespace: system
     - name: rook-ceph-cluster
       namespace: rook-ceph
-  interval: 1h
   path: "./clusters/psb/apps/home-automation/zigbee2mqtt/app"
   postBuild:
     substitute:
       APP: zigbee2mqtt
       KOPIUR_CLAIM: zigbee2mqtt-data
   prune: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-    namespace: flux-system
   targetNamespace: home-automation
   timeout: 5m
   wait: false

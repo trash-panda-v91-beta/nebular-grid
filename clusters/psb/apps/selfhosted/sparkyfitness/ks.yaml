@@ -22,7 +22,6 @@ spec:
       namespace: system
     - name: kanidm
       namespace: security
-  interval: 1h
   path: "./clusters/psb/apps/selfhosted/sparkyfitness/server"
   postBuild:
     substitute:
@@ -34,10 +33,6 @@ spec:
       OIDC_DISPLAY_NAME: SparkyFitness
       OIDC_CALLBACK: /api/auth/sso/callback/kanidm
   prune: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-    namespace: flux-system
   targetNamespace: selfhosted
   timeout: 5m
   wait: false
@@ -53,13 +48,8 @@ spec:
       app.kubernetes.io/name: sparkyfitness
   dependsOn:
     - name: sparkyfitness
-  interval: 1h
   path: "./clusters/psb/apps/selfhosted/sparkyfitness/app"
   prune: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-    namespace: flux-system
   targetNamespace: selfhosted
   timeout: 5m
   wait: false

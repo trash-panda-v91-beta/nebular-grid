@@ -20,7 +20,6 @@ spec:
       namespace: rook-ceph
     - name: kanidm
       namespace: security
-  interval: 1h
   path: "./clusters/psb/apps/home-automation/home-assistant/app"
   postBuild:
     substitute:
@@ -37,10 +36,6 @@ spec:
       KOPIUR_CAPACITY: 20Gi
       KOPIUR_CLAIM: home-assistant
   prune: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-    namespace: flux-system
   targetNamespace: home-automation
   timeout: 5m
   wait: false
