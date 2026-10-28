@@ -7,6 +7,7 @@ components:
   - ../../components/flux-alerts
 resources:
   - ./namespace.yaml
+  - ./networkpolicy.yaml
   - ./litellm-operator/ks.yaml
   - ./litellm/ks.yaml
   - ./text-embeddings-inference/ks.yaml
