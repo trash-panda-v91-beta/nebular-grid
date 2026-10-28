@@ -1,0 +1,127 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/monitoring.coreos.com/prometheusrule_v1.json
+# Carried here rather than taking the chart's rule set, so KopiurSnapshotFailed can
+# aggregate per policy: as shipped it alerts per Snapshot CR, which re-fires a
+# policy's entire failure history whenever that policy fails once.
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: kopiur-controller-rules
+spec:
+  groups:
+    - name: kopiur.controller.rules
+      rules:
+        - alert: KopiurBackupConsecutiveFailures
+          annotations:
+            description: "{{ $value }} consecutive backup failures (>=3) for SnapshotPolicy {{ $labels.namespace }}/{{ $labels.name }}."
+            summary: Backups for {{ $labels.namespace }}/{{ $labels.name }} are failing
+          expr: kopiur_snapshot_consecutive_failures >= 3
+          for: 15m
+          labels:
+            severity: warning
+        - alert: KopiurBackupStale
+          annotations:
+            description: Either the last successful backup was over 48h ago, or SnapshotPolicy {{ $labels.namespace }}/{{ $labels.policy }} has never succeeded (or its Succeeded Snapshot CRs were all deleted) and is currently failing.
+            summary: No recent successful backup for {{ $labels.namespace }}/{{ $labels.policy }}
+          expr: |-
+            (
+
+              time() - kopiur_policy_last_backup_success_timestamp_seconds > 172800
+            ) or (
+
+              label_replace(kopiur_snapshot_consecutive_failures, "policy", "$1", "name", "(.*)") > 0
+              unless on (namespace, policy, repository) kopiur_policy_last_backup_success_timestamp_seconds
+            )
+          for: 30m
+          labels:
+            severity: warning
+        - alert: KopiurLastBackupFailed
+          annotations:
+            description: The most recent completed backup for SnapshotPolicy {{ $labels.namespace }}/{{ $labels.policy }} failed. Resolves automatically once a newer backup succeeds.
+            summary: Latest backup for {{ $labels.namespace }}/{{ $labels.policy }} failed
+          expr: min by (namespace, policy, repository) (kopiur_snapshotpolicy_last_backup_success) == 0
+          for: 10m
+          labels:
+            severity: warning
+        - alert: KopiurRepositoryNotReady
+          annotations:
+            description: "A kopiur repository has been Degraded/Failed for 15m; backups to it will not run. Check the Ready condition message: a Failed repository whose message names `allow-reinitialize` was wiped and needs a human acknowledgement before kopiur will re-create it."
+            summary: Repository {{ $labels.namespace }}/{{ $labels.name }} is {{ $labels.phase }}
+          expr: max by (namespace, name) (kopiur_resource_phase{kind=~"Repository|ClusterRepository", phase=~"Degraded|Failed"}) == 1
+          for: 15m
+          labels:
+            severity: critical
+        - alert: KopiurSnapshotFailed
+          annotations:
+            summary: Snapshots failing for {{ $labels.namespace }}/{{ $labels.policy }}
+            description: "{{ $value }} Snapshot(s) in Failed phase for policy {{ $labels.namespace }}/{{ $labels.policy }}, with no newer successful backup."
+          expr: |-
+            count by (namespace, policy) (kopiur_resource_phase{kind="Snapshot", phase="Failed"} == 1) > 0
+            unless on (namespace, policy) (min by (namespace, policy) (kopiur_snapshotpolicy_last_backup_success) == 1)
+          for: 10m
+          labels:
+            severity: warning
+        - alert: KopiurRestoreFailed
+          annotations:
+            description: A Restore CR has been in phase=Failed for 10m.
+            summary: Restore {{ $labels.namespace }}/{{ $labels.name }} failed
+          expr: max by (namespace, name) (kopiur_resource_phase{kind="Restore", phase="Failed"}) == 1
+          for: 10m
+          labels:
+            severity: warning
+        - alert: KopiurReconcileErrorsHigh
+          annotations:
+            description: kopiur controller is erroring on {{ $labels.kind }} reconciles (>0.2/s over 10m).
+            summary: High reconcile error rate for {{ $labels.kind }}
+          expr: sum by (kind) (rate(kopiur_controller_reconcile_errors_total[10m])) > 0.2
+          for: 15m
+          labels:
+            severity: warning
+        - alert: KopiurLeaderElectionFlapping
+          annotations:
+            description: The kopiur controller has acquired the leader Lease {{ $value }} times in the last hour. Each transition costs a full informer resync, so reconciliation is stalling repeatedly. Check kopiur_leader_renew_duration_seconds and kopiur_leader_renew_failures_total for whether the API server, the network, or APF queueing is the cause.
+            summary: kopiur leader election is flapping
+          expr: increase(kopiur_leader_transitions_total[1h]) > 2
+          for: 5m
+          labels:
+            severity: warning
+        - alert: KopiurLeaderRenewSlow
+          annotations:
+            description: p99 Lease renew latency is {{ $value }}s against a 10s renew window. Healthy is single-digit milliseconds. If the API server is otherwise fine, the operator's lease traffic is most likely queueing in API Priority and Fairness — check that the kopiur FlowSchema exists (leaderElection.flowSchema.enabled).
+            summary: kopiur leader Lease renewals are slow
+          expr: histogram_quantile(0.99, sum by (le) (rate(kopiur_leader_renew_duration_seconds_bucket[10m]))) > 2
+          for: 15m
+          labels:
+            severity: warning
+        - alert: KopiurRepositoryBreakerOpen
+          annotations:
+            description: "The backend health probe kept failing past its threshold, so kopiur opened the circuit breaker: backups, maintenance, and replication against this repository are paused (Snapshots park Pending, they are not lost). Recovery is automatic once a connect succeeds — nothing needs restarting. Run `kubectl describe {{ $labels.kind }} {{ $labels.name }}` and check the BackendReachable condition for the cause."
+            summary: Repository circuit breaker open for {{ $labels.kind }} {{ $labels.namespace }}/{{ $labels.name }}
+          expr: max by (kind, namespace, name) (kopiur_repository_breaker_open{reason=~"unreachable|vanished|other"}) == 1
+          for: 15m
+          labels:
+            severity: warning
+        - alert: KopiurRepositoryConnectSlow
+          annotations:
+            description: "kopia repository connect keeps being killed by the bootstrap Job deadline, so the circuit breaker is open: backups and replication are paused (Snapshots park Pending), while maintenance keeps running and kopiur retries with a progressively longer deadline — this usually self-heals once a longer connect succeeds and index compaction catches up. If it persists, raise spec.bootstrap.failurePolicy.activeDeadlineSeconds and check that maintenance is actually completing (`kubectl describe {{ $labels.kind }} {{ $labels.name }}`, IndexBlobHealth and BackendReachable conditions)."
+            summary: Repository connects keep exceeding the bootstrap deadline for {{ $labels.kind }} {{ $labels.namespace }}/{{ $labels.name }}
+          expr: max by (kind, namespace, name) (kopiur_repository_breaker_open{reason="timed_out"}) == 1
+          for: 30m
+          labels:
+            severity: info
+        - alert: KopiurSnapshotsGated
+          annotations:
+            description: "{{ $value }} Snapshot(s) in {{ $labels.namespace }} have been held Pending for 30m because their repository is not Ready (see KopiurRepositoryBreakerOpen / the repository''s BackendReachable condition). They will launch automatically once the repository recovers."
+            summary: Backups in {{ $labels.namespace }} are parked behind a not-Ready repository
+          expr: sum by (namespace) (kopiur_snapshot_gated) > 0
+          for: 30m
+          labels:
+            severity: info
+        - alert: KopiurSnapshotWaitingForSlot
+          annotations:
+            description: "Snapshot {{ $labels.namespace }}/{{ $labels.name }} has been waiting 30m for a slot in {{ $labels.repository_kind }} {{ $labels.repository }}''s mover-Job pool. The repository is working — it is at its concurrency cap — and the run will start on its own when a slot frees; nothing is lost. If this persists, the cap is below what the schedules pointed at that repository need: raise spec.concurrency.maxConcurrentJobs (or the cluster-wide maxConcurrentJobs), spread the schedules with scheduleDefaults.jitter, or check for a wedged mover Job that is never terminating. Beware that while runs queue, a schedule with startingDeadlineSeconds set may be permanently SKIPPING slots (SkipExpiredSlot events)."
+            summary: Backup {{ $labels.namespace }}/{{ $labels.name }} has been queued for a mover slot for 30m
+          expr: max by (repository_kind, repository, namespace, name) (kopiur_snapshot_waiting_for_slot) == 1
+          for: 30m
+          labels:
+            severity: warning
