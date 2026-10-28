@@ -1,0 +1,31 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/cilium.io/ciliumnetworkpolicy_v2.json
+# Namespace-wide default deny for ingress. Two things reach in here: a gateway,
+# and the MCP servers in `ai`, which call the apps on their service ports
+# (actual 5006, donetick 2021, mealie 9000, papers 8080, searxng 8080,
+# sparkyfitness 3010). The agent namespace is allowed as a whole rather than per
+# port - the alternative is a rule per app that breaks every time an MCP tool
+# learns a new endpoint.
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: selfhosted-ingress
+spec:
+  endpointSelector: {}
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            gateway.networking.k8s.io/gateway-name: envoy-internal
+            k8s:io.kubernetes.pod.namespace: network
+        - matchLabels:
+            gateway.networking.k8s.io/gateway-name: envoy-internal-public-dns
+            k8s:io.kubernetes.pod.namespace: network
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: selfhosted
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: ai
+    - # kubelet probes come from the node, not from a pod
+      fromEntities:
+        - host

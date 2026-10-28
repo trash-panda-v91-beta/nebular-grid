@@ -7,6 +7,7 @@ components:
   - ../../components/flux-alerts
 resources:
   - ./namespace.yaml
+  - ./networkpolicy.yaml
   - ./actual/ks.yaml
   - ./paperless/ks.yaml
   - ./papers/ks.yaml
