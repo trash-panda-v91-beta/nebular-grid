@@ -13,16 +13,11 @@ spec:
   dependsOn:
     - name: dragonfly-operator
       namespace: database
-  interval: 1h
   path: ./clusters/psb/apps/selfhosted/searxng/app
   postBuild:
     substitute:
       APP: searxng
   prune: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-    namespace: flux-system
   targetNamespace: selfhosted
   timeout: 5m
   wait: false

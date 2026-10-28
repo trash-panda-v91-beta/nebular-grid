@@ -8,13 +8,8 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: cilium
-  interval: 1h
   path: "./clusters/psb/apps/kube-system/cilium/app"
   prune: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-    namespace: flux-system
   targetNamespace: kube-system
   timeout: 5m
   wait: false
@@ -29,13 +24,8 @@ spec:
     labels:
       app.kubernetes.io/name: cilium
       app.kubernetes.io/component: config
-  interval: 1h
   path: "./clusters/psb/apps/kube-system/cilium/config"
   prune: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-    namespace: flux-system
   targetNamespace: kube-system
   timeout: 5m
   wait: false
@@ -52,12 +42,7 @@ spec:
       app.kubernetes.io/component: netpols
   dependsOn:
     - name: cilium
-  interval: 1h
   path: "./clusters/psb/apps/kube-system/cilium/netpols"
   prune: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-    namespace: flux-system
   timeout: 5m
   wait: true

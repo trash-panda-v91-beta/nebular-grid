@@ -8,13 +8,8 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: flux-operator
-  interval: 1h
   path: ./clusters/psb/apps/flux-system/flux-operator/app
   prune: false # Never delete this
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-    namespace: flux-system
   targetNamespace: flux-system
   timeout: 5m
   wait: false

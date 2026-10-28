@@ -13,13 +13,8 @@ spec:
       kind: HelmRelease
       name: rook-ceph
       namespace: rook-ceph
-  interval: 1h
   path: ./clusters/psb/apps/rook-ceph/rook-ceph/operator
   prune: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-    namespace: flux-system
   targetNamespace: rook-ceph
   timeout: 5m
 ---
@@ -51,12 +46,7 @@ spec:
       kind: CephCluster
       failed: status.ceph.health == 'HEALTH_ERR'
       current: status.ceph.health in ['HEALTH_OK', 'HEALTH_WARN']
-  interval: 1h
   path: "./clusters/psb/apps/rook-ceph/rook-ceph/cluster"
   prune: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-    namespace: flux-system
   targetNamespace: rook-ceph
   timeout: 5m

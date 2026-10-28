@@ -13,13 +13,8 @@ spec:
       kind: HelmRelease
       name: multus
       namespace: network
-  interval: 1h
   path: "./clusters/psb/apps/network/multus/app"
   prune: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-    namespace: flux-system
   targetNamespace: network
   timeout: 5m
 ---
@@ -35,13 +30,8 @@ spec:
   dependsOn:
     - name: multus
       namespace: network
-  interval: 1h
   path: "./clusters/psb/apps/network/multus/networks"
   prune: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-    namespace: flux-system
   targetNamespace: network
   timeout: 5m
   wait: true

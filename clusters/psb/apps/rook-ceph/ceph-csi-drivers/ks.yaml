@@ -15,12 +15,7 @@ spec:
       kind: HelmRelease
       name: ceph-csi-drivers
       namespace: rook-ceph
-  interval: 1h
   path: ./clusters/psb/apps/rook-ceph/ceph-csi-drivers
   prune: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-    namespace: flux-system
   targetNamespace: rook-ceph
   timeout: 5m

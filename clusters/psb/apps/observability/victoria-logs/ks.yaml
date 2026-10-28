@@ -11,13 +11,8 @@ spec:
   dependsOn:
     - name: rook-ceph-cluster
       namespace: rook-ceph
-  interval: 1h
   path: "./clusters/psb/apps/observability/victoria-logs/app"
   prune: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-    namespace: flux-system
   targetNamespace: observability
   timeout: 5m
   wait: false
@@ -33,13 +28,8 @@ spec:
       app.kubernetes.io/name: victoria-logs-collector
   dependsOn:
     - name: victoria-logs
-  interval: 1h
   path: "./clusters/psb/apps/observability/victoria-logs/collector"
   prune: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-    namespace: flux-system
   targetNamespace: observability
   timeout: 5m
   wait: false

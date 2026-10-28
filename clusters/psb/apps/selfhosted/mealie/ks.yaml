@@ -24,7 +24,6 @@ spec:
       namespace: system
     - name: kanidm
       namespace: security
-  interval: 1h
   path: ./clusters/psb/apps/selfhosted/mealie/app
   postBuild:
     substitute:
@@ -36,10 +35,6 @@ spec:
       OIDC_CALLBACK: /login
       OIDC_REDIRECTS: "[\"https://mealie.nebular-grid.space/login\"]"
   prune: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-    namespace: flux-system
   targetNamespace: selfhosted
   timeout: 5m
   wait: false

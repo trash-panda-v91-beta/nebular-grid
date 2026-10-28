@@ -15,7 +15,6 @@ spec:
       namespace: cnpg-system
     - name: external-secrets
       namespace: external-secrets
-  interval: 1h
   path: "./clusters/psb/apps/database/postgres/cluster"
   postBuild:
     substituteFrom:
@@ -23,10 +22,6 @@ spec:
         name: barman-r2
         optional: true
   prune: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-    namespace: flux-system
   targetNamespace: database
   timeout: 10m
   wait: false

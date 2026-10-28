@@ -22,7 +22,6 @@ spec:
       namespace: matrix
     - name: kanidm
       namespace: security
-  interval: 1h
   path: ./clusters/psb/apps/ai/hermes/app
   postBuild:
     substitute:
@@ -33,10 +32,6 @@ spec:
       OIDC_CALLBACK: /auth/callback
       KOPIUR_CAPACITY: 20Gi
   prune: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-    namespace: flux-system
   targetNamespace: ai
   timeout: 5m
   wait: false

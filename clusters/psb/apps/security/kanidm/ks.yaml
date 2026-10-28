@@ -15,16 +15,11 @@ spec:
       namespace: network
     - name: external-secrets
       namespace: external-secrets
-  interval: 1h
   path: ./clusters/psb/apps/security/kanidm/app
   postBuild:
     substitute:
       APP: kanidm
   prune: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-    namespace: flux-system
   targetNamespace: security
   timeout: 10m
   wait: true

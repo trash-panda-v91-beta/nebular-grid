@@ -13,13 +13,8 @@ spec:
       kind: HelmRelease
       name: envoy-gateway
       namespace: network
-  interval: 1h
   path: "./clusters/psb/apps/network/envoy-gateway/app"
   prune: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-    namespace: flux-system
   targetNamespace: network
   timeout: 5m
 ---
@@ -35,12 +30,7 @@ spec:
   dependsOn:
     - name: envoy-gateway
       namespace: network
-  interval: 1h
   path: "./clusters/psb/apps/network/envoy-gateway/config"
   prune: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-    namespace: flux-system
   targetNamespace: network
   timeout: 5m

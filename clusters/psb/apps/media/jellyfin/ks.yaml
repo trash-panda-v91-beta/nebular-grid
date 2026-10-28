@@ -22,7 +22,6 @@ spec:
       namespace: rook-ceph
     - name: kanidm
       namespace: security
-  interval: 1h
   path: "./clusters/psb/apps/media/jellyfin/app"
   postBuild:
     substitute:
@@ -51,10 +50,6 @@ spec:
           }
         }
   prune: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-    namespace: flux-system
   targetNamespace: media
   timeout: 5m
   wait: false

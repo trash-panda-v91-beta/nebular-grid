@@ -8,13 +8,8 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: grafana-operator
-  interval: 1h
   path: "./clusters/psb/apps/observability/grafana/operator"
   prune: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-    namespace: flux-system
   targetNamespace: observability
   timeout: 5m
   wait: true
@@ -32,13 +27,8 @@ spec:
     - name: grafana-operator
     - name: rook-ceph-cluster
       namespace: rook-ceph
-  interval: 1h
   path: "./clusters/psb/apps/observability/grafana/instance"
   prune: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-    namespace: flux-system
   targetNamespace: observability
   timeout: 5m
   wait: true

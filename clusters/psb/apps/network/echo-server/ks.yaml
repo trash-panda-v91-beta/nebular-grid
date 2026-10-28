@@ -8,13 +8,8 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: echo-server
-  interval: 1h
   path: "./clusters/psb/apps/network/echo-server/app"
   prune: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-    namespace: flux-system
   targetNamespace: network
   timeout: 5m
   wait: false

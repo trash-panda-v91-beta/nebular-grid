@@ -17,16 +17,11 @@ spec:
       namespace: ai
     - name: kopiur
       namespace: system
-  interval: 1h
   path: ./clusters/psb/apps/ai/memini/app
   postBuild:
     substitute:
       APP: memini
   prune: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-    namespace: flux-system
   targetNamespace: ai
   timeout: 5m
   wait: false

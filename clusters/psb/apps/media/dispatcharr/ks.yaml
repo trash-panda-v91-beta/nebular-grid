@@ -18,7 +18,6 @@ spec:
       namespace: system
     - name: rook-ceph-cluster
       namespace: rook-ceph
-  interval: 1h
   path: "./clusters/psb/apps/media/dispatcharr/app"
   postBuild:
     substitute:
@@ -26,10 +25,6 @@ spec:
       KOPIUR_CLAIM: dispatcharr
       KOPIUR_CAPACITY: 10Gi
   prune: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-    namespace: flux-system
   targetNamespace: media
   timeout: 5m
   wait: false

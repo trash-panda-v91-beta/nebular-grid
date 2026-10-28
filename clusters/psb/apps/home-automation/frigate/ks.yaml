@@ -21,7 +21,6 @@ spec:
       namespace: network
     - name: rook-ceph-cluster
       namespace: rook-ceph
-  interval: 1h
   path: "./clusters/psb/apps/home-automation/frigate/app"
   postBuild:
     substitute:
@@ -29,10 +28,6 @@ spec:
       KOPIUR_CLAIM: frigate
       KOPIUR_CAPACITY: 5Gi
   prune: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-    namespace: flux-system
   targetNamespace: home-automation
   timeout: 5m
   wait: false

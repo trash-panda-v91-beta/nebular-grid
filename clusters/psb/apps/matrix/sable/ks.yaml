@@ -8,7 +8,6 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: sable
-  interval: 1h
   path: ./clusters/psb/apps/matrix/sable/app
   postBuild:
     substitute:
@@ -16,10 +15,6 @@ spec:
       APP_NAMESPACE: matrix
       SUBDOMAIN: sable
   prune: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-    namespace: flux-system
   targetNamespace: matrix
   timeout: 5m
   wait: false

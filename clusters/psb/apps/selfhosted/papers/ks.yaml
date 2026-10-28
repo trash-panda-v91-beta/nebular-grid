@@ -17,7 +17,6 @@ spec:
       namespace: system
     - name: rook-ceph-cluster
       namespace: rook-ceph
-  interval: 1h
   path: ./clusters/psb/apps/selfhosted/papers/app
   postBuild:
     substitute:
@@ -28,10 +27,6 @@ spec:
       KOPIUR_MOVER_UID: "1000"
       KOPIUR_MOVER_GID: "1000"
   prune: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-    namespace: flux-system
   targetNamespace: selfhosted
   timeout: 5m
   wait: false

@@ -20,7 +20,6 @@ spec:
       namespace: system
     - name: kanidm
       namespace: security
-  interval: 1h
   path: ./clusters/psb/apps/selfhosted/donetick/app
   postBuild:
     substitute:
@@ -38,10 +37,6 @@ spec:
       OIDC_DISABLE_PKCE: "true"
       OIDC_SCOPE_MAPS: "{\"children\": [], \"admins\": []}"
   prune: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-    namespace: flux-system
   targetNamespace: selfhosted
   timeout: 5m
   wait: false

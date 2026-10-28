@@ -13,13 +13,8 @@ spec:
       kind: HelmRelease
       name: silence-operator
       namespace: observability
-  interval: 1h
   path: ./clusters/psb/apps/observability/silence-operator/app
   prune: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-    namespace: flux-system
   targetNamespace: observability
   timeout: 5m
 ---
@@ -35,13 +30,8 @@ spec:
   dependsOn:
     - name: silence-operator
       namespace: observability
-  interval: 1h
   path: ./clusters/psb/apps/observability/silence-operator/silences
   prune: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-    namespace: flux-system
   targetNamespace: observability
   timeout: 5m
   wait: false

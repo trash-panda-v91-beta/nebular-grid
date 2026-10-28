@@ -13,16 +13,11 @@ spec:
       kind: HelmRelease
       name: kopiur
       namespace: system
-  interval: 1h
   path: "./clusters/psb/apps/system/kopiur/app"
   postBuild:
     substitute:
       APP: kopiur
   prune: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-    namespace: flux-system
   targetNamespace: system
   timeout: 5m
 ---
@@ -41,12 +36,7 @@ spec:
     - apiVersion: kopiur.home-operations.com/v1alpha1
       kind: ClusterRepository
       name: nas
-  interval: 1h
   path: "./clusters/psb/apps/system/kopiur/repository"
   prune: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-    namespace: flux-system
   targetNamespace: system
   timeout: 5m
