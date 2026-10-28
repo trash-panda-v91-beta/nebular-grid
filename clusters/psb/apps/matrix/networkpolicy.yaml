@@ -1,0 +1,28 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/cilium.io/ciliumnetworkpolicy_v2.json
+# Namespace-wide default deny for ingress. Federation and clients both arrive
+# through a gateway, so nothing outside these three sources has any business
+# connecting to the homeserver.
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: matrix-ingress
+spec:
+  endpointSelector: {}
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            gateway.networking.k8s.io/gateway-name: envoy-external
+            k8s:io.kubernetes.pod.namespace: network
+        - matchLabels:
+            gateway.networking.k8s.io/gateway-name: envoy-internal
+            k8s:io.kubernetes.pod.namespace: network
+        - matchLabels:
+            gateway.networking.k8s.io/gateway-name: envoy-internal-public-dns
+            k8s:io.kubernetes.pod.namespace: network
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: matrix
+    - # kubelet probes come from the node, not from a pod
+      fromEntities:
+        - host
