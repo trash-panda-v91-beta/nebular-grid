@@ -1,0 +1,26 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/cilium.io/ciliumnetworkpolicy_v2.json
+# Namespace-wide default deny for ingress. Everything here is reached either
+# through a gateway, by a sibling, or by the arrs pushing notifications into
+# jellyfin - and that last one is already covered by jellyfin's own policy, so it
+# is deliberately not repeated here.
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: media-ingress
+spec:
+  endpointSelector: {}
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            gateway.networking.k8s.io/gateway-name: envoy-internal
+            k8s:io.kubernetes.pod.namespace: network
+        - matchLabels:
+            gateway.networking.k8s.io/gateway-name: envoy-internal-public-dns
+            k8s:io.kubernetes.pod.namespace: network
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: media
+    - # kubelet probes come from the node, not from a pod
+      fromEntities:
+        - host
