@@ -1,9 +1,8 @@
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/cilium.io/ciliumnetworkpolicy_v2.json
-# Namespace-wide default deny for ingress. Four external callers, all deliberate:
+# Namespace-wide default deny for ingress. Three external callers, all deliberate:
 # the public-dns gateway, `selfhosted` (papers pulls summaries through litellm on
-# 4000), `observability` (prometheus scrapes llmkube), and the API server, which
-# calls two admission webhooks in here. Both webhooks run failurePolicy: Fail, so
+# 4000), and the API server, which calls two admission webhooks in here. Both webhooks run failurePolicy: Fail, so
 # missing the kube-apiserver entity below would not break the webhooks - it would
 # break creating the objects they validate.
 apiVersion: cilium.io/v2
@@ -28,10 +27,6 @@ spec:
         - ports:
             - port: "4000"
               protocol: TCP
-    - # prometheus scrapes the llmkube metrics
-      fromEndpoints:
-        - matchLabels:
-            k8s:io.kubernetes.pod.namespace: observability
     - # the API server calls the litellm-operator and llmkube validating webhooks
       fromEntities:
         - kube-apiserver
