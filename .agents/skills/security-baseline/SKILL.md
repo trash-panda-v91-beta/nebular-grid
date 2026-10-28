@@ -32,14 +32,16 @@ metadata:
   annotations:
     kustomize.toolkit.fluxcd.io/prune: disabled
   labels:
-    pod-security.kubernetes.io/enforce: restricted   # baseline | privileged, see below
+    expose: public   # only if this namespace publishes to the public gateway
 ```
 
-Levels: `restricted` for app namespaces. `baseline` for infra needing one specific capability. `privileged` for the hardware namespaces only - `kube-system`, `rook-ceph`, `observability`, `network`, `home-automation`. A new namespace asking for `privileged` is a bug, not a config.
+Do not add `pod-security.kubernetes.io/enforce` labels. Enforcing Pod Security Admission was tried and rolled back: it broke every kopiur backup, because the per-run cache volume needs a preparation pod that mounts `hostPath` and runs privileged. The decision and the reasoning are recorded; `warn` and `audit` are not set either, so do not expect a warning to be emitted.
+
+A `privileged` pod is still wrong outside `kube-system`, `rook-ceph`, `observability`, `network` and `home-automation`. Nothing enforces that - it is a review question, so say so in the PR if you see one.
 
 ### 2. Pod securityContext
 
-Every container, no exceptions, because the cluster has no default:
+Set one on every container. Nothing enforces it, so it only happens if you write it:
 
 ```yaml
 defaultPodOptions:
