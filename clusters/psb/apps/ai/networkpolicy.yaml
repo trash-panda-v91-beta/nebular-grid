@@ -1,11 +1,11 @@
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/cilium.io/ciliumnetworkpolicy_v2.json
-# Namespace-wide default deny for ingress. Three external callers, all deliberate:
-# the public-dns gateway, `selfhosted` (papers pulls summaries through litellm,
-# and the agent reads selfhosted APIs), and the API server, which calls two
-# admission webhooks in here. Both webhooks run failurePolicy: Fail, so
-# missing the kube-apiserver entity below would not break the webhooks - it would
-# break creating the objects they validate.
+# Namespace-wide default deny for ingress. Two external callers, both deliberate:
+# the public-dns gateway, and the API server, which calls two admission webhooks
+# in here. Both webhooks run failurePolicy: Fail, so missing the kube-apiserver
+# entity below would not break the webhooks - it would break creating the objects
+# they validate. Pods outside ai that need in get their own scoped policy in
+# ingress-peers.yaml rather than a namespace-wide grant here.
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
@@ -20,13 +20,6 @@ spec:
     - fromEndpoints:
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: ai
-    # no toPorts on this peer: a reply to a connection opened from ai arrives on
-    # an ephemeral port, so a port filter here drops it whenever the selfhosted
-    # pod runs on the same node as the caller. Remote peers slip through as
-    # remote-node, which is why this only shows up on one node.
-    - fromEndpoints:
-        - matchLabels:
-            k8s:io.kubernetes.pod.namespace: selfhosted
     - # the API server calls the litellm-operator and llmkube validating webhooks
       fromEntities:
         - kube-apiserver
