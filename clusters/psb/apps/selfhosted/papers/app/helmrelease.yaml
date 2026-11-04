@@ -56,6 +56,11 @@ spec:
                   secretKeyRef:
                     name: papers-secret
                     key: seerr_key
+              JELLYFIN_API_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: papers-secret
+                    key: jellyfin_key
             probes:
               liveness: &probe
                 enabled: true
