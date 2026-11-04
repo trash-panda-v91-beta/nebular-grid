@@ -31,6 +31,10 @@ spec:
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: media
             app.kubernetes.io/name: youtarr
+        # papers publishes new additions in its feed
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: selfhosted
+            app.kubernetes.io/name: papers
       toPorts:
         - ports:
             - port: "8096"
