@@ -21,6 +21,11 @@ spec:
     - fromEndpoints:
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: media
+    - # shared postgres/valkey/mosquitto pods live in database; their replies land
+      # on an ephemeral port, so this peer cannot be port-scoped
+      fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: database
     - # kubelet probes come from the node, not from a pod
       fromEntities:
         - host
