@@ -1,0 +1,50 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/cilium.io/ciliumnetworkpolicy_v2.json
+# Peers that live outside ai get their own pod-scoped policies instead of one
+# namespace-wide grant. Port filters only work on inbound calls: a reply to a
+# connection opened from ai arrives on an ephemeral port, so a peer that only
+# ever talks back cannot be port-restricted at all.
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: hermes-selfhosted-ingress
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: hermes
+  ingress:
+    - # the agent reads its REST API directly; the reply arrives on an ephemeral port
+      fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: selfhosted
+            app.kubernetes.io/name: sparkyfitness
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: litellm-selfhosted-ingress
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: litellm
+  ingress:
+    - # papers calls litellm directly, so this direction can stay on one port
+      fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: selfhosted
+            app.kubernetes.io/name: papers
+      toPorts:
+        - ports:
+            - port: "4000"
+              protocol: TCP
+    - # the MCP servers litellm calls back into, replies only
+      fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: selfhosted
+            app.kubernetes.io/name: actual
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: selfhosted
+            app.kubernetes.io/name: mealie
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: selfhosted
+            app.kubernetes.io/name: donetick

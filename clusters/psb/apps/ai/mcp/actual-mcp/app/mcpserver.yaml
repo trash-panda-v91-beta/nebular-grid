@@ -12,7 +12,7 @@ spec:
     name: actual-mcp-secret
     key: MCP_TOKEN
   workload:
-    image: ghcr.io/agigante80/actual-mcp-server:0.24.5@sha256:3200a3add02de2de736467d8dddcdeab1ac6e126aab4eaa4a3084aad88637bab
+    image: ghcr.io/agigante80/actual-mcp-server:0.27.0@sha256:2b99bfdecdc74e008d570ab58c1a9d9dddd0312e51bdaeb8e44c21a2db8d6b0a
     port: 3600
     path: /http
     env:

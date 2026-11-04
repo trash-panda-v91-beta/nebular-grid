@@ -26,7 +26,7 @@ spec:
           app:
             image:
               repository: ghcr.io/actualbudget/actual-server
-              tag: 26.10.0@sha256:24645e971da6bb1a1f953d6859e307a0b29be1e8b4130a35b3220c209b5b860c
+              tag: 26.11.0@sha256:06cf186569cf58d93e12659ff1a517b65b5b0ebee7050a3991d4bd8a1d398da6
             env:
               ACTUAL_PORT: &httpPort 5006
               ACTUAL_UPLOAD_FILE_SYNC_SIZE_LIMIT_MB: 80
@@ -43,7 +43,8 @@ spec:
                   key: client-secret
               ACTUAL_OPENID_SERVER_HOSTNAME: https://actual.nebular-grid.space
               ACTUAL_OPENID_ENFORCE: "true"
-              ACTUAL_USER_CREATION_MODE: login
+              # New logins are not auto-created; users are added in the User Directory.
+              ACTUAL_USER_CREATION_MODE: manual
             probes:
               liveness:
                 enabled: true
