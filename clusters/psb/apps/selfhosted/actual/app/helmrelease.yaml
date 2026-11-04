@@ -43,7 +43,8 @@ spec:
                   key: client-secret
               ACTUAL_OPENID_SERVER_HOSTNAME: https://actual.nebular-grid.space
               ACTUAL_OPENID_ENFORCE: "true"
-              ACTUAL_USER_CREATION_MODE: login
+              # New logins are not auto-created; users are added in the User Directory.
+              ACTUAL_USER_CREATION_MODE: manual
             probes:
               liveness:
                 enabled: true

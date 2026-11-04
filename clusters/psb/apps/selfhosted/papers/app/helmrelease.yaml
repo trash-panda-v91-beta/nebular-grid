@@ -31,7 +31,7 @@ spec:
           app:
             image:
               repository: ghcr.io/trash-panda-v91-beta/papers
-              tag: v0.3.5@sha256:f478290c4742791a6b1148f5a98dbf8f61851efdd548dc0b0eeba0e5d6c808b8
+              tag: v0.4.0@sha256:cff54c9542ec8221d245e517e3028cb18b5d5dfe603adf0621807c1f084f9fec
             env:
               TZ: Europe/Prague
               PAPERS_PORT: &httpPort 8080
@@ -56,6 +56,11 @@ spec:
                   secretKeyRef:
                     name: papers-secret
                     key: seerr_key
+              JELLYFIN_API_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: papers-secret
+                    key: jellyfin_key
             probes:
               liveness: &probe
                 enabled: true
