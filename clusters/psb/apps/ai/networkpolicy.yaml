@@ -1,10 +1,11 @@
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/cilium.io/ciliumnetworkpolicy_v2.json
-# Namespace-wide default deny for ingress. Two external callers, both deliberate:
-# the public-dns gateway, and the API server, which calls two admission webhooks
-# in here. Both webhooks run failurePolicy: Fail, so missing the kube-apiserver
-# entity below would not break the webhooks - it would break creating the objects
-# they validate. Pods outside ai that need in get their own scoped policy in
+# Namespace-wide default deny for ingress. The public-dns gateway comes in for
+# the gateway-served routes, `database` for replies from the shared postgres,
+# valkey and mosquitto pods, and the API server for the two admission webhooks.
+# Both webhooks run failurePolicy: Fail, so missing the kube-apiserver entity
+# below would not break the webhooks - it would break creating the objects they
+# validate. Pods outside ai that need in get their own scoped policy in
 # ingress-peers.yaml rather than a namespace-wide grant here.
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
@@ -20,6 +21,11 @@ spec:
     - fromEndpoints:
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: ai
+    - # shared postgres/valkey/mosquitto pods live in database; their replies land
+      # on an ephemeral port, so this peer cannot be port-scoped
+      fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: database
     - # the API server calls the litellm-operator and llmkube validating webhooks
       fromEntities:
         - kube-apiserver

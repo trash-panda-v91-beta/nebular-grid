@@ -23,6 +23,11 @@ spec:
     - fromEndpoints:
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: selfhosted
+    - # shared postgres/valkey/mosquitto pods live in database; their replies land
+      # on an ephemeral port, so this peer cannot be port-scoped
+      fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: database
     - fromEndpoints:
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: ai
