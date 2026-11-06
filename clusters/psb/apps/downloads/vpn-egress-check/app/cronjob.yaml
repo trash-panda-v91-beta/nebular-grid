@@ -52,8 +52,11 @@ spec:
                   # The pod holds two paths out: the macvlan on the VPN VLAN, and
                   # the cluster interface. They must never agree - if they do,
                   # the tunnel is not carrying the traffic and we are leaking.
-                  vpn=$(wget -q -O- -T 25 https://ifconfig.me) || { echo "no answer through the tunnel"; exit 1; }
-                  cluster=$(wget -q -O- -T 25 --bind-address="$(hostname -i)" https://ifconfig.me) || cluster="<blocked>"
-                  echo "via tunnel: $vpn | via cluster: $cluster"
+                  # Both probes have to return an address, or the run proves nothing.
+                  vpn=$(wget -q -O- -T 25 https://icanhazip.com) || { echo "no answer through the tunnel"; exit 1; }
+                  eth=$(ip -4 addr show eth0 | awk '/inet /{print $2}' | cut -d/ -f1)
+                  cluster=$(wget -q -O- -T 25 --bind-address="$eth" https://icanhazip.com) || cluster=""
+                  echo "via tunnel: [$vpn] | via cluster: [$cluster]"
                   [ -n "$vpn" ] || exit 1
+                  [ -n "$cluster" ] || { echo "cannot calibrate - the cluster path gave nothing"; exit 1; }
                   [ "$vpn" != "$cluster" ] || { echo "LEAK - both paths give $vpn"; exit 1; }
