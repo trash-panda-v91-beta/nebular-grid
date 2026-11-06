@@ -1,0 +1,59 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: vpn-egress-check
+spec:
+  schedule: "12 */1 * * *"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 0
+      template:
+        metadata:
+          annotations:
+            k8s.v1.cni.cncf.io/networks: |-
+              [{
+                "name": "multus-vpn",
+                "namespace": "network",
+                "ips": ["10.1.5.13/24"]
+              }]
+        spec:
+          restartPolicy: Never
+          automountServiceAccountToken: false
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 65534
+            runAsGroup: 65534
+            seccompProfile:
+              type: RuntimeDefault
+          containers:
+            - name: check
+              image: docker.io/library/alpine:3.24@sha256:294b683cb724975bec92580e1e685676bd4b50bda910ddb8c51d4cabeaec77e6
+              securityContext:
+                allowPrivilegeEscalation: false
+                readOnlyRootFilesystem: true
+                capabilities:
+                  drop:
+                    - "ALL"
+              resources:
+                requests:
+                  cpu: 5m
+                  memory: 16Mi
+                limits:
+                  memory: 32Mi
+              command:
+                - /bin/sh
+                - -c
+                - |-
+                  # The pod holds two paths out: the macvlan on the VPN VLAN, and
+                  # the cluster interface. They must never agree - if they do,
+                  # the tunnel is not carrying the traffic and we are leaking.
+                  vpn=$(wget -q -O- -T 25 https://ifconfig.me) || { echo "no answer through the tunnel"; exit 1; }
+                  cluster=$(wget -q -O- -T 25 --bind-address="$(hostname -i)" https://ifconfig.me) || cluster="<blocked>"
+                  echo "via tunnel: $vpn | via cluster: $cluster"
+                  [ -n "$vpn" ] || exit 1
+                  [ "$vpn" != "$cluster" ] || { echo "LEAK - both paths give $vpn"; exit 1; }

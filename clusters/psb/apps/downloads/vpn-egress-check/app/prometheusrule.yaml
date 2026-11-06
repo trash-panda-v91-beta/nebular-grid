@@ -1,0 +1,27 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/monitoring.coreos.com/prometheusrule_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: vpn-egress-check
+spec:
+  groups:
+    - name: vpn-egress-check.rules
+      rules:
+        - alert: VpnEgressBroken
+          annotations:
+            summary: The VPN egress check failed - the download pods may be leaving over the household uplink.
+            description: The hourly job compares the exit address seen through the tunnel with the one seen through the cluster network. They must differ. A run that fails means the tunnel is not carrying the traffic.
+          expr: |
+            max_over_time(kube_job_status_failed{job_name=~"vpn-egress-check.*"}[90m]) > 0
+          for: 5m
+          labels:
+            severity: critical
+        - alert: VpnEgressCheckAbsent
+          annotations:
+            summary: The VPN egress check has not run - it is no longer proving anything.
+          expr: |
+            absent(kube_job_status_succeeded{job_name=~"vpn-egress-check.*"} > 0)
+          for: 3h
+          labels:
+            severity: warning
