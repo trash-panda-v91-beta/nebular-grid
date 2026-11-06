@@ -11,7 +11,7 @@ spec:
   targets:
     staticConfig:
       static:
-        - asc.internal
+        - asc.sto.bar.internal
         - door.gar.bas.internal
         - heat-pump.mar.bas.internal
         - slzb-mr5u.drr.nes.internal
@@ -28,4 +28,4 @@ spec:
   targets:
     staticConfig:
       static:
-        - asc.internal:2049
+        - asc.sto.bar.internal:2049
