@@ -1,0 +1,21 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/cilium.io/ciliumclusterwidenetworkpolicy_v2.json
+# World egress for every endpoint except the pods that must only leave through
+# the VPN tunnel. Those two have a macvlan on the VPN VLAN and the kill switch on
+# the traffic route - if they could also reach the internet through the cluster
+# network they would sail straight past it. Everything else keeps working.
+apiVersion: cilium.io/v2
+kind: CiliumClusterwideNetworkPolicy
+metadata:
+  name: allow-world-egress
+spec:
+  endpointSelector:
+    matchExpressions:
+      - key: app.kubernetes.io/name
+        operator: NotIn
+        values:
+          - qbittorrent
+          - sabnzbd
+  egress:
+    - toEntities:
+        - world

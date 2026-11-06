@@ -13,3 +13,6 @@ talosconfig
 .mise/
 .claude/
 
+
+# machine-local secrets config
+fnox.local.toml
