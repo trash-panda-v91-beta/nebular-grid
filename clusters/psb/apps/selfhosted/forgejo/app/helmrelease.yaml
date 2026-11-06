@@ -22,12 +22,6 @@ spec:
       capabilities:
         drop:
           - ALL
-    extraVolumes:
-      - name: tmp
-        emptyDir: {}
-    extraContainerVolumeMounts:
-      - name: tmp
-        mountPath: /tmp
     deployment:
       annotations:
         reloader.stakater.com/auto: "true"
