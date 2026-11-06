@@ -2,6 +2,7 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "github>trash-panda-v91-beta/renovate-config",
+    "github>home-operations/renovate-presets//apps/talosFactory.json5#11.0.0",
     "github>trash-panda-v91-beta/nebular-grid//.renovate/overrides.json",
     "github>trash-panda-v91-beta/nebular-grid//.renovate/groups.json",
     "github>trash-panda-v91-beta/nebular-grid//.renovate/autoMerge.json",
