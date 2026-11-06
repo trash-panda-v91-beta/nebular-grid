@@ -1,5 +1,7 @@
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/cilium.io/ciliumclusterwidenetworkpolicy_v2.json
+# World egress lives in ./allow-world-egress.yaml, which is the same rule minus
+# the pods that must only leave through the VPN tunnel.
 apiVersion: cilium.io/v2
 kind: CiliumClusterwideNetworkPolicy
 metadata:
@@ -11,5 +13,3 @@ spec:
         - {}
     - toEntities:
         - cluster
-    - toEntities:
-        - world

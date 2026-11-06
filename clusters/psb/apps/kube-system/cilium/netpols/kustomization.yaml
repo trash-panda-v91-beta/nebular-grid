@@ -5,3 +5,4 @@ kind: Kustomization
 resources:
   - ./allow-cluster-egress.yaml
   - ./allow-dns-egress.yaml
+  - ./allow-world-egress.yaml
