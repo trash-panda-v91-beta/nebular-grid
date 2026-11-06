@@ -92,6 +92,14 @@ machine:
           - vlanId: 305
             dhcp: false
             mtu: 1500
+          # 70 and 50 are the incoming IoT and VPN tags. They sit beside the old
+          # ones so both exist on the wire while the re-tag moves across.
+          - vlanId: 70
+            dhcp: false
+            mtu: 1500
+          - vlanId: 50
+            dhcp: false
+            mtu: 1500
   sysctls:
     fs.inotify.max_user_instances: "8192"
     fs.inotify.max_user_watches: "1048576"
