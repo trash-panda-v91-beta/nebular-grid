@@ -28,6 +28,7 @@ spec:
   postBuild:
     substitute:
       APP: forgejo
+      APP_NAMESPACE: selfhosted
       KOPIUR_CLAIM: forgejo
       KOPIUR_CAPACITY: 20Gi
       OIDC_DISPLAY_NAME: Forgejo
