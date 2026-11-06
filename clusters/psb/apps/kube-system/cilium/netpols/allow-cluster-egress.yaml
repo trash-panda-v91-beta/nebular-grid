@@ -11,5 +11,5 @@ spec:
         - {}
     - toEntities:
         - cluster
-# World egress lives in ./allow-world-egress.yaml, which is the same rule minus
-# the pods that must only leave through the VPN tunnel.
+      # World egress lives in ./allow-world-egress.yaml, which is the same rule minus
+      # the pods that must only leave through the VPN tunnel.
