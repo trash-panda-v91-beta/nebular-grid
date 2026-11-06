@@ -17,15 +17,15 @@ spec:
     rules:
       default: false
       external:
-        - seriesQuery: "{__name__=\"probe_success\",instance=\"asc.internal:2049\"}"
+        - seriesQuery: "{__name__=\"probe_success\",instance=\"asc.sto.bar.internal:2049\"}"
           resources:
             namespaced: false
           name:
             as: probe_success_nfs
-          metricsQuery: max_over_time(probe_success{instance="asc.internal:2049"}[1m])
+          metricsQuery: max_over_time(probe_success{instance="asc.sto.bar.internal:2049"}[5m]) or vector(1)
         - seriesQuery: "{__name__=\"probe_success\",instance=\"slzb-mr5u.drr.nes.internal\"}"
           resources:
             namespaced: false
           name:
             as: probe_success_zigbee
-          metricsQuery: max_over_time(probe_success{instance="slzb-mr5u.drr.nes.internal"}[1m])
+          metricsQuery: max_over_time(probe_success{instance="slzb-mr5u.drr.nes.internal"}[5m]) or vector(1)
