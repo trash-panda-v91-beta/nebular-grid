@@ -22,12 +22,6 @@ spec:
       capabilities:
         drop:
           - ALL
-    extraVolumes:
-      - name: tmp
-        emptyDir: {}
-    extraContainerVolumeMounts:
-      - name: tmp
-        mountPath: /tmp
     deployment:
       annotations:
         reloader.stakater.com/auto: "true"
@@ -46,7 +40,8 @@ spec:
         memory: 1Gi
     gitea:
       admin:
-        email: forgejo@nebular-grid.space
+        # no local admin account, login is kanidm only and the admins group grants site admin
+        username: ""
       config:
         database:
           DB_TYPE: postgres
