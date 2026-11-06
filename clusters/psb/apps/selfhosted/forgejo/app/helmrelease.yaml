@@ -58,6 +58,11 @@ spec:
           ALLOW_ONLY_EXTERNAL_REGISTRATION: true
           SHOW_REGISTRATION_BUTTON: false
           DEFAULT_ENABLE_TIMETRACKING: false
+          # kanidm is the only way in
+          ENABLE_INTERNAL_SIGNIN: false
+        oauth2_client:
+          # a login nobody has created an account for is refused
+          ENABLE_AUTO_REGISTRATION: false
         repository:
           DEFAULT_BRANCH: main
         cron.archive_cleanup:
