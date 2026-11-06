@@ -1,0 +1,43 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: forgejo
+spec:
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: forgejo
+  components:
+    - ../../../../components/kopiur/backup
+    - ../../../../components/oidc
+    - ../../../../components/postgres/pass
+    - ../../../../components/postgres/patch
+  dependsOn:
+    - name: external-secrets
+      namespace: external-secrets
+    - name: postgres-cluster
+      namespace: database
+    - name: rook-ceph-cluster
+      namespace: rook-ceph
+    - name: kopiur
+      namespace: system
+    - name: kanidm
+      namespace: security
+  path: ./clusters/psb/apps/selfhosted/forgejo/app
+  postBuild:
+    substitute:
+      APP: forgejo
+      KOPIUR_CLAIM: forgejo
+      KOPIUR_CAPACITY: 20Gi
+      OIDC_DISPLAY_NAME: Forgejo
+      OIDC_CALLBACK: /user/oauth2/kanidm/callback
+      # git.nebular-grid.space, not forgejo.nebular-grid.space
+      SUBDOMAIN: git
+      # the chart reads client-id/client-secret from keys named key/secret
+      OIDC_CLIENT_ID_KEY: key
+      OIDC_CLIENT_SECRET_KEY: secret
+  prune: true
+  targetNamespace: selfhosted
+  timeout: 5m
+  wait: false
