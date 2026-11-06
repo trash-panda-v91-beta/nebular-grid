@@ -87,7 +87,7 @@ spec:
       media:
         type: nfs
         path: /mnt/tank/apps/frigate
-        server: asc.internal
+        server: asc.sto.bar.internal
         globalMounts:
           - path: /media/frigate
       cache:
