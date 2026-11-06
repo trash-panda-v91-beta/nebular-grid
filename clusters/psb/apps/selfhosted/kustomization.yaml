@@ -17,3 +17,4 @@ resources:
   - ./obsidian-livesync/ks.yaml
   - ./donetick/ks.yaml
   - ./mealie/ks.yaml
+  - ./forgejo/ks.yaml
