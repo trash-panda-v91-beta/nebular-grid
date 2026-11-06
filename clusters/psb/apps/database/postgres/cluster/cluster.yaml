@@ -81,3 +81,10 @@ spec:
         disablePassword: false
         passwordSecret:
           name: mealie-postgres
+      - name: forgejo
+        ensure: present
+        login: true
+        superuser: false
+        disablePassword: false
+        passwordSecret:
+          name: forgejo-postgres
