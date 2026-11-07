@@ -73,7 +73,7 @@ spec:
         hostnames:
           - seerr.nebular-grid.space
         parentRefs:
-          - name: envoy-internal-public-dns
+          - name: envoy-internal
             namespace: network
     persistence:
       config:

@@ -15,9 +15,6 @@ spec:
   endpointSelector: {}
   ingress:
     - fromEndpoints:
-        - matchLabels:
-            gateway.networking.k8s.io/gateway-name: envoy-internal-public-dns
-            k8s:io.kubernetes.pod.namespace: network
     - fromEndpoints:
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: ai

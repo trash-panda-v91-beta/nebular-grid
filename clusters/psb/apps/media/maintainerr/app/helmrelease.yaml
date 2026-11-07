@@ -74,7 +74,7 @@ spec:
         hostnames:
           - maintainerr.nebular-grid.space
         parentRefs:
-          - name: envoy-internal-public-dns
+          - name: envoy-internal
             namespace: network
     service:
       app:
