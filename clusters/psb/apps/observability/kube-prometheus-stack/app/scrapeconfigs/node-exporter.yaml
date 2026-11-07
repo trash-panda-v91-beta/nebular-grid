@@ -7,7 +7,7 @@ metadata:
 spec:
   staticConfigs:
     - targets:
-        - asc.internal:9100
+        - asc.sto.bar.internal:9100
   metricsPath: /metrics
   relabelings:
     - action: replace

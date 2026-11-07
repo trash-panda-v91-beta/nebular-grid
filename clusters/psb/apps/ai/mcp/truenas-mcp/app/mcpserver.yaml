@@ -12,9 +12,9 @@ spec:
     port: 8000
     path: /mcp
     env:
-      # TrueNAS middleware websocket; asc.internal is the NAS (in-cluster DNS, also the NFS server)
+      # TrueNAS middleware websocket; asc.sto.bar.internal is the NAS (in-cluster DNS, also the NFS server)
       - name: TRUENAS_URI
-        value: wss://asc.internal/api/current
+        value: wss://asc.sto.bar.internal/api/current
       # TrueNAS serves a self-signed cert - skip verification on the internal link
       - name: TRUENAS_VERIFY_SSL
         value: "false"

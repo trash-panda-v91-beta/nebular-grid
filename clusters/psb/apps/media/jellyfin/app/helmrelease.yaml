@@ -103,7 +103,7 @@ spec:
               - path: /config/log
       media:
         type: nfs
-        server: asc.internal
+        server: asc.sto.bar.internal
         path: /mnt/tank/media
         advancedMounts:
           jellyfin:

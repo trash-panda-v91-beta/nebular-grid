@@ -50,7 +50,7 @@ spec:
                 subPath: data
       recordings:
         type: nfs
-        server: asc.internal
+        server: asc.sto.bar.internal
         path: /mnt/tank/media
         advancedMounts:
           dispatcharr:
