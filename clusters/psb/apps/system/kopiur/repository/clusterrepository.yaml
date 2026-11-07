@@ -12,7 +12,7 @@ spec:
       path: /repo
       volume:
         nfs:
-          server: asc.internal
+          server: asc.sto.bar.internal
           path: /mnt/tank/backup/kopiur
   create:
     enabled: true

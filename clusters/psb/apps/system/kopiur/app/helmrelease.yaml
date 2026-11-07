@@ -13,7 +13,7 @@ spec:
     extraVolumes:
       - name: repo
         nfs:
-          server: asc.internal
+          server: asc.sto.bar.internal
           path: /mnt/tank/backup/kopiur
     extraVolumeMounts:
       - name: repo

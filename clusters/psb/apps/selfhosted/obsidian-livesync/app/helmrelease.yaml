@@ -50,7 +50,7 @@ spec:
     persistence:
       vault:
         type: nfs
-        server: asc.internal
+        server: asc.sto.bar.internal
         path: /mnt/tank/apps/vault
         globalMounts:
           - path: /vault
