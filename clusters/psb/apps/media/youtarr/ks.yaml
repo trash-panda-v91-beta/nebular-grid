@@ -5,6 +5,8 @@ kind: Kustomization
 metadata:
   name: youtarr
 spec:
+  components:
+    - ../../../../components/zeroscaler/nas-nfs-scaler
   commonMetadata:
     labels:
       app.kubernetes.io/name: youtarr

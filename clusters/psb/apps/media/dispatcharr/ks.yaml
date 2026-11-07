@@ -9,6 +9,7 @@ spec:
     labels:
       app.kubernetes.io/name: dispatcharr
   components:
+    - ../../../../components/zeroscaler/nas-nfs-scaler
     - ../../../../components/gpu
     - ../../../../components/kopiur/backup
   dependsOn:
