@@ -39,21 +39,45 @@ else that has to publish from an operator-owned namespace.
 
 ## Internal service checklist
 
-1. Route `parentRefs` -> `envoy-internal` (or `envoy-internal-vpn`)
+1. Route `parentRefs` -> `envoy-internal`
 2. Do **not** add the `external-dns.kubernetes.io/cloudflare-proxied`
-   annotation and do **not** use `envoy-internal-public-dns` - those create
-   public DNS records
-3. Create a **UniFi DNS record** pointing the hostname at the internal
-   ingress IP `10.1.6.43` (unifi MCP: `unifi_create_dns_record`, then enable
-   it - records are created `enabled: false`)
-4. Verify with `nslookup <host>` against the UniFi resolver (`10.1.0.1`) -
-   DNS propagation can take a moment and negative lookups get cached
+   annotation and do **not** point the route at `envoy-external` - those publish
+   the name to the public zone on Cloudflare. Internal names resolve from the
+   gateway for LAN and VPN clients and must not be enumerable from the internet.
+3. DNS is **automatic**. `envoy-internal` carries
+   `external-dns.kubernetes.io/target: ingress-int-psb.nebular-grid.space`, so
+   external-dns-unifi writes a CNAME to it and the gateway answers. No manual
+   UniFi record is needed for a route hostname.
+   - A record in UniFi is only for something that is **not** an HTTPRoute - a
+     device, a NAS share, a load balancer IP. Point those at the address directly
+     (unifi MCP: `unifi_create_dns_record`, then enable it - records are created
+     `enabled: false`).
+   - Never set `local_dns_record` on a DHCP reservation: it shadows the
+     automatic `<device>.<room>.<site>.internal` name with a competing one.
+4. Verify with `dig <host> @10.1.0.1` - DNS propagation can take a moment and
+   negative lookups get cached.
 
 ## Gotchas
 
-- `envoy-internal` routes get **no DNS record automatically** - "Server Not
-  Found" in a browser means the UniFi record is missing, not that the gateway
-  is wrong
+- **Do not test public DNS with `dig @8.8.8.8` from inside the house.** The
+  gateway intercepts LAN DNS and answers it, so you are querying UniFi and
+  calling it the internet. This has produced wrong conclusions more than once.
+  Use DNS-over-HTTPS, which cannot be intercepted:
+
+  ```
+  curl -s -H 'accept: application/dns-json' \
+    'https://dns.google/resolve?name=NAME&type=A'
+  ```
+
+- **To prove which resolver a client actually uses,** create a name that exists
+  in only one place (a UniFi record and nowhere else) and ask the client for it.
+  If it answers, the client is using the gateway. Delete the probe afterwards.
+- The VPN must **push DNS** for any of this to work off-LAN. `dhcpd_dns_enabled`
+  has to be true on the VPN network, not just `dhcpd_dns_1` set - the flag is off
+  by default and iOS silently keeps its own resolver.
+- `envoy-external` is the only gateway whose names go to Cloudflare. It carries
+  the `external-dns/controller: externaldns-cloudflare` label; `envoy-internal`
+  deliberately does not.
 - The 1Password **service account** (`OP_SERVICE_ACCOUNT_TOKEN`) sees only the
   `NebularGrid` vault - `Private` vault references do not resolve in fnox or
   `op`
