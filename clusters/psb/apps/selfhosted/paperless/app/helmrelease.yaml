@@ -110,7 +110,7 @@ spec:
         hostnames:
           - paperless.nebular-grid.space
         parentRefs:
-          - name: envoy-internal-public-dns
+          - name: envoy-internal
             namespace: network
 
         rules:

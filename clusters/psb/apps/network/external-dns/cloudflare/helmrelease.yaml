@@ -25,9 +25,11 @@ spec:
       - --cloudflare-proxied
       - --crd-source-apiversion=externaldns.k8s.io/v1alpha1
       - --crd-source-kind=DNSEndpoint
-      # Watch both gateways (envoy-external + envoy-internal-public-dns) via a
-      # shared label. --gateway-name cannot be repeated in external-dns v0.21.0
-      # (caused CrashLoopBackOff), so use a single label filter instead.
+      # Only what is genuinely external. The internal gateway has no
+      # external-dns/controller label on purpose: its names resolve from the
+      # gateway for LAN and VPN clients, and publishing them leaked the whole
+      # internal topology to the public zone. --gateway-name cannot be repeated
+      # in external-dns v0.21.0 (CrashLoopBackOff), so this is a label filter.
       - --gateway-label-filter=external-dns/controller=externaldns-cloudflare
     podAnnotations:
       secret.reloader.stakater.com/reload: externaldns-cloudflare-secrets
