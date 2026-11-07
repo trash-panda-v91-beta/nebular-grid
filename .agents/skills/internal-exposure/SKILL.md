@@ -4,9 +4,9 @@ description: >
   Use when deploying services, creating HTTPRoutes, configuring DNS records,
   or exposing anything to the network in nebular-grid - never expose a service
   to the public internet unless the user explicitly asks. Internal services use
-  the envoy-internal or envoy-internal-vpn gateway plus a UniFi DNS record.
-  Auto-fires before writing any HelmRelease route block, DNS record, or
-  gateway reference.
+  the envoy-internal gateway, which gets its DNS from external-dns
+  automatically. Auto-fires before writing any HelmRelease route block, DNS
+  record, or gateway reference.
 ---
 
 # Internal Exposure Rule
@@ -19,9 +19,8 @@ includes public DNS records, Cloudflare-proxied routes, public gateways, and
 
 | Gateway | DNS | Reachable from |
 |---------|-----|----------------|
-| `envoy-internal` | UniFi DNS record (manual) | LAN only |
-| `envoy-internal-vpn` | UniFi DNS record (manual) | VPN only |
-| `envoy-internal-public-dns` | external-dns creates a **public** record | Externally - **only on explicit request** |
+| `envoy-internal` | external-dns writes a CNAME to `ingress-int-psb.nebular-grid.space` | LAN and VPN |
+| `envoy-external` | external-dns writes a **public** record | The internet - **only on explicit request** |
 
 ## Public gateway needs a namespace label
 
