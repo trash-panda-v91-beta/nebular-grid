@@ -4,9 +4,11 @@ apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:
   name: envoy-internal-public-dns
-  labels:
-    external-dns/controller: externaldns-cloudflare
   annotations:
+    # Internal names resolve from UniFi DNS only. They are deliberately NOT
+    # published to Cloudflare: the gateway answers them for LAN and VPN clients
+    # (verified 2026-11-07 with a phone on the VPN), and publishing them leaked
+    # the whole internal topology to anyone querying the public zone.
     # No external-dns.kubernetes.io/target -> external-dns falls back to
     # the gateway Status.Addresses (the Cilium LB IP 10.1.6.43) and emits A
     # records (not CNAME). cloudflare-proxied is applied per-HTTPRoute (see the
