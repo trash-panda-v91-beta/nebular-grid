@@ -90,7 +90,7 @@ spec:
     tcpRoute:
       enabled: true
       parentRefs:
-        - name: envoy-internal
+        - name: envoy-internal-ssh
           namespace: network
           sectionName: ssh
     httpRoute:

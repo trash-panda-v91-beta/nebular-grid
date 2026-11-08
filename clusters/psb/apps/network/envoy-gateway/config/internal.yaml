@@ -34,13 +34,6 @@ spec:
         certificateRefs:
           - kind: Secret
             name: nebular-grid.space-tls
-    - # git over ssh
-      name: ssh
-      protocol: TCP
-      port: 22
-      allowedRoutes:
-        namespaces:
-          from: All
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/gateway.envoyproxy.io/envoypatchpolicy_v1alpha1.json
 apiVersion: gateway.envoyproxy.io/v1alpha1
@@ -71,3 +64,27 @@ spec:
     kind: Gateway
     name: envoy-internal
   type: JSONPatch
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/gateway.networking.k8s.io/gateway_v1.json
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  # git over ssh lives on its own gateway on purpose. When it shared
+  # envoy-internal with the HTTP listeners, one client could not hold a
+  # sustained HTTPS connection at all - pages loaded and then every live
+  # stream died within a couple of seconds. A near-identical gateway without
+  # the TCP listener served the same names to the same client fine, so the
+  # raw TCP listener on the same gateway was the cause.
+  name: envoy-internal-ssh
+spec:
+  gatewayClassName: envoy
+  infrastructure:
+    annotations:
+      lbipam.cilium.io/ips: 10.1.6.45
+  listeners:
+    - name: ssh
+      protocol: TCP
+      port: 22
+      allowedRoutes:
+        namespaces:
+          from: All
