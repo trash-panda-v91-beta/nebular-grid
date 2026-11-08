@@ -1,0 +1,64 @@
+---
+# Lets hermes replace a persistent volume whose source is immutable, which is
+# what a NAS rename needs: the PV and its claim have to be recreated.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: hermes-storage-migrate
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - persistentvolumeclaims
+      - persistentvolumes
+    verbs:
+      - get
+      - list
+      - watch
+      - delete
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: hermes-storage-migrate
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: hermes-storage-migrate
+subjects:
+  - kind: ServiceAccount
+    name: hermes
+    namespace: ai
+---
+# A claim cannot be deleted while a pod still uses it, so the workload has to
+# be scaled out of the way first.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: hermes-workload-scale
+  namespace: media
+rules:
+  - apiGroups:
+      - apps
+    resources:
+      - deployments
+      - statefulsets
+    verbs:
+      - get
+      - list
+      - patch
+      - update
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: hermes-workload-scale
+  namespace: media
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: hermes-workload-scale
+subjects:
+  - kind: ServiceAccount
+    name: hermes
+    namespace: ai
