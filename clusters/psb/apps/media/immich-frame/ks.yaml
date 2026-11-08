@@ -17,6 +17,7 @@ spec:
   postBuild:
     substitute:
       APP: immich-frame
+  force: true
   prune: true
   targetNamespace: media
   timeout: 5m

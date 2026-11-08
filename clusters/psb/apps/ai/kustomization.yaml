@@ -20,7 +20,6 @@ resources:
   - ./mcp/mealie-mcp/ks.yaml
   - ./mcp/truenas-mcp/ks.yaml
   - ./mcp/context7-mcp/ks.yaml
-  - ./mcp/ha-mcp/ks.yaml
   - ./mcp/grafana-mcp/ks.yaml
   - ./mcp/actual-mcp/ks.yaml
   - ./mcp/unifi-network-mcp/ks.yaml

@@ -4,21 +4,27 @@ apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:
   name: envoy-internal
+  labels:
+    # Lets externaldns-cloudflare publish the names behind this gateway. The
+    # phones in the house only resolve public DNS - a managed profile forces a
+    # resolver that does not know internal-only names - so the service names
+    # have to be in the public zone for anything to work on them.
+    external-dns/controller: externaldns-cloudflare
   annotations:
-    external-dns.kubernetes.io/target: &hostname ingress-int-psb.nebular-grid.space
+    external-dns.kubernetes.io/target: &hostname ingress-internal.nebular-grid.space
 spec:
   gatewayClassName: envoy
   infrastructure:
     annotations:
       external-dns.kubernetes.io/hostname: *hostname
-      lbipam.cilium.io/ips: 10.1.6.42
+      lbipam.cilium.io/ips: 10.1.6.43
   listeners:
     - name: http
       protocol: HTTP
       port: 80
       allowedRoutes:
         namespaces:
-          from: Same
+          from: All
     - name: https
       protocol: HTTPS
       port: 443
@@ -29,8 +35,7 @@ spec:
         certificateRefs:
           - kind: Secret
             name: nebular-grid.space-tls
-    - # git over ssh
-      name: ssh
+    - name: ssh
       protocol: TCP
       port: 22
       allowedRoutes:
@@ -43,6 +48,11 @@ kind: EnvoyPatchPolicy
 metadata:
   name: envoy-internal
 spec:
+  targetRef:
+    group: gateway.networking.k8s.io
+    kind: Gateway
+    name: envoy-internal
+  type: JSONPatch
   jsonPatches:
     - type: type.googleapis.com/envoy.config.listener.v3.Listener
       name: network/envoy-internal/https
@@ -61,8 +71,3 @@ spec:
     - type: type.googleapis.com/envoy.config.listener.v3.Listener
       name: network/envoy-internal/https-quic
       operation: *operation
-  targetRef:
-    group: gateway.networking.k8s.io
-    kind: Gateway
-    name: envoy-internal
-  type: JSONPatch
