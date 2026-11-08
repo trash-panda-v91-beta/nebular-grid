@@ -82,7 +82,7 @@ spec:
       downloads:
         type: nfs
         path: /mnt/tank/media
-        server: asc.internal
+        server: asc.sto.bar.internal
         globalMounts:
           - path: /data/nas-media/downloads/qbittorrent
             subPath: downloads/qbittorrent
@@ -95,7 +95,7 @@ spec:
         hostnames:
           - qbittorrent.nebular-grid.space
         parentRefs:
-          - name: envoy-internal-public-dns
+          - name: envoy-internal
             namespace: network
 
         rules:

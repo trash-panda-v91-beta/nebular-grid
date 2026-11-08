@@ -97,7 +97,7 @@ spec:
       nas:
         type: nfs
         path: /mnt/tank/apps/paperless
-        server: asc.internal
+        server: asc.sto.bar.internal
         advancedMounts:
           paperless:
             app:
@@ -110,7 +110,7 @@ spec:
         hostnames:
           - paperless.nebular-grid.space
         parentRefs:
-          - name: envoy-internal-public-dns
+          - name: envoy-internal
             namespace: network
 
         rules:

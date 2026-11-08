@@ -9,4 +9,4 @@ spec:
     - name: alertname
       value: NodeMemoryHighUtilization
     - name: instance
-      value: asc.internal:9100
+      value: asc.sto.bar.internal:9100

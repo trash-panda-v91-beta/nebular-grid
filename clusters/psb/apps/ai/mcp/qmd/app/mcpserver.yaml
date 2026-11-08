@@ -24,7 +24,7 @@ spec:
     volumes:
       - name: vault
         nfs:
-          server: asc.internal
+          server: asc.sto.bar.internal
           path: /mnt/tank/apps/vault
           readOnly: true
       - name: cache

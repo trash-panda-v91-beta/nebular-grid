@@ -21,6 +21,10 @@ spec:
                 "namespace": "network",
                 "ips": ["10.1.30.157/24", "fd12:3456:789a:303::157/64"],
                 "mac": "76:fa:11:c0:c9:84"
+              },{
+                "name":"multus-video",
+                "namespace": "network",
+                "ips": ["10.1.4.2/24"]
               }]
           securityContext:
             sysctls:

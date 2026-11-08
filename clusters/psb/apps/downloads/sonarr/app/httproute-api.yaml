@@ -13,7 +13,7 @@ metadata:
     external-dns.kubernetes.io/cloudflare-proxied: "false"
 spec:
   parentRefs:
-    - name: envoy-internal-public-dns
+    - name: envoy-internal
       namespace: network
   hostnames:
     - sonarr.nebular-grid.space

@@ -25,7 +25,7 @@ spec:
           hostnames:
             - alertmanager.nebular-grid.space
           parentRefs:
-            - name: envoy-internal
+            - name: envoy-management
               namespace: network
 
       alertmanagerSpec:
@@ -159,5 +159,5 @@ spec:
           hostnames:
             - prometheus.nebular-grid.space
           parentRefs:
-            - name: envoy-internal
+            - name: envoy-management
               namespace: network

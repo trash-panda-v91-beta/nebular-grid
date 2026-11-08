@@ -21,7 +21,7 @@ spec:
   postBuild:
     substitute:
       APP: esphome
-      DOMAIN: asc.internal
+      DOMAIN: asc.sto.bar.internal
       TIMEZONE: Europe/Prague
       KOPIUR_CLAIM: esphome-config
       KOPIUR_CAPACITY: 5Gi

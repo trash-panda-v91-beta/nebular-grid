@@ -23,7 +23,7 @@ spec:
     storage: 2Ti
   nfs:
     path: /mnt/tank/stores/photos
-    server: asc.internal
+    server: asc.sto.bar.internal
   persistentVolumeReclaimPolicy: Retain
   storageClassName: ""
   volumeMode: Filesystem

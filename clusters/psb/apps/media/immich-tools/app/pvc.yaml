@@ -10,7 +10,7 @@ spec:
     storage: 30Gi
   nfs:
     path: /mnt/tank/stores/photos/favorites
-    server: asc.internal
+    server: asc.sto.bar.internal
   persistentVolumeReclaimPolicy: Retain
   storageClassName: ""
   volumeMode: Filesystem
@@ -40,7 +40,7 @@ spec:
     storage: 5Gi
   nfs:
     path: /mnt/tank/stores/photos/immich-tools
-    server: asc.internal
+    server: asc.sto.bar.internal
   persistentVolumeReclaimPolicy: Retain
   storageClassName: ""
   volumeMode: Filesystem

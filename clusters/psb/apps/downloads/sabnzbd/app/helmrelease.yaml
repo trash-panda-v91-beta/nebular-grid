@@ -86,7 +86,7 @@ spec:
       downloads:
         type: nfs
         path: /mnt/tank/media
-        server: asc.internal
+        server: asc.sto.bar.internal
         globalMounts:
           - path: /data/nas-media/downloads/sabnzbd
             subPath: downloads/sabnzbd
@@ -104,5 +104,5 @@ spec:
         hostnames:
           - sabnzbd.nebular-grid.space
         parentRefs:
-          - name: envoy-internal-public-dns
+          - name: envoy-internal
             namespace: network

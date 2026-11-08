@@ -5,6 +5,8 @@ kind: Kustomization
 metadata:
   name: obsidian-livesync
 spec:
+  components:
+    - ../../../../components/zeroscaler/nas-nfs-scaler
   commonMetadata:
     labels:
       app.kubernetes.io/name: obsidian-livesync
@@ -16,3 +18,6 @@ spec:
   targetNamespace: selfhosted
   timeout: 5m
   wait: false
+  postBuild:
+    substitute:
+      APP: obsidian-livesync

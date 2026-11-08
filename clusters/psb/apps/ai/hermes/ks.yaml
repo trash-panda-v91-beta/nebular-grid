@@ -9,6 +9,7 @@ spec:
     labels:
       app.kubernetes.io/name: hermes
   components:
+    - ../../../../components/zeroscaler/nas-nfs-scaler
     - ../../../../components/kopiur/backup
     - ../../../../components/oidc
   dependsOn:
