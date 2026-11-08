@@ -4,13 +4,18 @@ apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:
   name: envoy-internal
-  annotations:
-    external-dns.kubernetes.io/target: &hostname ingress-int-psb.nebular-grid.space
+  # No external-dns.kubernetes.io/target on purpose. With it, every service
+  # name is published as a CNAME to ingress-int-psb, and the AAAA lookup then
+  # returns a CNAME pointing at a name with no IPv6 address. On a network with
+  # IPv6 that makes iOS stall on the v6 chain and the name never loads.
+  # Without it external-dns emits a direct A record at the gateway address,
+  # which resolves immediately and is what these names used to be.
+  annotations: {}
 spec:
   gatewayClassName: envoy
   infrastructure:
     annotations:
-      external-dns.kubernetes.io/hostname: *hostname
+      external-dns.kubernetes.io/hostname: ingress-int-psb.nebular-grid.space
       lbipam.cilium.io/ips: 10.1.6.42
   listeners:
     - name: http
