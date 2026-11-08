@@ -48,3 +48,18 @@ spec:
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: selfhosted
             app.kubernetes.io/name: donetick
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: hermes-home-automation-ingress
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: hermes
+  ingress:
+    # Home Assistant answers the MCP webhook; the reply's source is rewritten to
+    # the service VIP, so conntrack does not recognise it and no port filter applies
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: home-automation
