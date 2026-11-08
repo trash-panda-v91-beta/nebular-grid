@@ -4,18 +4,14 @@ apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:
   name: envoy-management
-  labels:
-    # Published like envoy-internal, because the same managed phones need to
-    # reach the monitoring UIs. See the task note on why internal names have
-    # to be public here.
-    external-dns/controller: externaldns-cloudflare
-  annotations:
-    external-dns.kubernetes.io/target: &hostname ingress-mgmt.nebular-grid.space
+  # Deliberately NOT published. The monitoring and admin UIs are reachable on
+  # the LAN and over the VPN, where the gateway answers the names through UniFi
+  # DNS. Nothing here needs to be resolvable from outside, and unlike the app
+  # names these are not already in the public repo.
 spec:
   gatewayClassName: envoy
   infrastructure:
     annotations:
-      external-dns.kubernetes.io/hostname: *hostname
       lbipam.cilium.io/ips: 10.1.6.45
   listeners:
     - name: https
