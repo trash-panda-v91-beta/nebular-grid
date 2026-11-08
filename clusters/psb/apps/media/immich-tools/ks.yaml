@@ -12,7 +12,6 @@ spec:
     - name: external-secrets
       namespace: external-secrets
   path: "./clusters/psb/apps/media/immich-tools/app"
-  force: true
   prune: true
   targetNamespace: media
   timeout: 5m
