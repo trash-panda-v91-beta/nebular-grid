@@ -88,11 +88,7 @@ spec:
       ssh:
         port: 22
     tcpRoute:
-      enabled: true
-      parentRefs:
-        - name: envoy-internal-ssh
-          namespace: network
-          sectionName: ssh
+      enabled: false
     httpRoute:
       enabled: true
       hostnames:
