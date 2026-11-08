@@ -130,6 +130,11 @@ spec:
               API_SERVER_ENABLED: "true"
               API_SERVER_HOST: 0.0.0.0
               GOPATH: /opt/data/go
+              HA_MCP_URL:
+                valueFrom:
+                  secretKeyRef:
+                    name: hermes-config
+                    key: HA_MCP_URL
               HERMES_GID: "2000"
               HERMES_HOME: /opt/data
               HERMES_UID: "2000"
