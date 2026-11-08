@@ -84,7 +84,7 @@ spec:
       hostnames:
         - grafana.nebular-grid.space
       parentRefs:
-        - name: envoy-internal
+        - name: envoy-management
           namespace: network
   persistentVolumeClaim:
     spec:

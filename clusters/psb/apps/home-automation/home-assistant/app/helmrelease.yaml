@@ -141,7 +141,7 @@ spec:
         hostnames:
           - hass-code.nebular-grid.space
         parentRefs:
-          - name: envoy-internal
+          - name: envoy-management
             namespace: network
 
         rules:
