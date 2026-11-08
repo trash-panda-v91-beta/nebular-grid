@@ -42,7 +42,6 @@ spec:
             }
           }
         }
-  force: true
   prune: true
   targetNamespace: media
   timeout: 10m
