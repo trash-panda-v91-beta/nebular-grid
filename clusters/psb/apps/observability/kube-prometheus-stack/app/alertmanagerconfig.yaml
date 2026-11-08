@@ -25,6 +25,14 @@ spec:
             value: InfoInhibitor
             matchType: =
       - receiver: pushover
+        groupBy:
+          - "alertname"
+          - "instance"
+        matchers:
+          - name: alertname
+            value: BlackboxProbeFailed
+            matchType: =
+      - receiver: pushover
         matchers:
           - name: severity
             value: critical
