@@ -105,6 +105,8 @@ spec:
                 subPath: id_ed25519
     route:
       app:
+        annotations:
+          external-dns.kubernetes.io/cloudflare-proxied: "false"
         hostnames:
           - esphome.nebular-grid.space
         parentRefs:

@@ -108,6 +108,8 @@ spec:
               - path: /data
     route:
       app:
+        annotations:
+          external-dns.kubernetes.io/cloudflare-proxied: "false"
         hostnames:
           - zigbee2mqtt.nebular-grid.space
         parentRefs:

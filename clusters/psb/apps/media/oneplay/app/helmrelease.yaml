@@ -96,6 +96,8 @@ spec:
             port: *port
     route:
       app:
+        annotations:
+          external-dns.kubernetes.io/cloudflare-proxied: "false"
         hostnames:
           - oneplay.nebular-grid.space
         parentRefs:

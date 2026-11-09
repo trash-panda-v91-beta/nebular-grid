@@ -98,6 +98,8 @@ spec:
 
     route:
       app:
+        annotations:
+          external-dns.kubernetes.io/cloudflare-proxied: "false"
         hostnames:
           - search.nebular-grid.space
         parentRefs:
