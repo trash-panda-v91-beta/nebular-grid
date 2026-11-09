@@ -36,11 +36,8 @@ spec:
                   secretKeyRef:
                     name: searxng-secret
                     key: secret_key
-            # settings.yml references ${BRAVE_API_KEY} and ${SERPER_API_KEY}.
-            # They come in as env so the values never land in a ConfigMap.
-            envFrom:
-              - secretRef:
-                  name: searxng-secret
+            # settings.yml is rendered by the ExternalSecret template with the
+            # engine API keys inlined, so no env expansion is needed here.
             probes:
               liveness:
                 enabled: true
@@ -81,13 +78,17 @@ spec:
             port: *httpPort
 
     persistence:
-      config:
-        type: configMap
-        name: searxng-config
+      settings:
+        type: secret
+        name: searxng-secret
         globalMounts:
           - path: /etc/searxng/settings.yml
             subPath: settings.yml
             readOnly: true
+      config:
+        type: configMap
+        name: searxng-config
+        globalMounts:
           - path: /etc/searxng/limiter.toml
             subPath: limiter.toml
             readOnly: true
