@@ -15,6 +15,20 @@ spec:
       reporting_enabled: "false"
     auth:
       disable_login_form: "false"
+    auth.generic_oauth:
+      enabled: "true"
+      name: Kanidm
+      client_id: grafana
+      scopes: openid profile email groups
+      auth_url: https://idm.nebular-grid.space/ui/oauth2
+      token_url: https://idm.nebular-grid.space/oauth2/token
+      api_url: https://idm.nebular-grid.space/oauth2/openid/grafana/userinfo
+      use_pkce: "true"
+      allow_sign_up: "true"
+      login_attribute_path: preferred_username
+      email_attribute_path: email
+      role_attribute_path: contains(groups[*], 'admins@idm.nebular-grid.space') && 'Admin' || 'Viewer'
+      role_attribute_strict: "false"
     date_formats:
       use_browser_locale: "true"
     explore:
@@ -57,6 +71,11 @@ spec:
                     secretKeyRef:
                       name: grafana-admin-secret
                       key: admin-user
+                - name: GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET
+                  valueFrom:
+                    secretKeyRef:
+                      name: kanidm-grafana-oidc
+                      key: client-secret
               resources:
                 requests:
                   cpu: 50m
