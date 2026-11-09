@@ -13,7 +13,10 @@ spec:
     autoDirectNodeRoutes: true
     bandwidthManager:
       enabled: true
-      bbr: true
+      # BBR needs BPF host routing, which hostLegacyRouting turns off. The
+      # agent refuses to start otherwise: "BPF bandwidth manager's BBR setup
+      # requires BPF host routing." The bandwidth manager itself stays on.
+      bbr: false
     bgpControlPlane:
       enabled: true
     bpf:
