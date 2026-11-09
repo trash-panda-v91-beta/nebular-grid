@@ -41,7 +41,7 @@ spec:
               SONARR__AUTH__REQUIRED: Enabled
               # Sonarr matches a single identity on verified email or sub.
               SONARR__AUTH__OIDCAUTHORITY: https://idm.nebular-grid.space/oauth2/openid/sonarr
-              SONARR__AUTH__OIDCUSERIDENTIFIER: petr@idm.nebular-grid.space
+              SONARR__AUTH__OIDCUSERIDENTIFIER: petr@nebular-grid.space
               SONARR__AUTH__OIDCSCOPES: openid email profile
               SONARR__AUTH__OIDCCLIENTID:
                 valueFrom:

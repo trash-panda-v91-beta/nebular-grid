@@ -37,7 +37,7 @@ spec:
               RADARR__AUTH__REQUIRED: Enabled
               # Radarr matches a single identity on verified email or sub.
               RADARR__AUTH__OIDCAUTHORITY: https://idm.nebular-grid.space/oauth2/openid/radarr
-              RADARR__AUTH__OIDCUSERIDENTIFIER: petr@idm.nebular-grid.space
+              RADARR__AUTH__OIDCUSERIDENTIFIER: petr@nebular-grid.space
               RADARR__AUTH__OIDCSCOPES: openid email profile
               RADARR__AUTH__OIDCCLIENTID:
                 valueFrom:
