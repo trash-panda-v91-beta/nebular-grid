@@ -21,6 +21,7 @@ spec:
     substitute:
       APP: searxng
       APP_NAMESPACE: selfhosted
+      SUBDOMAIN: search
       OIDC_DISPLAY_NAME: SearXNG
       OIDC_GROUP: admins
   prune: true
