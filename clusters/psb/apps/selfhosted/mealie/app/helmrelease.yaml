@@ -80,6 +80,8 @@ spec:
               - path: /app/data
     route:
       app:
+        annotations:
+          external-dns.kubernetes.io/cloudflare-proxied: "false"
         hostnames:
           - mealie.nebular-grid.space
         parentRefs:

@@ -46,6 +46,8 @@ spec:
             port: *port
     route:
       app:
+        annotations:
+          external-dns.kubernetes.io/cloudflare-proxied: "false"
         hostnames:
           - echo-server.psb.nebular-grid.space
         parentRefs:

@@ -110,6 +110,8 @@ spec:
                 subPath: tmp
     route:
       frigate:
+        annotations:
+          external-dns.kubernetes.io/cloudflare-proxied: "false"
         hostnames:
           - frigate.nebular-grid.space
         parentRefs:
@@ -121,6 +123,8 @@ spec:
               - identifier: frigate
                 port: 5000
       go2rtc:
+        annotations:
+          external-dns.kubernetes.io/cloudflare-proxied: "false"
         hostnames:
           - frigate-go2rtc.nebular-grid.space
         parentRefs:

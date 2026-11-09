@@ -94,6 +94,8 @@ spec:
           - path: /app/data
     route:
       app:
+        annotations:
+          external-dns.kubernetes.io/cloudflare-proxied: "false"
         hostnames:
           - tidyquest.nebular-grid.space
         parentRefs:

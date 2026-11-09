@@ -95,6 +95,8 @@ spec:
           sectionName: ssh
     httpRoute:
       enabled: true
+      annotations:
+        external-dns.kubernetes.io/cloudflare-proxied: "false"
       hostnames:
         - git.nebular-grid.space
       parentRefs:
