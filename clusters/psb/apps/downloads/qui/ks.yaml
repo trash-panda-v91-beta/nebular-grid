@@ -11,7 +11,7 @@ spec:
   components:
     - ../../../../components/kopiur/backup
     - ../../../../components/zeroscaler/nas-nfs-scaler
-    - ../../../../components/oidc/envoy
+    - ../../../../components/oidc
   dependsOn:
     - name: kopiur
       namespace: system
@@ -29,6 +29,7 @@ spec:
       KOPIUR_CAPACITY: 1Gi
       OIDC_DISPLAY_NAME: qui
       OIDC_GROUP: admins
+      OIDC_CALLBACK: /api/auth/oidc/callback
   prune: true
   targetNamespace: downloads
   timeout: 5m
