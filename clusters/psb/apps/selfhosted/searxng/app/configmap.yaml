@@ -67,7 +67,10 @@ data:
         categories: [general]
       - name: docker hub
         disabled: false
-        categories: [general]
+        # Name matcher, not a relevance engine: it matches the query against
+        # image names and can fill the top of a general search with unrelated
+        # repos. Useful when you ask for an image, not for a general query.
+        categories: [it]
       - name: archwiki
         disabled: false
         categories: [general]
@@ -128,7 +131,6 @@ data:
         - (.*\.)?github.com$
         - (.*\.)?gitlab.com$
         - (.*\.)?reddit.com$
-        - (.*\.)?docker.com$
         - (.*\.)?archlinux.org$
         - (.*\.)?stackoverflow.com$
         - (.*\.)?askubuntu.com$
