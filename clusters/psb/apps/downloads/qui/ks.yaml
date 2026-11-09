@@ -11,6 +11,7 @@ spec:
   components:
     - ../../../../components/kopiur/backup
     - ../../../../components/zeroscaler/nas-nfs-scaler
+    - ../../../../components/oidc/envoy
   dependsOn:
     - name: kopiur
       namespace: system
@@ -18,11 +19,16 @@ spec:
       namespace: rook-ceph
     - name: qbittorrent
       namespace: downloads
+    - name: kanidm
+      namespace: security
   path: "./clusters/psb/apps/downloads/qui/app"
   postBuild:
     substitute:
       APP: qui
+      APP_NAMESPACE: downloads
       KOPIUR_CAPACITY: 1Gi
+      OIDC_DISPLAY_NAME: qui
+      OIDC_GROUP: admins
   prune: true
   targetNamespace: downloads
   timeout: 5m
