@@ -18,6 +18,13 @@ spec:
       replicaCount: 1
       leaderElection:
         enabled: false
+      # The watch canary writes a coordination.k8s.io lease every minute and
+      # the chart's Role does not grant it. Each write is denied, the canary
+      # exits and Kubernetes restarts the pod - 607 restarts, all exit 0.
+      # Disabling it is what other installs of this chart do; the pod is
+      # single-replica and the canary only catches a stuck watch.
+      watchCanary:
+        interval: 0s
       nodeSelector:
         kubernetes.io/hostname: midori
       resources:
