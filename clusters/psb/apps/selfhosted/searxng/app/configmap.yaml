@@ -50,7 +50,7 @@ data:
       - name: brave
         engine: braveapi
         shortcut: br
-        api_key: "${BRAVE_API_KEY}"
+        api_key: "$${BRAVE_API_KEY}"
         require_api_key: true
         disabled: false
         categories: [general]
@@ -59,7 +59,7 @@ data:
       - name: exa
         engine: exaapi
         shortcut: ex
-        api_key: "${EXA_API_KEY}"
+        api_key: "$${EXA_API_KEY}"
         require_api_key: true
         disabled: false
         categories: [general]
