@@ -13,7 +13,6 @@ resources:
   - ./papers/ks.yaml
   - ./searxng/ks.yaml
   - ./sparkyfitness/ks.yaml
-  - ./tidyquest/ks.yaml
   - ./obsidian-livesync/ks.yaml
   - ./donetick/ks.yaml
   - ./mealie/ks.yaml
