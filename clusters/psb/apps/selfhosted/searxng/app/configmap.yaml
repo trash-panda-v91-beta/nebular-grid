@@ -112,10 +112,13 @@ data:
 
     # Internal cluster traffic (Hermes, MCP, OpenWebUI) bypasses the limiter —
     # a private single-user instance's only legit clients are in-cluster pods.
+    # The household is the same single user, so the LAN is exempt too: without
+    # it the agent's own searches get 429'd by our own limiter.
     # Keeps the instance well-behaved for upstream engines without ever
     # rate-limiting our own agent.
     pass_ip = [
       '10.244.0.0/16', # pod CIDR
       '10.96.0.0/12',  # service CIDR
+      '10.1.0.0/16',   # LAN - the household, same single user
     ]
     pass_searxng_org = false
