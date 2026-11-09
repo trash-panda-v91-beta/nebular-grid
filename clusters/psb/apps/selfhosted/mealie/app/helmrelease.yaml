@@ -54,6 +54,8 @@ spec:
               OIDC_GROUPS_CLAIM: groups
               OIDC_REMEMBER_ME: "true"
               OIDC_SIGNUP_ENABLED: "false"
+              # OIDC is the only login; the local password form is hidden.
+              ALLOW_PASSWORD_LOGIN: "false"
             probes:
               liveness:
                 enabled: true
