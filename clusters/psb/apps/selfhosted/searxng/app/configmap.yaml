@@ -14,6 +14,8 @@ data:
     search:
       autocomplete: duckduckgo
       favicon_resolver: duckduckgo
+      default_lang: en
+      safe_search: 0
       formats:
         - html
         - json
@@ -33,17 +35,57 @@ data:
       - Self Informations
       - Tracker URL remover
       - Unit converter plugin
+    # Result ranking: lift primary sources and docs, push content farms and
+    # link-shorteners down. Agents read the top results, so ordering matters
+    # more than it does for a human scrolling a page.
     hostnames:
       high_priority:
         - (.*)\/blog\/(.*)
         - (.*\.)?wikipedia.org$
         - (.*\.)?github.com$
+        - (.*\.)?gitlab.com$
         - (.*\.)?reddit.com$
         - (.*\.)?docker.com$
         - (.*\.)?archlinux.org$
         - (.*\.)?stackoverflow.com$
         - (.*\.)?askubuntu.com$
         - (.*\.)?superuser.com$
+        - (.*\.)?stackexchange.com$
+        - (.*\.)?docs.rs$
+        - (.*\.)?readthedocs.io$
+        - (.*\.)?developer.mozilla.org$
+        - (.*\.)?kubernetes.io$
+        - (.*\.)?grafana.com$
+        - (.*\.)?prometheus.io$
+        - (.*\.)?terraform.io$
+        - (.*\.)?python.org$
+        - (.*\.)?postgresql.org$
+        - (.*\.)?kernel.org$
+        - (.*\.)?ietf.org$
+        - (.*\.)?rfc-editor.org$
+        - (.*\.)?w3.org$
+        - (.*\.)?whatwg.org$
+        - (.*\.)?apple.com$
+        - (.*\.)?ui.com$
+        - (.*\.)?ubnt.com$
+      low_priority:
+        - (.*\.)?pinterest\..*$
+        - (.*\.)?quora.com$
+        - (.*\.)?medium.com$
+        - (.*\.)?facebook.com$
+        - (.*\.)?instagram.com$
+        - (.*\.)?tiktok.com$
+        - (.*\.)?twitter.com$
+        - (.*\.)?x.com$
+        - (.*\.)?linkedin.com$
+        - bit\.ly$
+        - tinyurl\.com$
+        - (.*\.)?wixsite.com$
+        - (.*\.)?blogspot\..*$
+        - (.*\.)?substack.com$
+        - (.*\.)?forbes.com$
+        - (.*\.)?cnet.com$
+        - (.*\.)?techradar.com$
     # Engine set: keep all searxng default engines (like bjw-s home-ops). This
     # instance runs on a home IP, so the engine blocks we saw (Brave "too many
     # requests", Startpage "CAPTCHA", Qwant/Yep "access denied") are behavioral
