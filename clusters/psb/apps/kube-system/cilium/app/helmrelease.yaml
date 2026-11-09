@@ -20,6 +20,15 @@ spec:
       datapathMode: netkit
       masquerade: true
       preallocateMaps: true
+      # A pod with a Multus macvlan cannot reach any ClusterIP, any other pod
+      # IP, or the LAN - only addresses on its own secondary network work. The
+      # kernel's routing table inside the pod is correct (ip route get shows
+      # eth0 and the pod IP), so the packets never follow it: the BPF cgroup
+      # hooks do their own route lookup first and pick the wrong device when a
+      # second interface is present. hostLegacyRouting makes the BPF defer to
+      # the kernel. Leaves ipv4NativeRoutingCIDR alone, so LAN masquerading
+      # is unaffected.
+      hostLegacyRouting: true
     bpfClockProbe: true
     cgroup:
       automount:
