@@ -11,7 +11,7 @@ spec:
   components:
     - ../../../../components/kopiur/backup
     - ../../../../components/zeroscaler/nas-nfs-scaler
-    - ../../../../components/oidc/envoy
+    - ../../../../components/oidc
   dependsOn:
     - name: kopiur
       namespace: system
@@ -27,7 +27,8 @@ spec:
       KOPIUR_CLAIM: sonarr-config
       OIDC_DISPLAY_NAME: Sonarr
       OIDC_GROUP: admins
-      OIDC_SCOPES: "[\"openid\", \"profile\"]"
+      OIDC_SCOPES: "[\"openid\", \"profile\", \"email\"]"
+      OIDC_CALLBACK: /signin-oidc
   prune: true
   targetNamespace: downloads
   timeout: 5m
