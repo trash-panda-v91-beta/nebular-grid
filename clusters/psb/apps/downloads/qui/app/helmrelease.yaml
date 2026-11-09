@@ -30,6 +30,22 @@ spec:
               TZ: Europe/Prague
               QUI__HOST: 0.0.0.0
               QUI__PORT: &port 7476
+              # qui only hides its local login form when OIDC is on, so this is
+              # what leaves Kanidm as the only way in.
+              QUI__OIDC_ENABLED: "true"
+              QUI__OIDC_ISSUER: https://idm.nebular-grid.space/oauth2/openid/qui
+              QUI__OIDC_REDIRECT_URL: https://qui.nebular-grid.space/api/auth/oidc/callback
+              QUI__OIDC_DISABLE_BUILT_IN_LOGIN: "true"
+              QUI__OIDC_CLIENT_ID:
+                valueFrom:
+                  secretKeyRef:
+                    name: kanidm-qui-oidc
+                    key: client-id
+              QUI__OIDC_CLIENT_SECRET:
+                valueFrom:
+                  secretKeyRef:
+                    name: kanidm-qui-oidc
+                    key: client-secret
             probes:
               liveness: &probes
                 enabled: true
