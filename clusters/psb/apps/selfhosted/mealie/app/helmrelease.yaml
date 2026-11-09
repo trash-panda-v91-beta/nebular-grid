@@ -53,6 +53,7 @@ spec:
               OIDC_ADMIN_GROUP: admins@idm.nebular-grid.space
               OIDC_GROUPS_CLAIM: groups
               OIDC_REMEMBER_ME: "true"
+              OIDC_SIGNUP_ENABLED: "false"
             probes:
               liveness:
                 enabled: true
