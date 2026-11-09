@@ -4,6 +4,8 @@ kind: ConfigMap
 metadata:
   name: searxng-config
 data:
+  # searxng does not expand ${...} itself, so the container command
+  # substitutes them from env before exec-ing the server.
   settings.yml: |-
     use_default_settings: true
     server:

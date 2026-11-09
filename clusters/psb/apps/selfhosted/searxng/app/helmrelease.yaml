@@ -25,12 +25,33 @@ spec:
             image:
               repository: ghcr.io/searxng/searxng
               tag: 2026.11.5-3e95f6cd2@sha256:ffad724acd87b8dd312328d18da88ddd42e5c4b1d23231594662620053c13cae
+            # searxng reads no ${...} placeholders - only SEARXNG_SETTINGS_PATH
+            # and a couple of flags - so substitute them from env here and exec
+            # the server on the rendered file. Keeps the keys in env only; the
+            # ConfigMap stays a template.
+            # searxng reads no ${...} placeholders - only SEARXNG_SETTINGS_PATH
+            # and a couple of flags - so substitute them from env here and exec
+            # the server on the rendered file. Keys stay in env only; the
+            # ConfigMap is a template.
+            command:
+              - /bin/sh
+              - -c
+              - |
+                python3 -c '
+                import os, re, pathlib
+                src = pathlib.Path("/etc/searxng/settings.yml.template").read_text()
+                out = re.sub(r"\$\{([A-Za-z_][A-Za-z0-9_]*)\}",
+                             lambda m: os.environ.get(m.group(1), m.group(0)), src)
+                pathlib.Path("/tmp/settings.yml").write_text(out)
+                print("rendered settings.yml:", len(out), "bytes")'
+                exec searxng
             env:
               SEARXNG_BASE_URL: https://search.nebular-grid.space
               SEARXNG_PORT: &httpPort 8080
               # Backing store for the rate limiter (Dragonfly, deployed via the
               # dragonfly component). bjw-s pattern.
               SEARXNG_VALKEY_URL: redis://searxng-dragonfly.selfhosted.svc.cluster.local:6379/0
+              SEARXNG_SETTINGS_PATH: /tmp/settings.yml
               SEARXNG_SECRET:
                 valueFrom:
                   secretKeyRef:
@@ -85,7 +106,7 @@ spec:
         type: configMap
         name: searxng-config
         globalMounts:
-          - path: /etc/searxng/settings.yml
+          - path: /etc/searxng/settings.yml.template
             subPath: settings.yml
             readOnly: true
           - path: /etc/searxng/limiter.toml
