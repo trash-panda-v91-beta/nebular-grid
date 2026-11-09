@@ -84,15 +84,8 @@ spec:
             secretKeyRef:
               name: forgejo-postgres
               key: password
-    service:
-      ssh:
-        port: 22
-    tcpRoute:
-      enabled: true
-      parentRefs:
-        - name: envoy-internal
-          namespace: network
-          sectionName: ssh
+    # Git over HTTPS only. The tcpRoute went with the gateway's ssh
+    # listener - see the note in the internal gateway config.
     httpRoute:
       enabled: true
       annotations:

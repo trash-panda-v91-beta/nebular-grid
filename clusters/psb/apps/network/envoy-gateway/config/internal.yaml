@@ -25,6 +25,9 @@ spec:
       allowedRoutes:
         namespaces:
           from: All
+    # No ssh listener. Git over HTTPS works, and ssh on this gateway broke
+    # sustained HTTPS across the whole site - two protocols on one listener
+    # is the thing that does not survive.
     - name: https
       protocol: HTTPS
       port: 443
@@ -35,12 +38,6 @@ spec:
         certificateRefs:
           - kind: Secret
             name: nebular-grid.space-tls
-    - name: ssh
-      protocol: TCP
-      port: 22
-      allowedRoutes:
-        namespaces:
-          from: All
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/gateway.envoyproxy.io/envoypatchpolicy_v1alpha1.json
 apiVersion: gateway.envoyproxy.io/v1alpha1
