@@ -88,17 +88,3 @@ spec:
             subPath: downloads/qbittorrent
       tmp:
         type: emptyDir
-    route:
-      app:
-        annotations:
-          external-dns.kubernetes.io/cloudflare-proxied: "false"
-        hostnames:
-          - qbittorrent.nebular-grid.space
-        parentRefs:
-          - name: envoy-internal
-            namespace: network
-
-        rules:
-          - backendRefs:
-              - identifier: app
-                port: *port

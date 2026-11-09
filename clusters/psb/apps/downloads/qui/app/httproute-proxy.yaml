@@ -1,0 +1,28 @@
+---
+# Unauthenticated /proxy route for API clients (helmarr, LunaSea, etc).
+# The oidc/envoy component's SecurityPolicy only targetRefs the
+# app-template-generated route named "qui", so this separate route is never
+# OIDC-attached. qui gates /proxy with the client API key in the path and holds
+# the qBittorrent credentials itself. Longest-prefix match routes /proxy/* here
+# and everything else to the OIDC-protected route.
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: qui-proxy
+  namespace: downloads
+  annotations:
+    external-dns.kubernetes.io/cloudflare-proxied: "false"
+spec:
+  parentRefs:
+    - name: envoy-internal
+      namespace: network
+  hostnames:
+    - qui.nebular-grid.space
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /proxy
+      backendRefs:
+        - name: qui
+          port: 7476
