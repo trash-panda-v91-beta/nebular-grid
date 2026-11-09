@@ -19,8 +19,72 @@ data:
       formats:
         - html
         - json
+      # The defaults park a failed engine for a day, so one CAPTCHA blanks the
+      # instance until the next restart. Shorter bans mean an engine comes
+      # back on its own.
+      ban_time_on_fail: 5
+      max_ban_time_on_fail: 300
+      suspended_times:
+        SearxEngineAccessDenied: 600
+        SearxEngineCaptcha: 600
+        SearxEngineTooManyRequests: 300
+        cf_SearxEngineCaptcha: 3600
+        cf_SearxEngineAccessDenied: 600
+        recaptcha_SearxEngineCaptcha: 3600
     general:
       instance_name: Nebular Grid Search
+
+    # Engine set for a residential IP. Upstream defaults favour Brave,
+    # DuckDuckGo and Google CSE - exactly the engines that CAPTCHA or 429 a
+    # home connection, leaving the instance with zero results. From a home IP
+    # the reliable engines are the ones with public APIs and the ones that
+    # tolerate residential clients: Bing, Yahoo, Seznam, Wikipedia, GitHub,
+    # Docker Hub, the Arch wiki. Reverse of upstream on purpose.
+
+    engines:
+      # API-backed or residential-friendly - these are what actually answer.
+      - name: bing
+        disabled: false
+      - name: yahoo
+        disabled: false
+      - name: seznam
+        disabled: false
+      - name: wikipedia
+        disabled: false
+      - name: wikidata
+        disabled: false
+      - name: github
+        disabled: false
+      - name: docker hub
+        disabled: false
+      - name: archwiki
+        disabled: false
+      - name: stackoverflow
+        disabled: false
+      - name: google scholar
+        disabled: false
+      - name: arxiv
+        disabled: false
+      - name: pypi
+        disabled: false
+      - name: npm
+        disabled: false
+      - name: mdn
+        disabled: false
+      # Consumer search pages that CAPTCHA a home connection. Off so they
+      # stop burning query slots and blanking the result set.
+      - name: duckduckgo
+        disabled: true
+      - name: brave
+        disabled: true
+      - name: startpage
+        disabled: true
+      - name: google
+        disabled: true
+      - name: google cse
+        disabled: true
+      - name: qwant
+        disabled: true
     ui:
       default_theme: simple
       infinite_scroll: true
@@ -86,13 +150,6 @@ data:
         - (.*\.)?forbes.com$
         - (.*\.)?cnet.com$
         - (.*\.)?techradar.com$
-    # Engine set: keep all searxng default engines (like bjw-s home-ops). This
-    # instance runs on a home IP, so the engine blocks we saw (Brave "too many
-    # requests", Startpage "CAPTCHA", Qwant/Yep "access denied") are behavioral
-    # rate-limit/CAPTCHA windows, not permanent IP bans - and they are time-
-    # varying (Bing/Yahoo answered in some probes). The server limiter
-    # (limiter: true) throttles our own probing so engines keep seeing one
-    # polite client and stay in their working window. No engines disabled.
   limiter.toml: |-
     [botdetection]
     # Prefix defines leading bits compared to group client addresses.
@@ -112,10 +169,13 @@ data:
 
     # Internal cluster traffic (Hermes, MCP, OpenWebUI) bypasses the limiter —
     # a private single-user instance's only legit clients are in-cluster pods.
+    # The household is the same single user, so the LAN is exempt too: without
+    # it the agent's own searches get 429'd by our own limiter.
     # Keeps the instance well-behaved for upstream engines without ever
     # rate-limiting our own agent.
     pass_ip = [
       '10.244.0.0/16', # pod CIDR
       '10.96.0.0/12',  # service CIDR
+      '10.1.0.0/16',   # LAN - the household, same single user
     ]
     pass_searxng_org = false
