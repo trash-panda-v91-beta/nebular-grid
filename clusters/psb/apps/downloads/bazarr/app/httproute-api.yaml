@@ -1,0 +1,27 @@
+---
+# Unauthenticated /api route for API clients (helmarr, LunaSea, etc).
+# The oidc/envoy component's SecurityPolicy only targetRefs the
+# app-template-generated route named "bazarr", so this separate route is never
+# OIDC-attached. Bazarr gates /api with its own api key. Longest-prefix match
+# routes /api/* here and everything else to the OIDC-protected route.
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: bazarr-api
+  namespace: downloads
+  annotations:
+    external-dns.kubernetes.io/cloudflare-proxied: "false"
+spec:
+  parentRefs:
+    - name: envoy-internal
+      namespace: network
+  hostnames:
+    - bazarr.nebular-grid.space
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /api
+      backendRefs:
+        - name: bazarr
+          port: 6767
