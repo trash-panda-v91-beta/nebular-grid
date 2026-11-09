@@ -33,8 +33,22 @@ spec:
                   secretKeyRef:
                     name: radarr-secret
                     key: api_key
-              RADARR__AUTH__METHOD: External
-              RADARR__AUTH__REQUIRED: DisabledForLocalAddresses
+              RADARR__AUTH__METHOD: Oidc
+              RADARR__AUTH__REQUIRED: Enabled
+              # Radarr matches a single identity on verified email or sub.
+              RADARR__AUTH__OIDCAUTHORITY: https://idm.nebular-grid.space/oauth2/openid/radarr
+              RADARR__AUTH__OIDCUSERIDENTIFIER: petr@idm.nebular-grid.space
+              RADARR__AUTH__OIDCSCOPES: openid email profile
+              RADARR__AUTH__OIDCCLIENTID:
+                valueFrom:
+                  secretKeyRef:
+                    name: kanidm-radarr-oidc
+                    key: client-id
+              RADARR__AUTH__OIDCCLIENTSECRET:
+                valueFrom:
+                  secretKeyRef:
+                    name: kanidm-radarr-oidc
+                    key: client-secret
               RADARR__LOG__DBENABLED: "False"
               RADARR__LOG__LEVEL: info
               RADARR__SERVER__PORT: &port 7878
