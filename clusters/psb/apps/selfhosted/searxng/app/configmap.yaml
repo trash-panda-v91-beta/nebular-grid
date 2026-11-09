@@ -43,34 +43,52 @@ data:
 
     engines:
       # API-backed or residential-friendly - these are what actually answer.
+      # `categories` matters more than `disabled`: a plain search runs only the
+      # `general` engines, and the API-backed ones default to `it`/`science`,
+      # so without this they are enabled and never asked. With Seznam as the
+      # only general engine we were getting one source per search.
       - name: bing
         disabled: false
+        categories: [general]
       - name: yahoo
         disabled: false
+        categories: [general]
       - name: seznam
         disabled: false
+        categories: [general]
       - name: wikipedia
         disabled: false
+        categories: [general]
       - name: wikidata
         disabled: false
+        categories: [general]
       - name: github
         disabled: false
+        categories: [general]
       - name: docker hub
         disabled: false
+        categories: [general]
       - name: archwiki
         disabled: false
+        categories: [general]
       - name: stackoverflow
         disabled: false
+        categories: [general]
       - name: google scholar
         disabled: false
+        categories: [general, science]
       - name: arxiv
         disabled: false
+        categories: [general, science]
       - name: pypi
         disabled: false
+        categories: [general, it]
       - name: npm
         disabled: false
+        categories: [general, it]
       - name: mdn
         disabled: false
+        categories: [general, it]
       # Consumer search pages that CAPTCHA a home connection. Off so they
       # stop burning query slots and blanking the result set.
       - name: duckduckgo
@@ -85,6 +103,7 @@ data:
         disabled: true
       - name: qwant
         disabled: true
+
     ui:
       default_theme: simple
       infinite_scroll: true
