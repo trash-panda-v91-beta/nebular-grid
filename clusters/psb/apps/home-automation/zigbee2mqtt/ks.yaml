@@ -11,16 +11,22 @@ spec:
   components:
     - ../../../../components/kopiur/backup
     - ../../../../components/zeroscaler/zigbee-adapter
+    - ../../../../components/oidc/envoy
   dependsOn:
     - name: kopiur
       namespace: system
     - name: rook-ceph-cluster
       namespace: rook-ceph
+    - name: kanidm
+      namespace: security
   path: "./clusters/psb/apps/home-automation/zigbee2mqtt/app"
   postBuild:
     substitute:
       APP: zigbee2mqtt
+      APP_NAMESPACE: home-automation
       KOPIUR_CLAIM: zigbee2mqtt-data
+      OIDC_DISPLAY_NAME: Zigbee2MQTT
+      OIDC_GROUP: admins
   prune: true
   targetNamespace: home-automation
   timeout: 5m
