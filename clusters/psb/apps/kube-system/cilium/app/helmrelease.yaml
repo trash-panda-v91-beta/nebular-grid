@@ -42,7 +42,13 @@ spec:
       enabled: false
     ipam:
       mode: kubernetes
-    ipv4NativeRoutingCIDR: 10.244.0.0/16
+    # Was 10.244.0.0/16 (pod CIDR only). Cilium's cgroup BPF hooks intercept
+    # connect() and route anything outside this CIDR through its own datapath,
+    # which bypasses the kernel's policy routing. The Multus macvlan lives on
+    # 10.1.30.0/24, outside the old CIDR, so every connect() from a multi-homed
+    # pod was hijacked before the sbr rules could apply - ClusterIP to a local
+    # pod timed out while the pod IP worked. See cilium/cilium#43896.
+    ipv4NativeRoutingCIDR: 10.0.0.0/8
     k8sServiceHost: 127.0.0.1
     k8sServicePort: 7445
     kubeProxyReplacement: true
