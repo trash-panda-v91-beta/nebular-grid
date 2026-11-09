@@ -58,6 +58,9 @@ spec:
               # $(POD_IP) keeps kubelet probes working - they send Host: <pod IP>
               SONARR__SERVER__ALLOWEDHOSTS: "sonarr.nebular-grid.space,sonarr.downloads.svc.cluster.local,sonarr.downloads,$(POD_IP)"
               SONARR__SERVER__PORT: &port 8989
+              # Trust envoy's X-Forwarded-Proto so the OIDC redirect URI is built as
+              # https; without it the callback is http and Kanidm rejects it.
+              SONARR__SERVER__TRUSTEDNETWORKS: 10.244.0.0/16
               SONARR__UPDATE__BRANCH: develop
             probes:
               liveness: &probes
