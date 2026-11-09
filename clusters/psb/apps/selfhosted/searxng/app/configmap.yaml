@@ -42,7 +42,31 @@ data:
     # Docker Hub, the Arch wiki. Reverse of upstream on purpose.
 
     engines:
-      # API-backed or residential-friendly - these are what actually answer.
+      # API-backed engines first. These are interfaces meant to be called -
+      # no scraping, no CAPTCHAs, no rate-limit games - and their relevance is
+      # in a different class from anything we can scrape. `weight` puts them
+      # above the scraping engines so they lead. Keys come from the
+      # searxng-secret env, never from this file.
+      - name: brave
+        engine: braveapi
+        shortcut: br
+        api_key: "${BRAVE_API_KEY}"
+        require_api_key: true
+        disabled: false
+        categories: [general]
+        weight: 2.0
+        use_official_api: true
+      - name: exa
+        engine: exaapi
+        shortcut: ex
+        api_key: "${EXA_API_KEY}"
+        require_api_key: true
+        disabled: false
+        categories: [general]
+        weight: 2.0
+        use_official_api: true
+      # Scraping engines below. API-backed or residential-friendly - these are
+      # what answer when the API engines have no quota left.
       # `categories` matters more than `disabled`: a plain search runs only the
       # `general` engines, and the API-backed ones default to `it`/`science`,
       # so without this they are enabled and never asked. With Seznam as the
@@ -67,7 +91,10 @@ data:
         categories: [general]
       - name: docker hub
         disabled: false
-        categories: [general]
+        # Name matcher, not a relevance engine: it matches the query against
+        # image names and can fill the top of a general search with unrelated
+        # repos. Useful when you ask for an image, not for a general query.
+        categories: [it]
       - name: archwiki
         disabled: false
         categories: [general]
@@ -128,7 +155,6 @@ data:
         - (.*\.)?github.com$
         - (.*\.)?gitlab.com$
         - (.*\.)?reddit.com$
-        - (.*\.)?docker.com$
         - (.*\.)?archlinux.org$
         - (.*\.)?stackoverflow.com$
         - (.*\.)?askubuntu.com$
