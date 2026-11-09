@@ -42,6 +42,12 @@ spec:
       enabled: false
     ipam:
       mode: kubernetes
+    # Pod CIDR only. This doubles as the masquerading boundary: anything
+    # outside it gets NAT'd to the node IP. Widening it to 10.0.0.0/8 to fix
+    # the multi-homed ClusterIP case (cilium/cilium#43896) broke LAN access
+    # from every pod - 10.1.x.x stopped being masqueraded, so packets left
+    # with the pod IP as source and the LAN dropped the reply. Measured:
+    # pod -> 10.1.0.1 100% loss, pod -> 8.8.8.8 fine, node -> 10.1.0.1 fine.
     ipv4NativeRoutingCIDR: 10.244.0.0/16
     k8sServiceHost: 127.0.0.1
     k8sServicePort: 7445

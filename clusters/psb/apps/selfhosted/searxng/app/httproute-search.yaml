@@ -1,0 +1,28 @@
+---
+# Unauthenticated /search route for API clients (hermes, the MCP servers).
+# The oidc/envoy component's SecurityPolicy only targetRefs the
+# app-template-generated route named "searxng", so this separate route is never
+# OIDC-attached. SearXNG answers /search with results or JSON, so callers never
+# see the login page. Longest-prefix match routes /search here and everything
+# else, including the UI, to the OIDC-protected route.
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: searxng-search
+  namespace: selfhosted
+  annotations:
+    external-dns.kubernetes.io/cloudflare-proxied: "false"
+spec:
+  parentRefs:
+    - name: envoy-internal
+      namespace: network
+  hostnames:
+    - search.nebular-grid.space
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /search
+      backendRefs:
+        - name: searxng
+          port: 8080

@@ -10,6 +10,7 @@ spec:
       app.kubernetes.io/name: esphome
   components:
     - ../../../../components/kopiur/backup
+    - ../../../../components/oidc/envoy
   dependsOn:
     - name: kopiur
       namespace: system
@@ -17,14 +18,18 @@ spec:
       namespace: network
     - name: rook-ceph-cluster
       namespace: rook-ceph
+    - name: kanidm
+      namespace: security
   path: "./clusters/psb/apps/home-automation/esphome/app"
   postBuild:
     substitute:
       APP: esphome
-      DOMAIN: asc.sto.bar.internal
+      APP_NAMESPACE: home-automation
       TIMEZONE: Europe/Prague
       KOPIUR_CLAIM: esphome-config
       KOPIUR_CAPACITY: 5Gi
+      OIDC_DISPLAY_NAME: ESPHome
+      OIDC_GROUP: admins
   prune: true
   targetNamespace: home-automation
   timeout: 5m

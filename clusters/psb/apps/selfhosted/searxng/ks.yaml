@@ -10,13 +10,19 @@ spec:
       app.kubernetes.io/name: searxng
   components:
     - ../../../../components/dragonfly
+    - ../../../../components/oidc/envoy
   dependsOn:
     - name: dragonfly-operator
       namespace: database
+    - name: kanidm
+      namespace: security
   path: ./clusters/psb/apps/selfhosted/searxng/app
   postBuild:
     substitute:
       APP: searxng
+      APP_NAMESPACE: selfhosted
+      OIDC_DISPLAY_NAME: SearXNG
+      OIDC_GROUP: admins
   prune: true
   targetNamespace: selfhosted
   timeout: 5m
