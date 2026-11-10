@@ -15,5 +15,5 @@ export IS_CONTROLPLANE
 # and matches the document migration - each file is one document, or one
 # section of the v1alpha1 config.
 talosctl machineconfig patch \
-  <(for f in "${TALOS_DIR}"/all/*.yaml; do minijinja-cli "$f"; done | op inject) \
+  <(for f in $(ls "${TALOS_DIR}"/all/*.yaml "${TALOS_DIR}"/all/*.yaml.j2 2>/dev/null | sort); do minijinja-cli "$f"; done | op inject) \
   -p @<(minijinja-cli "${TALOS_DIR}/nodes/${usage_node}.yaml.j2" | op inject)
