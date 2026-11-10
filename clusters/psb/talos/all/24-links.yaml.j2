@@ -7,19 +7,19 @@ apiVersion: v1alpha1
 kind: LinkAliasConfig
 name: nic0
 selector:
-  match: mac == 58:47:ca:79:64:84
+  match: 'mac(link.permanent_addr) == "58:47:ca:79:64:84" && link.driver == "i40e"'
 ---
 apiVersion: v1alpha1
 kind: LinkAliasConfig
 name: nic1
 selector:
-  match: mac == 38:05:25:31:7f:f2
+  match: 'mac(link.permanent_addr) == "38:05:25:31:7f:f2" && link.driver == "i40e"'
 ---
 apiVersion: v1alpha1
 kind: LinkAliasConfig
 name: nic2
 selector:
-  match: mac == 58:47:ca:7a:bd:ae
+  match: 'mac(link.permanent_addr) == "58:47:ca:7a:bd:ae" && link.driver == "i40e"'
 ---
 apiVersion: v1alpha1
 kind: BondConfig
