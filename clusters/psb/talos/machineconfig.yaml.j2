@@ -100,6 +100,13 @@ machine:
           - vlanId: 50
             dhcp: false
             mtu: 1500
+          # 40 is the Video network. The switch side is done - access-video on
+          # port 13 of switch.sto.bar - but this was never added here, so
+          # bond0.40 does not exist on the nodes and Frigate's multus-video
+          # attachment, which names bond0.40 as its master, cannot come up.
+          - vlanId: 40
+            dhcp: false
+            mtu: 1500
   sysctls:
     fs.inotify.max_user_instances: "8192"
     fs.inotify.max_user_watches: "1048576"
