@@ -1,0 +1,59 @@
+---
+# The three physical NICs, each bound to a name by its MAC address. This is
+# the typed equivalent of the v1alpha1 deviceSelectors block - LinkAliasConfig
+# carries a CEL match expression, and the names below are what BondConfig
+# references.
+apiVersion: v1alpha1
+kind: LinkAliasConfig
+name: nic0
+selector:
+  match: mac == 58:47:ca:79:64:84
+---
+apiVersion: v1alpha1
+kind: LinkAliasConfig
+name: nic1
+selector:
+  match: mac == 38:05:25:31:7f:f2
+---
+apiVersion: v1alpha1
+kind: LinkAliasConfig
+name: nic2
+selector:
+  match: mac == 58:47:ca:7a:bd:ae
+---
+apiVersion: v1alpha1
+kind: BondConfig
+name: bond0
+links:
+  - nic0
+  - nic1
+  - nic2
+bondMode: active-backup
+mtu: 9000
+---
+# DHCP is its own document in the typed form - CommonLinkConfig has no
+# dhcp field.
+apiVersion: v1alpha1
+kind: DHCPv4Config
+name: bond0
+---
+apiVersion: v1alpha1
+kind: VLANConfig
+name: bond0.70
+vlanID: 70
+parent: bond0
+mtu: 1500
+---
+apiVersion: v1alpha1
+kind: VLANConfig
+name: bond0.50
+vlanID: 50
+parent: bond0
+mtu: 1500
+---
+apiVersion: v1alpha1
+kind: VLANConfig
+name: bond0.40
+vlanID: 40
+parent: bond0
+mtu: 1500
