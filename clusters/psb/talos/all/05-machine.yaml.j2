@@ -1,0 +1,108 @@
+  files:
+    - op: create
+      path: /etc/cri/conf.d/20-customization.part
+      content: |-
+        [plugins]
+          [plugins."io.containerd.grpc.v1.cri"]
+            enable_unprivileged_ports = true
+            enable_unprivileged_icmp = true
+        [plugins."io.containerd.cri.v1.images"]
+          discard_unpacked_layers = false
+        [plugins."io.containerd.cri.v1.runtime"]
+          cdi_spec_dirs = ["/var/cdi/static", "/var/cdi/dynamic"]
+          device_ownership_from_security_context = true
+    - op: overwrite
+      path: /etc/nfsmount.conf
+      permissions: 0o644
+      content: |
+        [ NFSMount_Global_Options ]
+        nfsvers=4.2
+        hard=True
+        noatime=True
+        nconnect=16
+  install:
+    image: factory.talos.dev/metal-installer/d0403b4a4440e8acf7262d34408e7ecdfd51b3de189db67278d3cce41a25dcf2:v1.14.5
+  kernel:
+    modules:
+      - name: nbd
+      - name: thunderbolt
+      - name: thunderbolt_net
+  kubelet:
+    defaultRuntimeSeccompProfileEnabled: true
+    disableManifestsDirectory: true
+    extraConfig:
+      allowedUnsafeSysctls:
+        - net.ipv6.conf.*
+      maxPods: 150
+      serializeImagePulls: false
+      imageGCHighThresholdPercent: 60
+      imageGCLowThresholdPercent: 55
+    image: ghcr.io/siderolabs/kubelet:v1.37.2@sha256:d80d3843530cfae376a0814f73bcc4ac70e32bc157de777b38a90f33b82d1111
+    nodeIP:
+      validSubnets:
+        - 10.1.1.0/24
+  network:
+    disableSearchDomain: true
+    interfaces:
+      - interface: bond0
+        bond:
+          deviceSelectors:
+            - hardwareAddr: 58:47:ca:79:64:84
+              driver: i40e
+            - hardwareAddr: 38:05:25:31:7f:f2
+              driver: i40e
+            - hardwareAddr: 58:47:ca:7a:bd:ae
+              driver: i40e
+          mode: active-backup
+        dhcp: true
+        mtu: 9000
+        vlans:
+          # 70 and 50 are the IoT and VPN tags. The old 303 and 305 went when
+          # the re-tag finished - those VLANs are gone from the network entirely,
+          # so the node interfaces carried nothing.
+          - vlanId: 70
+            dhcp: false
+            mtu: 1500
+          - vlanId: 50
+            dhcp: false
+            mtu: 1500
+          # 40 is the Video network. The switch side is done - access-video on
+          # port 13 of switch.sto.bar - but this was never added here, so
+          # bond0.40 does not exist on the nodes and Frigate's multus-video
+          # attachment, which names bond0.40 as its master, cannot come up.
+          - vlanId: 40
+            dhcp: false
+            mtu: 1500
+  sysctls:
+    fs.inotify.max_user_instances: "8192"
+    fs.inotify.max_user_watches: "1048576"
+    net.core.default_qdisc: fq
+    net.core.rmem_max: "67108864"
+    net.core.wmem_max: "67108864"
+    net.ipv4.neigh.default.gc_thresh1: "4096"
+    net.ipv4.neigh.default.gc_thresh2: "8192"
+    net.ipv4.neigh.default.gc_thresh3: "16384"
+    net.ipv4.ping_group_range: 0 2147483647
+    net.ipv4.tcp_congestion_control: bbr
+    net.ipv4.tcp_fastopen: "3"
+    net.ipv4.tcp_mtu_probing: "1"
+    net.ipv4.tcp_notsent_lowat: "131072"
+    net.ipv4.tcp_rmem: 4096 87380 33554432
+    net.ipv4.tcp_slow_start_after_idle: "0"
+    net.ipv4.tcp_window_scaling: "1"
+    net.ipv4.tcp_wmem: 4096 65536 33554432
+    sunrpc.tcp_max_slot_table_entries: "128"
+    sunrpc.tcp_slot_table_entries: "128"
+    user.max_user_namespaces: "11255"
+    vm.nr_hugepages: "1024"
+  time:
+    disabled: false
+    servers:
+      - 10.1.1.12
+  token: "op://NebularGrid/6i7sewsv3lus3qxpwddknc7jem/machine token"
+  udev:
+    rules:
+      # Thunderbolt - Disable Power Management
+      - ACTION=="add", SUBSYSTEM=="thunderbolt", ATTR{power/control}="on"
+      # Coral PCIe TPU
+      - SUBSYSTEM=="apex", KERNEL=="apex*", GROUP="44", MODE="0660"
