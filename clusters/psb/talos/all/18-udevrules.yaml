@@ -1,0 +1,8 @@
+---
+apiVersion: v1alpha1
+kind: UdevRulesConfig
+rules:
+  # Thunderbolt - Disable Power Management
+  - ACTION=="add", SUBSYSTEM=="thunderbolt", ATTR{power/control}="on"
+  # Coral PCIe TPU
+  - SUBSYSTEM=="apex", KERNEL=="apex*", GROUP="44", MODE="0660"
