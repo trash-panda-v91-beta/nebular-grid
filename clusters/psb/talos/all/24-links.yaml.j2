@@ -1,25 +1,30 @@
 ---
-# The three physical NICs, each bound to a name by its MAC address. This is
-# the typed equivalent of the v1alpha1 deviceSelectors block - LinkAliasConfig
+# The three physical NICs, each bound to a name by MAC and driver. This is the
+# typed equivalent of the v1alpha1 deviceSelectors block - LinkAliasConfig
 # carries a CEL match expression, and the names below are what BondConfig
-# references.
+# references. The driver filter is kept: the bond runs over Thunderbolt
+# networking, and the same MAC on a different bus must not be picked up.
+#
+# CEL syntax is load-bearing here - `mac(link.permanent_addr) == "..."` is
+# what the Talos source examples use. The render does not evaluate it, so a
+# wrong expression passes validation and the bond ends up with no slaves.
 apiVersion: v1alpha1
 kind: LinkAliasConfig
 name: nic0
 selector:
-  match: mac == 58:47:ca:79:64:84
+  match: 'mac(link.permanent_addr) == "58:47:ca:79:64:84" && link.driver == "i40e"'
 ---
 apiVersion: v1alpha1
 kind: LinkAliasConfig
 name: nic1
 selector:
-  match: mac == 38:05:25:31:7f:f2
+  match: 'mac(link.permanent_addr) == "38:05:25:31:7f:f2" && link.driver == "i40e"'
 ---
 apiVersion: v1alpha1
 kind: LinkAliasConfig
 name: nic2
 selector:
-  match: mac == 58:47:ca:7a:bd:ae
+  match: 'mac(link.permanent_addr) == "58:47:ca:7a:bd:ae" && link.driver == "i40e"'
 ---
 apiVersion: v1alpha1
 kind: BondConfig
@@ -31,8 +36,8 @@ links:
 bondMode: active-backup
 mtu: 9000
 ---
-# DHCP is its own document in the typed form - CommonLinkConfig has no
-# dhcp field.
+# DHCP is its own document in the typed form - CommonLinkConfig has no dhcp
+# field.
 apiVersion: v1alpha1
 kind: DHCPv4Config
 name: bond0
