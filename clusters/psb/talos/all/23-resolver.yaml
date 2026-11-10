@@ -1,5 +1,12 @@
 ---
+# ResolverConfig replaces machine.network.disableSearchDomain. The two are
+# mutually exclusive - the migration path rejects the combination outright.
+#
+# No nameservers block: the old config took DNS from DHCP and that is what
+# works. Hardcoding one here makes the node use it instead of the DHCP
+# resolver, and every lookup fails when it is wrong. No searchDomains block
+# means no search domains, which is what disableSearchDomain: true asked for.
 apiVersion: v1alpha1
 kind: ResolverConfig
-nameservers:
-  - address: 10.1.1.12
+searchDomains:
+  domains: []
