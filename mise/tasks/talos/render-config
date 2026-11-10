@@ -10,6 +10,10 @@ IS_CONTROLPLANE=$(minijinja-cli "${TALOS_DIR}/nodes/${usage_node}.yaml.j2" \
 
 export IS_CONTROLPLANE
 
+# The config is one file per concern under talos/all/, concatenated in
+# filename order. Splitting keeps each concern small enough to diff on its own
+# and matches the document migration - each file is one document, or one
+# section of the v1alpha1 config.
 talosctl machineconfig patch \
-  <(minijinja-cli "${TALOS_DIR}/machineconfig.yaml.j2" | op inject) \
+  <(for f in "${TALOS_DIR}"/all/*.yaml; do minijinja-cli "$f"; done | op inject) \
   -p @<(minijinja-cli "${TALOS_DIR}/nodes/${usage_node}.yaml.j2" | op inject)

@@ -1,0 +1,29 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/siderolabs/talos/refs/heads/release-1.10/website/content/v1.14.5/schemas/config.schema.json
+version: v1alpha1
+machine:
+  ca:
+    crt: "op://NebularGrid/6i7sewsv3lus3qxpwddknc7jem/machine ca crt"
+    {% if ENV.IS_CONTROLPLANE %}
+    key: "op://NebularGrid/6i7sewsv3lus3qxpwddknc7jem/machine ca key"
+    {% endif %}
+  features:
+    apidCheckExtKeyUsage: true
+    diskQuotaSupport: true
+    hostDNS:
+      enabled: true
+      forwardKubeDNSToHost: true
+      resolveMemberNames: true
+    kubePrism:
+      enabled: true
+      port: 7445
+    {% if ENV.IS_CONTROLPLANE %}
+    kubernetesTalosAPIAccess:
+      enabled: true
+      allowedRoles:
+        - os:admin
+      allowedKubernetesNamespaces:
+        - actions-runner-system
+        - system-upgrade
+    {% endif %}
+    rbac: true

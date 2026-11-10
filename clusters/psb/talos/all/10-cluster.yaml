@@ -1,0 +1,84 @@
+cluster:
+  {% if ENV.IS_CONTROLPLANE %}
+  aggregatorCA:
+    crt: "op://NebularGrid/6i7sewsv3lus3qxpwddknc7jem/aggregator ca crt"
+    key: "op://NebularGrid/6i7sewsv3lus3qxpwddknc7jem/aggregator ca key"
+  allowSchedulingOnControlPlanes: true
+  apiServer:
+    image: registry.k8s.io/kube-apiserver:v1.37.2@sha256:3e563afb5cb5b72a10bac7012698dd09f5a42bde7d22de8d7d3c12e654df86b4
+    extraArgs:
+      enable-aggregator-routing: "true"
+      feature-gates: MutatingAdmissionPolicy=true,HPAScaleToZero=true
+      runtime-config: admissionregistration.k8s.io/v1beta1=true
+    certSANs:
+      - 127.0.0.1 # KubePrism
+      - 10.1.6.50
+      - psb.internal
+    disablePodSecurityPolicy: true
+  controllerManager:
+    image: registry.k8s.io/kube-controller-manager:v1.37.2@sha256:28e62daf706ed815a8bd1dd27b03294ba09421b2e1674e9a83bbac38e24ceb0c
+    extraArgs:
+      bind-address: 0.0.0.0
+      feature-gates: HPAScaleToZero=true
+  coreDNS:
+    disabled: true
+  etcd:
+    advertisedSubnets:
+      - 10.1.1.0/24
+    ca:
+      crt: "op://NebularGrid/6i7sewsv3lus3qxpwddknc7jem/etcd ca crt"
+      key: "op://NebularGrid/6i7sewsv3lus3qxpwddknc7jem/etcd ca key"
+    extraArgs:
+      listen-metrics-urls: http://0.0.0.0:2381
+  proxy:
+    disabled: true
+    image: registry.k8s.io/kube-proxy:v1.37.2@sha256:b2e075697d7ab4f0878775dff9e5dccf818b67644437175210ce72fc1ec70551
+  scheduler:
+    config:
+      apiVersion: kubescheduler.config.k8s.io/v1
+      kind: KubeSchedulerConfiguration
+      profiles:
+        - pluginConfig:
+            - args:
+                defaultConstraints:
+                  - maxSkew: 1
+                    topologyKey: kubernetes.io/hostname
+                    whenUnsatisfiable: ScheduleAnyway
+                defaultingType: List
+              name: PodTopologySpread
+          plugins:
+            score:
+              disabled:
+                - name: ImageLocality
+          schedulerName: default-scheduler
+    extraArgs:
+      bind-address: 0.0.0.0
+    image: registry.k8s.io/kube-scheduler:v1.37.2@sha256:028c847fc321b8a7f9787f7b1c0840f832d6b68439be2e5c09279ffb14203d6b
+  secretboxEncryptionSecret: "op://NebularGrid/6i7sewsv3lus3qxpwddknc7jem/secretbox encryption secret"
+  serviceAccount:
+    key: "op://NebularGrid/6i7sewsv3lus3qxpwddknc7jem/service account"
+  {% endif %}
+  ca:
+    crt: "op://NebularGrid/6i7sewsv3lus3qxpwddknc7jem/ca crt"
+    {% if ENV.IS_CONTROLPLANE %}
+    key: "op://NebularGrid/6i7sewsv3lus3qxpwddknc7jem/ca key"
+    {% endif %}
+  controlPlane:
+    endpoint: https://10.1.6.50:6443
+  clusterName: psb
+  discovery:
+    enabled: true
+    registries:
+      kubernetes: { disabled: true }
+      service: { disabled: false }
+  id: "op://NebularGrid/6i7sewsv3lus3qxpwddknc7jem/cluster id"
+  network:
+    cni:
+      name: none
+    dnsDomain: cluster.local
+    podSubnets:
+      - 10.244.0.0/16
+    serviceSubnets:
+      - 10.96.0.0/12
+  secret: "op://NebularGrid/6i7sewsv3lus3qxpwddknc7jem/cluster secret"
+  token: "op://NebularGrid/6i7sewsv3lus3qxpwddknc7jem/cluster token"
