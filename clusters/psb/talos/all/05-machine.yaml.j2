@@ -22,6 +22,15 @@
         nconnect=16
   install:
     image: factory.talos.dev/metal-installer/d0403b4a4440e8acf7262d34408e7ecdfd51b3de189db67278d3cce41a25dcf2:v1.14.5
+  # TODO: this is the one part of the migration we deliberately leave in
+  # v1alpha1 form. Talos 1.14 auto-generates a KubeletConfig document that
+  # conflicts with a migrated one, so the modern form needs a $patch: delete
+  # dance on the generated document before ours can land. The reference
+  # implementation for this - eleboucher/homelab, the tuppr author - does the
+  # same and keeps machine.kubelet in v1alpha1. Migrate it when Talos stops
+  # generating the conflicting default. The fields would become KubeletConfig
+  # (image, config: instead of extraConfig:, extraArgs) plus KubeNodeConfig
+  # for nodeIP.validSubnets.
   kubelet:
     defaultRuntimeSeccompProfileEnabled: true
     disableManifestsDirectory: true
