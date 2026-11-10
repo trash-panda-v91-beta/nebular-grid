@@ -55,4 +55,8 @@
           - vlanId: 40
             dhcp: false
             mtu: 1500
+  # TODO: machine.token has no typed document equivalent. Checked
+  # pkg/machinery/config/types/ - the only token-bearing kind is
+  # SideroLinkConfig, which is the SideroLink tunnel, not the cluster join
+  # token. Same situation as machine.kubelet above: leave it in v1alpha1.
   token: "op://NebularGrid/6i7sewsv3lus3qxpwddknc7jem/machine token"
