@@ -86,18 +86,20 @@ machine:
         dhcp: true
         mtu: 9000
         vlans:
-          - vlanId: 303
-            dhcp: false
-            mtu: 1500
-          - vlanId: 305
-            dhcp: false
-            mtu: 1500
-          # 70 and 50 are the incoming IoT and VPN tags. They sit beside the old
-          # ones so both exist on the wire while the re-tag moves across.
+          # 70 and 50 are the IoT and VPN tags. The old 303 and 305 went when
+          # the re-tag finished - those VLANs are gone from the network entirely,
+          # so the node interfaces carried nothing.
           - vlanId: 70
             dhcp: false
             mtu: 1500
           - vlanId: 50
+            dhcp: false
+            mtu: 1500
+          # 40 is the Video network. The switch side is done - access-video on
+          # port 13 of switch.sto.bar - but this was never added here, so
+          # bond0.40 does not exist on the nodes and Frigate's multus-video
+          # attachment, which names bond0.40 as its master, cannot come up.
+          - vlanId: 40
             dhcp: false
             mtu: 1500
   sysctls:
