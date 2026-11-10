@@ -3,23 +3,23 @@ apiVersion: v1alpha1
 kind: CRICustomizationConfig
 name: 20-customization
 content: |-
-    [plugins]
-      [plugins."io.containerd.grpc.v1.cri"]
-        enable_unprivileged_ports = true
-        enable_unprivileged_icmp = true
-    [plugins."io.containerd.cri.v1.images"]
-      discard_unpacked_layers = false
-    [plugins."io.containerd.cri.v1.runtime"]
-      cdi_spec_dirs = ["/var/cdi/static", "/var/cdi/dynamic"]
-      device_ownership_from_security_context = true
+  [plugins]
+    [plugins."io.containerd.grpc.v1.cri"]
+      enable_unprivileged_ports = true
+      enable_unprivileged_icmp = true
+  [plugins."io.containerd.cri.v1.images"]
+    discard_unpacked_layers = false
+  [plugins."io.containerd.cri.v1.runtime"]
+    cdi_spec_dirs = ["/var/cdi/static", "/var/cdi/dynamic"]
+    device_ownership_from_security_context = true
 ---
 apiVersion: v1alpha1
 kind: EtcFileConfig
 name: nfsmount.conf
 mode: 0o644
 contents: |-
-    [ NFSMount_Global_Options ]
-    nfsvers=4.2
-    hard=True
-    noatime=True
-    nconnect=16
+  [ NFSMount_Global_Options ]
+  nfsvers=4.2
+  hard=True
+  noatime=True
+  nconnect=16
