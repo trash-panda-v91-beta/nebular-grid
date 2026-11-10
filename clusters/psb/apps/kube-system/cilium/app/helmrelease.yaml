@@ -13,27 +13,12 @@ spec:
     autoDirectNodeRoutes: true
     bandwidthManager:
       enabled: true
-      # BBR needs BPF host routing, which hostLegacyRouting turns off. The
-      # agent refuses to start otherwise: "BPF bandwidth manager's BBR setup
-      # requires BPF host routing." The bandwidth manager itself stays on.
-      bbr: false
+      bbr: true
     bgpControlPlane:
       enabled: true
     bpf:
-      # veth, not netkit. A pod with a Multus macvlan cannot reach any
-      # ClusterIP, any other pod IP, or the LAN - only addresses on its own
-      # secondary network work - and netkit forbids the setting that fixes it:
-      # "netkit devices cannot be used with --enable-host-legacy-routing=true".
-      # onedr0p/home-ops and bjw-s-labs/home-ops both run Multus with
-      # devices: bond+ on veth for exactly this reason.
-      datapathMode: veth
-      # The kernel's routing table inside the pod is correct - ip route get
-      # shows eth0 and the pod IP - but the BPF cgroup hooks do their own
-      # route lookup first and pick the wrong device when a second interface
-      # is present. This makes them defer to the kernel.
-      hostLegacyRouting: true
+      datapathMode: netkit
       masquerade: true
-      preallocateMaps: true
     bpfClockProbe: true
     cgroup:
       automount:
