@@ -1,8 +1,5 @@
 ---
 machine:
-  install:
-    diskSelector:
-      serial: S665NN0Y705289
   network:
     interfaces:
       # aka
@@ -34,3 +31,12 @@ machine:
 apiVersion: v1alpha1
 kind: HostnameConfig
 hostname: ao.sto.bar.internal
+  # UnattendedInstallConfig, matching the base. Talos 1.14 stops validating
+  # patches on machine.install, so the node override has to use the typed
+  # document too. CEL, not a serial field - disk.serial is the property.
+---
+apiVersion: v1alpha1
+kind: UnattendedInstallConfig
+provisioning:
+  diskSelector:
+    match: 'disk.serial == "S665NN0Y705289"'
