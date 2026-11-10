@@ -1,25 +1,3 @@
-  files:
-    - op: create
-      path: /etc/cri/conf.d/20-customization.part
-      content: |-
-        [plugins]
-          [plugins."io.containerd.grpc.v1.cri"]
-            enable_unprivileged_ports = true
-            enable_unprivileged_icmp = true
-        [plugins."io.containerd.cri.v1.images"]
-          discard_unpacked_layers = false
-        [plugins."io.containerd.cri.v1.runtime"]
-          cdi_spec_dirs = ["/var/cdi/static", "/var/cdi/dynamic"]
-          device_ownership_from_security_context = true
-    - op: overwrite
-      path: /etc/nfsmount.conf
-      permissions: 0o644
-      content: |
-        [ NFSMount_Global_Options ]
-        nfsvers=4.2
-        hard=True
-        noatime=True
-        nconnect=16
   install:
     image: factory.talos.dev/metal-installer/d0403b4a4440e8acf7262d34408e7ecdfd51b3de189db67278d3cce41a25dcf2:v1.14.5
   # TODO: this is the one part of the migration we deliberately leave in
