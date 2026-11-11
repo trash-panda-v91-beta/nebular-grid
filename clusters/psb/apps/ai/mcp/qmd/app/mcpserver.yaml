@@ -8,7 +8,7 @@ spec:
   alias: qmd
   transport: sse
   workload:
-    image: docker.io/library/node:26.13.0-bookworm@sha256:fa52d1669505e29b58c042875b1d65c229e0787a3610fd52869b22b68e480853
+    image: docker.io/library/node:26.13.1-bookworm@sha256:b7087bc4d973034b30854b378ba107f9fab622b47514cb7e2592e41b8bab8d49
     port: 8000
     path: /sse
     # ceph-block is RWO, so a replacement pod scheduled onto another node
