@@ -25,3 +25,4 @@ resources:
   - ./mcp/unifi-network-mcp/ks.yaml
   - ./mcp/sparkyfit-mcp/ks.yaml
   - ./mcp/qmd/ks.yaml
+  - ./mcp/ha-mcp/ks.yaml

@@ -216,9 +216,11 @@ data:
         headers:
           Authorization: Bearer ${MCP_LITELLM_API_KEY}
         connect_timeout: 30
-      # runs inside Home Assistant now; the secret webhook URL is the credential
+      # ha-mcp runs inside Home Assistant; litellm holds its credential
       ha_mcp:
-        url: ${HA_MCP_URL}
+        url: http://litellm.ai:4000/ha_mcp/mcp
+        headers:
+          Authorization: Bearer ${MCP_LITELLM_API_KEY}
         connect_timeout: 30
       qmd:
         url: http://litellm.ai:4000/qmd/mcp
