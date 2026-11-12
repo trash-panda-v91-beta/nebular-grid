@@ -20,7 +20,7 @@ spec:
               [{
                 "name": "multus-vpn",
                 "namespace": "network",
-                "ips": ["10.1.5.11/24"],
+                "ips": ["10.1.50.11/24"],
                 "mac": "2a:6f:c9:1d:3b:87"
               }]
           securityContext:
