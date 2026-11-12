@@ -66,7 +66,7 @@ spec:
         type: LoadBalancer
         annotations:
           external-dns.kubernetes.io/hostname: "mqtt.nebular-grid.space."
-          lbipam.cilium.io/ips: 10.1.6.61
+          lbipam.cilium.io/ips: 10.1.60.61
         externalTrafficPolicy: Local
         ports:
           mqtt:

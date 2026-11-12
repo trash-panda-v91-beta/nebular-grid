@@ -12,7 +12,7 @@ cluster:
       runtime-config: admissionregistration.k8s.io/v1beta1=true
     certSANs:
       - 127.0.0.1 # KubePrism
-      - 10.1.6.50
+      - 10.1.60.50
       - psb.internal
     disablePodSecurityPolicy: true
   controllerManager:
@@ -64,7 +64,7 @@ cluster:
     key: "op://NebularGrid/6i7sewsv3lus3qxpwddknc7jem/ca key"
     {% endif %}
   controlPlane:
-    endpoint: https://10.1.6.50:6443
+    endpoint: https://10.1.60.50:6443
   clusterName: psb
   discovery:
     enabled: true
