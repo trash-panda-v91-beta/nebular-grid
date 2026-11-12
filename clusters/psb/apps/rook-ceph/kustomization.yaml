@@ -7,5 +7,6 @@ components:
   - ../../components/flux-alerts
 resources:
   - ./namespace.yaml
+  - ./nodes.yaml
   - ./ceph-csi-drivers/ks.yaml
   - ./rook-ceph/ks.yaml
