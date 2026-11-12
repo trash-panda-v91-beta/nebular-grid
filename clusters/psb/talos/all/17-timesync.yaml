@@ -4,4 +4,6 @@ kind: TimeSyncConfig
 enabled: true
 ntp:
   servers:
-    - 10.1.10.225
+    - asc.sto.bar.internal
+    # fallback: the NAS is a single point of failure for time
+    - time.cloudflare.com
