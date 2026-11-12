@@ -19,7 +19,7 @@ spec:
               [{
                 "name": "multus-vpn",
                 "namespace": "network",
-                "ips": ["10.1.5.13/24"]
+                "ips": ["10.1.50.13/24"]
               }]
         spec:
           restartPolicy: Never
