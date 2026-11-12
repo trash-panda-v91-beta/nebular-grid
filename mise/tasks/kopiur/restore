@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+#MISE description="Restore PVCs from Kopiur snapshots (scales apps down, claims the PVC, scales back)"
+#USAGE arg "[namespace]" help="Namespace to restore; omit to walk every namespace that has snapshots"
+#USAGE flag "--execute" help="Actually restore; without it the script only prints the plan"
+set -euo pipefail
+
+script_dir="$(cd "$(dirname "$0")/../../scripts" && pwd)"
+args=()
+
+if [[ -n "${usage_namespace:-}" ]]; then
+  args+=(--namespace "${usage_namespace}")
+fi
+
+if [[ -n "${usage_execute:-}" ]]; then
+  args+=(--execute)
+fi
+
+python3 "${script_dir}/restore-pvc.py" "${args[@]}"
