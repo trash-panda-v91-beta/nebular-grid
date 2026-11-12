@@ -28,6 +28,17 @@ spec:
               - secretRef:
                   name: maintainerr-secret
             probes:
+              # the restored database makes first start slow enough that the
+              # liveness probe used to kill it before it ever listened
+              startup:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /api/health/live
+                    port: 6246
+                  periodSeconds: 10
+                  failureThreshold: 60
               liveness:
                 enabled: true
                 custom: true
@@ -35,7 +46,7 @@ spec:
                   httpGet:
                     path: /api/health/live
                     port: 6246
-                  initialDelaySeconds: 60
+                  initialDelaySeconds: 0
                   periodSeconds: 10
                   failureThreshold: 5
               readiness:
@@ -45,7 +56,7 @@ spec:
                   httpGet:
                     path: /api/health/ready
                     port: 6246
-                  initialDelaySeconds: 30
+                  initialDelaySeconds: 10
                   periodSeconds: 10
                   failureThreshold: 5
             resources:
