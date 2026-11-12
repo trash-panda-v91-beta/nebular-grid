@@ -4,6 +4,10 @@ apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: hermes
+  annotations:
+    # the himalaya init script uses shell ${VAR} expansion; flux postBuild
+    # substitution would try to resolve those and fail in strict mode
+    kustomize.toolkit.fluxcd.io/substitute: disabled
 spec:
   chartRef:
     kind: OCIRepository
