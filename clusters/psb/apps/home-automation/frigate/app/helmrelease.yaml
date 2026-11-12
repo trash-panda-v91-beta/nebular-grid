@@ -24,7 +24,7 @@ spec:
               },{
                 "name":"multus-video",
                 "namespace": "network",
-                "ips": ["10.1.4.2/24"]
+                "ips": ["10.1.40.2/24"]
               }]
           securityContext:
             sysctls:
