@@ -19,6 +19,8 @@ spec:
       namespace: rook-ceph
     - name: openebs
       namespace: openebs
+    - name: kanidm
+      namespace: security
   path: "./clusters/psb/apps/downloads/sabnzbd/app"
   postBuild:
     substitute:
