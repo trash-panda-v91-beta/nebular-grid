@@ -25,8 +25,8 @@ spec:
         containers:
           app:
             image:
-              repository: forgejo.ellis.link/continuwuation/continuwuity
-              tag: main-maxperf@sha256:5a1508b35b50bfd589f3a4cf6ca59c367d0081a4be594b0c734fb53bffb4225c
+              repository: ghcr.io/continuwuity/continuwuity
+              tag: v26.9.3-maxperf@sha256:0226cd42554761d5845df0cee5f525b6d18573bbbd6d34dc50d8c5aeff70911d
             env:
               CONDUWUIT_CONFIG: /etc/conduwuit/conduwuit.toml
               TZ: America/Chicago
