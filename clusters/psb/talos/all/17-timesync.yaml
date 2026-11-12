@@ -5,5 +5,8 @@ enabled: true
 ntp:
   servers:
     - asc.sto.bar.internal
-    # fallback: the NAS is a single point of failure for time
+    # the name first, then the same host by address: the nodes can hold a
+    # stale DNS answer and the NTP client does not ask again for long
+    - 10.1.10.225
+    # last resort, the NAS is a single point of failure for time
     - time.cloudflare.com
