@@ -61,11 +61,13 @@ spec:
             enabled: true
       network:
         provider: host
+        # link-local ranges (169.254.0.0/16) cannot be published in the mon
+        # EndpointSlice, so the Thunderbolt fabric lives on 10.99.255.0/24
         addressRanges:
           public:
-            - 169.254.255.0/24
+            - 10.99.255.0/24
           cluster:
-            - 169.254.255.0/24
+            - 10.99.255.0/24
         connections:
           requireMsgr2: true
       security:
