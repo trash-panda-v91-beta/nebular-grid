@@ -48,7 +48,7 @@
     {
       "description": "continuwuity maxperf builds - pin the suffix so updates stay on the perf build",
       "matchDatasources": ["docker"],
-      "matchPackageNames": ["forgejo.ellis.link/continuwuation/continuwuity"],
+      "matchPackageNames": ["ghcr.io/continuwuity/continuwuity"],
       "versioning": "regex:^v(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)-maxperf$"
     }
   ]
