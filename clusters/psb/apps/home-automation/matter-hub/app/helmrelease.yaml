@@ -20,7 +20,7 @@ spec:
               [{
                 "name":"multus-iot",
                 "namespace": "network",
-                "ips": ["10.1.30.154/24", "fd12:3456:789a:303::154/64"],
+                "ips": ["10.1.70.154/24", "fd12:3456:789a:303::154/64"],
                 "mac": "3e:59:e4:f7:43:0a"
               }]
           securityContext:
@@ -43,7 +43,7 @@ spec:
               tag: 2.0.59@sha256:40f6df4ef6b800f32fe3ee8496ffbeaa0c0283590d731267fa3bd2c89830ce5e
             env:
               TZ: "Europe/Prague"
-              HAMH_HOME_ASSISTANT_URL: "http://10.1.30.151:8123"
+              HAMH_HOME_ASSISTANT_URL: "http://10.1.70.151:8123"
               HAMH_HOME_ASSISTANT_ACCESS_TOKEN:
                 secretKeyRef:
                   name: matter-hub-secret
