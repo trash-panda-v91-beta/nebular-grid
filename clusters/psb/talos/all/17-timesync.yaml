@@ -4,4 +4,4 @@ kind: TimeSyncConfig
 enabled: true
 ntp:
   servers:
-    - 10.1.1.12
+    - 10.1.10.12
