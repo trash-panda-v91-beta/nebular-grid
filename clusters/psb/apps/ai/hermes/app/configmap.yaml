@@ -253,6 +253,11 @@ data:
         headers:
           Authorization: Bearer ${MCP_LITELLM_API_KEY}
         connect_timeout: 30
+      paperless_mcp:
+        url: http://litellm.ai:4000/paperless_mcp/mcp
+        headers:
+          Authorization: Bearer ${MCP_LITELLM_API_KEY}
+        connect_timeout: 30
       sparky_fitness:
         url: http://litellm.ai:4000/sparky_fitness/mcp
         headers:
