@@ -1,0 +1,24 @@
+---
+# Rook takes the mon address from the node's pod IP unless the node carries the
+# mon-ip annotation. Without these the mons land on the LAN instead of the
+# Thunderbolt fabric, which is where ceph's public network points.
+apiVersion: v1
+kind: Node
+metadata:
+  name: aka
+  annotations:
+    network.rook.io/mon-ip: 10.99.255.21
+---
+apiVersion: v1
+kind: Node
+metadata:
+  name: midori
+  annotations:
+    network.rook.io/mon-ip: 10.99.255.22
+---
+apiVersion: v1
+kind: Node
+metadata:
+  name: ao
+  annotations:
+    network.rook.io/mon-ip: 10.99.255.23
