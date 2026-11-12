@@ -8,9 +8,13 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: kanidm
+  components:
+    - ../../../../components/kopiur/backup
   dependsOn:
     - name: kopiur
       namespace: system
+    - name: rook-ceph-cluster
+      namespace: rook-ceph
     - name: envoy-gateway-config
       namespace: network
     - name: external-secrets
@@ -19,6 +23,9 @@ spec:
   postBuild:
     substitute:
       APP: kanidm
+      APP_NAMESPACE: security
+      KOPIUR_CLAIM: kanidm
+      KOPIUR_CAPACITY: 2Gi
   prune: true
   targetNamespace: security
   timeout: 10m

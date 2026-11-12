@@ -9,15 +9,22 @@ spec:
     labels:
       app.kubernetes.io/name: conduwuit
   components:
+    - ../../../../components/kopiur/backup
     - ../../../../components/oidc
   dependsOn:
     - name: kanidm
       namespace: security
+    - name: kopiur
+      namespace: system
+    - name: rook-ceph-cluster
+      namespace: rook-ceph
   path: ./clusters/psb/apps/matrix/conduwuit/app
   postBuild:
     substitute:
       APP: conduwuit
       APP_NAMESPACE: matrix
+      KOPIUR_CLAIM: conduwuit
+      KOPIUR_CAPACITY: 5Gi
       SUBDOMAIN: matrix
       OIDC_CALLBACK: /_continuwuity/oidc/complete
       OIDC_DISPLAY_NAME: Continuwuity
