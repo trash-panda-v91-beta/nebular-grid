@@ -63,7 +63,9 @@ spec:
               - |
                 set -euo pipefail
                 mkdir -p /opt/data
-                cp /run/config/config.yaml /opt/data/config.yaml
+                # seed only: from here the agent owns its config, and the operator layer at
+                # /etc/hermes overrides whatever it must not drift from
+                test -f /opt/data/config.yaml || cp /run/config/config.yaml /opt/data/config.yaml
                 cp /run/config/env /opt/data/.env
                 chmod 600 /opt/data/.env
                 cat > /opt/data/.kopiaignore <<'EOF'
@@ -224,6 +226,9 @@ spec:
               GOPATH: /opt/data/go
               HERMES_GID: "2000"
               HERMES_HOME: /opt/data
+              # the operator layer lives beside the image's own /etc/hermes, not over it:
+              # the image keeps image-provenance.json there and a ConfigMap mount would hide it
+              HERMES_MANAGED_DIR: /etc/hermes-managed
               HERMES_UID: "2000"
               HERMES_CRON_TIMEOUT: 0
               HOME: /opt/data
@@ -462,6 +467,14 @@ spec:
               - path: /opt/data
             codeserver:
               - path: /opt/data
+      managed-config:
+        type: configMap
+        name: hermes-managed
+        defaultMode: 0o644
+        advancedMounts:
+          hermes:
+            app:
+              - path: /etc/hermes-managed
       config-yaml:
         type: configMap
         name: hermes-configmap
