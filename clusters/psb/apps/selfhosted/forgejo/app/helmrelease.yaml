@@ -63,6 +63,15 @@ spec:
         oauth2_client:
           # a login nobody has created an account for is refused
           ENABLE_AUTO_REGISTRATION: false
+        session:
+          # memory sessions die with the pod, which breaks the oauth handshake
+          # halfway: the browser returns with a session id the new process has
+          # never seen, and goth answers ErrNoSession before the token exchange.
+          PROVIDER: file
+          PROVIDER_CONFIG: /data/gitea/sessions
+          # plain `session` collides with anything else on the parent domain, and
+          # a stale copy shadows the fresh one because Go takes the first match.
+          COOKIE_NAME: forgejo_session
         repository:
           DEFAULT_BRANCH: main
         cron.archive_cleanup:
