@@ -1,0 +1,119 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/batch/cronjob_v1.json
+# Daily basket import into Sparky foods. Skips silently when Sparky is not ready;
+# exits non-zero only on real breakage, so Alertmanager stays quiet for restarts.
+# A failed Job raises kube_job_failed and reaches the existing pushover receiver.
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: rohlik-import
+spec:
+  schedule: "0 5 * * *"
+  timeZone: Europe/Prague
+  concurrencyPolicy: Forbid
+  startingDeadlineSeconds: 3600
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 1
+      activeDeadlineSeconds: 900
+      template:
+        spec:
+          restartPolicy: Never
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 2000
+            runAsGroup: 2000
+            fsGroup: 2000
+            seccompProfile:
+              type: RuntimeDefault
+          initContainers:
+            # dependency install kept out of the image so there is nothing to build
+            - name: deps
+              image: docker.io/library/python:3.13-slim@sha256:e48f59cdba69a3cbd9ed2cf0f348d90d45a8d350d98134cf1070bc106ee9ed90
+              command:
+                - sh
+                - -c
+                - pip install --no-cache-dir --disable-pip-version-check --target=/deps "rohlik-api==0.3.0" httpx
+              env:
+                - name: HOME
+                  value: /tmp
+              resources:
+                requests:
+                  cpu: 50m
+                  memory: 128Mi
+                limits:
+                  memory: 512Mi
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop:
+                    - ALL
+                readOnlyRootFilesystem: true
+              volumeMounts:
+                - name: deps
+                  mountPath: /deps
+                - name: tmp
+                  mountPath: /tmp
+          containers:
+            - name: import
+              image: docker.io/library/python:3.13-slim@sha256:e48f59cdba69a3cbd9ed2cf0f348d90d45a8d350d98134cf1070bc106ee9ed90
+              command:
+                - python
+                - /scripts/rohlik_import.py
+              env:
+                - name: PYTHONPATH
+                  value: /deps
+                - name: PYTHONUNBUFFERED
+                  value: "1"
+                - name: HOME
+                  value: /tmp
+                - name: SPARKY_URL
+                  value: http://sparkyfitness.selfhosted.svc.cluster.local:3010
+                - name: SPARKY_HEALTH_WAIT
+                  value: "600"
+                - name: ROHLIK_USER
+                  valueFrom:
+                    secretKeyRef:
+                      name: rohlik-import-secret
+                      key: ROHLIK_USER
+                - name: ROHLIK_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: rohlik-import-secret
+                      key: ROHLIK_PASSWORD
+                - name: SPARKY_API_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: rohlik-import-secret
+                      key: SPARKY_API_KEY
+              resources:
+                requests:
+                  cpu: 10m
+                  memory: 128Mi
+                limits:
+                  memory: 512Mi
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop:
+                    - ALL
+                readOnlyRootFilesystem: true
+              volumeMounts:
+                - name: script
+                  mountPath: /scripts
+                  readOnly: true
+                - name: deps
+                  mountPath: /deps
+                  readOnly: true
+                - name: tmp
+                  mountPath: /tmp
+          volumes:
+            - name: script
+              configMap:
+                name: rohlik-import-script
+            - name: deps
+              emptyDir: {}
+            - name: tmp
+              emptyDir: {}
