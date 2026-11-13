@@ -1,0 +1,264 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+# Forgejo Actions runner. Each workflow job becomes its own Kubernetes Job through
+# the k8s plugin, so the runner pod itself stays unprivileged: only the `docker`
+# label spawns a privileged dind pod, and only when a workflow asks to build images.
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: forgejo-runner
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: forgejo-runner
+  interval: 30m
+  values:
+    configMaps:
+      config:
+        data:
+          runner.yaml: |-
+            log:
+              level: info
+            cache:
+              enabled: true
+              dir: /data/cache
+              port: 8088
+              proxy_port: 8089
+            container:
+              # "-" means no docker daemon; jobs are pods, not containers here
+              docker_host: "-"
+              workdir_parent: shared/workdir
+            host:
+              workdir_parent: /data/act
+            plugins:
+              k8s:
+                address: unix:///plugin/forgejo-runner-k8s.sock
+                options:
+                  namespace: selfhosted
+                  poll_timeout: 10m
+                  # the spawned job pods carry these labels, so the plugin can find them
+                  labels: "app.kubernetes.io/name=forgejo-runner-instance"
+                  resources: |
+                    requests:
+                      cpu: 100m
+                      memory: 256Mi
+                    limits:
+                      memory: 2Gi
+            runner:
+              capacity: 4
+              timeout: 3h
+              shutdown_timeout: 3m
+              labels:
+                - ubuntu-latest:k8s:///config/podspec-default.yaml
+                - docker:k8s:///config/podspec-dind.yaml
+          # default job pod: enough tooling for python/rust work, no docker
+          podspec-default.yaml: |-
+            automountServiceAccountToken: false
+            containers:
+              - name: main
+                image: ghcr.io/catthehacker/ubuntu:act-22.04
+                imagePullPolicy: IfNotPresent
+                env:
+                  - name: DEBIAN_FRONTEND
+                    value: noninteractive
+                resources:
+                  requests:
+                    cpu: 100m
+                    memory: 512Mi
+                  limits:
+                    memory: 2Gi
+            restartPolicy: Never
+          # image builds: privileged dind, only for the `docker` label
+          podspec-dind.yaml: |-
+            automountServiceAccountToken: false
+            initContainers:
+              - name: dind
+                image: docker:29-dind
+                restartPolicy: Always
+                securityContext:
+                  privileged: true
+                env:
+                  - name: DOCKER_TLS_CERTDIR
+                    value: /certs
+                resources:
+                  requests:
+                    cpu: 100m
+                    memory: 256Mi
+                  limits:
+                    memory: 4Gi
+                volumeMounts:
+                  - name: docker-storage
+                    mountPath: /var/lib/docker
+                  - name: docker-certs
+                    mountPath: /certs
+            containers:
+              - name: main
+                image: ghcr.io/catthehacker/ubuntu:act-22.04
+                imagePullPolicy: IfNotPresent
+                env:
+                  - name: DOCKER_HOST
+                    value: tcp://localhost:2376
+                  - name: DOCKER_TLS_VERIFY
+                    value: "1"
+                  - name: DOCKER_CERT_PATH
+                    value: /certs/client
+                resources:
+                  requests:
+                    cpu: 100m
+                    memory: 512Mi
+                  limits:
+                    memory: 4Gi
+                volumeMounts:
+                  - name: docker-certs
+                    mountPath: /certs
+            volumes:
+              - name: docker-storage
+                emptyDir: {}
+              - name: docker-certs
+                emptyDir: {}
+            restartPolicy: Never
+    controllers:
+      forgejo-runner:
+        type: deployment
+        replicas: 1
+        annotations:
+          reloader.stakater.com/auto: "true"
+        pod:
+          automountServiceAccountToken: true
+          # covers runner.shutdown_timeout plus the plugin's cleanup budget
+          terminationGracePeriodSeconds: 300
+          securityContext:
+            fsGroup: 1000
+            fsGroupChangePolicy: OnRootMismatch
+            runAsGroup: 1000
+            runAsNonRoot: true
+            runAsUser: 1000
+            seccompProfile:
+              type: RuntimeDefault
+        initContainers:
+          # native sidecar: starts before and stops after the runner, so the socket
+          # outlives job draining on shutdown
+          k8s-plugin:
+            image:
+              repository: registry.erwanleboucher.dev/eleboucher/runner-k8s-plugin
+              tag: 13.2.1
+            args:
+              - --listen
+              - unix:///plugin/forgejo-runner-k8s.sock
+            restartPolicy: Always
+            resources:
+              requests:
+                cpu: 5m
+                memory: 32Mi
+              limits:
+                memory: 128Mi
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop:
+                  - ALL
+              readOnlyRootFilesystem: true
+            volumeMounts:
+              - name: plugin
+                mountPath: /plugin
+          # registers once, then never again unless the volume is lost
+          register:
+            image:
+              repository: data.forgejo.org/forgejo/runner
+              tag: 13.2.1
+            command:
+              - sh
+              - -ec
+              - |
+                if [ -f /data/.runner ]; then
+                  echo "already registered, reusing the stored credentials"
+                  exit 0
+                fi
+                forgejo-runner register --no-interactive \
+                  --instance http://forgejo-http.selfhosted.svc.cluster.local:3000 \
+                  --token "$(cat /run/registration/token)" \
+                  --name nebular-grid-k8s \
+                  --labels "ubuntu-latest:k8s:///config/podspec-default.yaml,docker:k8s:///config/podspec-dind.yaml"
+            env:
+              - name: HOME
+                value: /data
+            resources:
+              requests:
+                cpu: 5m
+                memory: 32Mi
+              limits:
+                memory: 128Mi
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop:
+                  - ALL
+            volumeMounts:
+              - name: data
+                mountPath: /data
+              - name: registration
+                mountPath: /run/registration
+                readOnly: true
+        containers:
+          runner:
+            image:
+              repository: data.forgejo.org/forgejo/runner
+              tag: 13.2.1
+            command:
+              - forgejo-runner
+              - daemon
+              - --config
+              - /config/runner.yaml
+            env:
+              HOME: /data
+            resources:
+              requests:
+                cpu: 5m
+                memory: 256Mi
+              limits:
+                memory: 512Mi
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop:
+                  - ALL
+              readOnlyRootFilesystem: true
+            volumeMounts:
+              - name: config
+                mountPath: /config
+                readOnly: true
+              - name: data
+                mountPath: /data
+              - name: plugin
+                mountPath: /plugin
+              - name: tmp
+                mountPath: /tmp
+    serviceAccount:
+      forgejo-runner: {}
+    persistence:
+      data:
+        type: persistentVolumeClaim
+        accessMode: ReadWriteOnce
+        size: 2Gi
+        globalMounts:
+          - path: /data
+      config:
+        type: configMap
+        identifier: config
+        globalMounts:
+          - path: /config
+            readOnly: true
+      registration:
+        type: secret
+        name: forgejo-runner-secret
+        globalMounts:
+          - path: /run/registration
+            readOnly: true
+      plugin:
+        type: emptyDir
+        globalMounts:
+          - path: /plugin
+      tmp:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp
