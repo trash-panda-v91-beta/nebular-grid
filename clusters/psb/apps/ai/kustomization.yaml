@@ -19,7 +19,6 @@ resources:
   - ./mcp/donetick-mcp/ks.yaml
   - ./mcp/mealie-mcp/ks.yaml
   - ./mcp/paperless-mcp/ks.yaml
-  - ./mcp/forgejo-mcp/ks.yaml
   - ./mcp/truenas-mcp/ks.yaml
   - ./mcp/context7-mcp/ks.yaml
   - ./mcp/grafana-mcp/ks.yaml
