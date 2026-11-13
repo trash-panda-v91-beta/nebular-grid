@@ -1,0 +1,30 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/monitoring.coreos.com/prometheusrule_v1.json
+# The renovate operator spawns one Job per run. A failed run is only visible in
+# the operator UI, which nobody opens, so watch the Jobs themselves.
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: renovate
+spec:
+  groups:
+    - name: renovate.rules
+      rules:
+        - alert: RenovateJobFailed
+          annotations:
+            summary: A renovate run failed - dependency PRs may be missing or stale.
+            description: The operator finishes a run as a Kubernetes Job. A failed Job means renovate could not complete, usually an expired token or a Forgejo API problem, and no pull requests were opened or updated for that run.
+          expr: |
+            max_over_time(kube_job_status_failed{namespace="selfhosted", job_name=~"renovate-.*"}[2h]) > 0
+          for: 5m
+          labels:
+            severity: warning
+        - alert: RenovateNotRunning
+          annotations:
+            summary: Renovate has not completed a run - dependency updates are not happening.
+            description: No successful renovate Job exists in the last six hours, while the schedule is every 30 minutes. Either the operator is down, the RenovateJob is not being scheduled, or every run is failing to start.
+          expr: |
+            absent(kube_job_status_succeeded{namespace="selfhosted", job_name=~"renovate-.*"} > 0)
+          for: 6h
+          labels:
+            severity: warning
