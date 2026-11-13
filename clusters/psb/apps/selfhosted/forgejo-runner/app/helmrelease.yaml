@@ -230,9 +230,18 @@ spec:
       config:
         type: configMap
         identifier: config
+        # the plugin resolves k8s:///config/podspec-*.yaml itself. globalMounts
+        # covers the runner but does not reach init containers, and the plugin is
+        # a native sidecar, so it has to be listed by name or every job pod comes
+        # out with image="" and is torn down immediately
+        globalMounts:
+          - path: /config
+            readOnly: true
         advancedMounts:
           forgejo-runner:
-            runner:
+            k8s-plugin:
+              - path: /config
+                readOnly: true
               - path: /config
                 readOnly: true
       registration:
