@@ -1,0 +1,20 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: renovate-jobs
+spec:
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: renovate-jobs
+  # the operator has to install its CRDs before a RenovateJob can be dry-run,
+  # so this waits for the operator release to be ready
+  dependsOn:
+    - name: renovate-operator
+      namespace: selfhosted
+  path: ./clusters/psb/apps/selfhosted/renovate/jobs
+  prune: true
+  targetNamespace: selfhosted
+  timeout: 5m
+  wait: false

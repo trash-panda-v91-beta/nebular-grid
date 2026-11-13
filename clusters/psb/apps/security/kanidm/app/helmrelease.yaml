@@ -20,11 +20,11 @@ spec:
           annotations:
             reloader.stakater.com/auto: "true"
           securityContext:
-            fsGroup: 1000
+            fsGroup: 2000
             fsGroupChangePolicy: OnRootMismatch
-            runAsGroup: 1000
+            runAsGroup: 2000
             runAsNonRoot: true
-            runAsUser: 1000
+            runAsUser: 2000
         containers:
           app:
             image:
@@ -68,11 +68,11 @@ spec:
       provision:
         pod:
           securityContext:
-            fsGroup: 1000
+            fsGroup: 2000
             fsGroupChangePolicy: OnRootMismatch
-            runAsGroup: 1000
+            runAsGroup: 2000
             runAsNonRoot: true
-            runAsUser: 1000
+            runAsUser: 2000
         containers:
           app:
             image:

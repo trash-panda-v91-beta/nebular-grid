@@ -1,0 +1,16 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/helm.toolkit.fluxcd.io/helmrelease_v2.json
+# Renovate operator: schedules one Job per RenovateJob CR instead of running a
+# single long process over every repo. No UI, no OIDC - the CRs in git are the
+# interface, and a failed run is visible as a failed Job.
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: renovate-operator
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: renovate-operator
+  interval: 30m
+  values:
+    fullnameOverride: renovate-operator
