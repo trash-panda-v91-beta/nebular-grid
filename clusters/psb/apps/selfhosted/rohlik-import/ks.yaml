@@ -1,0 +1,18 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: rohlik-import
+spec:
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: rohlik-import
+  dependsOn:
+    - name: sparkyfitness
+      namespace: selfhosted
+  path: ./clusters/psb/apps/selfhosted/rohlik-import/app
+  prune: true
+  targetNamespace: selfhosted
+  timeout: 5m
+  wait: false
