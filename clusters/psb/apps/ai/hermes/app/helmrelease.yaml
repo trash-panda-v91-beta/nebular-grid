@@ -174,6 +174,38 @@ spec:
                   - ALL
               runAsGroup: 2000
               runAsUser: 2000
+          install-fj:
+            # the upstream image ships the binary; copying it out avoids a curl
+            # download and any glibc surprises at every pod start
+            image:
+              repository: codeberg.org/forgejo-contrib/forgejo-cli
+              tag: latest
+            command:
+              - sh
+              - -ec
+              - |
+                mkdir -p /opt/data/.local/bin
+                cp /usr/local/bin/fj /opt/data/.local/bin/fj
+                chmod 0755 /opt/data/.local/bin/fj
+                # fj keeps its login under HOME, which is /opt/data for hermes
+                /opt/data/.local/bin/fj auth add-token "$FORGEJO_TOKEN" \
+                  -H https://git.nebular-grid.space >/dev/null 2>&1 || true
+                echo "fj installed: $(/opt/data/.local/bin/fj version 2>/dev/null | head -1)"
+            env:
+              FORGEJO_TOKEN:
+                valueFrom:
+                  secretKeyRef:
+                    name: hermes-config
+                    key: FORGEJO_TOKEN
+              HOME:
+                value: /opt/data
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop:
+                  - ALL
+              runAsGroup: 2000
+              runAsUser: 2000
         containers:
           app:
             image:
@@ -277,6 +309,11 @@ spec:
                   secretKeyRef:
                     name: hermes-config
                     key: ICLOUD_USER
+              FORGEJO_TOKEN:
+                valueFrom:
+                  secretKeyRef:
+                    name: hermes-config
+                    key: FORGEJO_TOKEN
               SIGNAL_ACCOUNT:
                 valueFrom:
                   secretKeyRef:
@@ -415,6 +452,8 @@ spec:
             install-tools:
               - path: /opt/data
             install-himalaya:
+              - path: /opt/data
+            install-fj:
               - path: /opt/data
             app:
               - path: /opt/data
