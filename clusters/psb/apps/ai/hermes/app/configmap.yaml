@@ -129,6 +129,10 @@ data:
     skills:
       external_dirs:
         - /opt/data/skills-pmb
+      # the english-coach skill rides along in every session: Petr is learning English and
+      # wants the correction note on every reply, in every channel
+      auto_load:
+        - english-coach
       creation_nudge_interval: 15
       disabled: []
     plugins:
