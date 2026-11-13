@@ -6,6 +6,12 @@ metadata:
   name: unifi-network-mcp
 spec:
   alias: unifi_network_mcp
+  # The proxy is in ai and this CR is not, so registration has to name it.
+  # Without these the Deployment is created but the tool never appears in
+  # litellm's mcp_servers - the MCP answers on its own URL and is unreachable
+  # through the gateway.
+  proxyRef: litellm
+  proxyNamespace: ai
   workload:
     image: ghcr.io/sirkirby/unifi-network-mcp:0.45.1@sha256:17e8d34e871d1869b43663922e172a91904154a1f3d27e99fd681321eb17ddd9
     port: 3000
@@ -40,7 +46,7 @@ spec:
       - name: UNIFI_MCP_HOST
         value: "0.0.0.0"
       - name: UNIFI_MCP_ALLOWED_HOSTS
-        value: "localhost,127.0.0.1,unifi-network-mcp,unifi-network-mcp.ai.svc,unifi-network-mcp.ai.svc.cluster.local"
+        value: "localhost,127.0.0.1,unifi-network-mcp,unifi-network-mcp.infra-mgmt.svc,unifi-network-mcp.infra-mgmt.svc.cluster.local"
     resources:
       requests:
         cpu: 10m
