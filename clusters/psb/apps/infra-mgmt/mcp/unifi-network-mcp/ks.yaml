@@ -1,0 +1,18 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: unifi-network-mcp
+spec:
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: unifi-network-mcp
+  dependsOn:
+    - name: litellm-operator
+      namespace: ai
+  path: ./clusters/psb/apps/infra-mgmt/mcp/unifi-network-mcp/app
+  prune: true
+  targetNamespace: infra-mgmt
+  timeout: 5m
+  wait: false

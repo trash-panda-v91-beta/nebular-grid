@@ -8,6 +8,11 @@
 # The exemption is by namespace, not by pod label: a pod author can set any
 # label they like, but a pod cannot choose its namespace. A compromised CI job
 # lands in its own namespace and cannot inherit this.
+#
+# infra-mgmt exists for exactly this: the two workloads allowed to administer
+# hardware, and nothing else. `ai` and `network` used to be exempt because the
+# clients lived among their other workloads - moving them narrowed the
+# exemption from three namespaces (one of them nineteen workloads deep) to one.
 apiVersion: cilium.io/v2
 kind: CiliumClusterwideNetworkPolicy
 metadata:
@@ -19,8 +24,7 @@ spec:
       - key: k8s:io.kubernetes.pod.namespace
         operator: NotIn
         values:
-          - network
-          - ai
+          - infra-mgmt
           - home-automation
   egressDeny:
     # every VLAN gateway address the gateway answers on
