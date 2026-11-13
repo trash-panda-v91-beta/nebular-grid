@@ -223,6 +223,18 @@ Persistence (pairs with the kopiur block in ks.yaml; also add `fsGroup: 2000` + 
           - path: /tmp
 ```
 
+Persistence backed by the NAS instead of a claim (read the `nfs-exports` skill first: the export has to exist, be scoped to `10.1.10.0/25`, and NFS has to be reloaded):
+
+```yaml
+    persistence:
+      nas:
+        type: nfs
+        server: asc.sto.bar.internal
+        path: /mnt/tank/apps/<app>
+        globalMounts:
+          - path: /data
+```
+
 Config file mount (pairs with configMapGenerator):
 
 ```yaml
