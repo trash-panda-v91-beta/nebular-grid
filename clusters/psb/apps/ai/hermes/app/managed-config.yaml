@@ -1,0 +1,139 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: hermes-managed
+  annotations:
+    # the mcp headers expand $VAR at runtime; flux substitution must not touch them
+    kustomize.toolkit.fluxcd.io/substitute: disabled
+data:
+  config.yaml: |-
+    # The operator layer. Hermes merges this over /opt/data/config.yaml and wins on any key set
+    # here, so keep it to wiring: what the agent can reach and what it loads. Everything else -
+    # display, compression, agent personality, terminal - belongs to the agent's own config on
+    # the PVC, which it is free to change and kopiur backs up hourly.
+    model:
+      default: deepseek-v4.1-flash
+      provider: neuralwatt
+      base_url: https://api.neuralwatt.com/v1
+      api_mode: chat_completions
+    auxiliary:
+      vision:
+        provider: neuralwatt
+        model: gemma-4-31b
+      compression:
+        provider: neuralwatt
+        model: deepseek-v4-flash
+      title_generation:
+        provider: neuralwatt
+        model: gemma-4-31b
+      approval:
+        provider: neuralwatt
+        model: deepseek-v4-flash
+      mcp:
+        provider: neuralwatt
+        model: deepseek-v4-flash
+      curator:
+        provider: neuralwatt
+        model: deepseek-v4-flash
+      skills_hub:
+        provider: neuralwatt
+        model: gemma-4-31b
+      memory_query_rewrite:
+        provider: neuralwatt
+        model: gemma-4-31b
+    mcp_servers:
+      actual_mcp:
+        url: http://litellm.ai:4000/actual_mcp/mcp
+        headers:
+          Authorization: Bearer ${MCP_LITELLM_API_KEY}
+        connect_timeout: 30
+        timeout: 600
+      context7:
+        url: http://litellm.ai:4000/context7/mcp
+        headers:
+          Authorization: Bearer ${MCP_LITELLM_API_KEY}
+        connect_timeout: 30
+      grafana_mcp:
+        url: http://litellm.ai:4000/grafana_mcp/mcp
+        headers:
+          Authorization: Bearer ${MCP_LITELLM_API_KEY}
+        connect_timeout: 30
+      ha_mcp:
+        url: http://litellm.ai:4000/ha_mcp/mcp
+        headers:
+          Authorization: Bearer ${MCP_LITELLM_API_KEY}
+        connect_timeout: 30
+      qmd:
+        url: http://litellm.ai:4000/qmd/mcp
+        headers:
+          Authorization: Bearer ${MCP_LITELLM_API_KEY}
+        connect_timeout: 30
+      searxng_mcp:
+        url: http://litellm.ai:4000/searxng_mcp/mcp
+        headers:
+          Authorization: Bearer ${MCP_LITELLM_API_KEY}
+        connect_timeout: 30
+        enabled: false
+      unifi_network_mcp:
+        url: http://litellm.ai:4000/unifi_network_mcp/mcp
+        headers:
+          Authorization: Bearer ${MCP_LITELLM_API_KEY}
+        connect_timeout: 30
+      donetick_mcp:
+        url: http://litellm.ai:4000/donetick_mcp/mcp
+        headers:
+          Authorization: Bearer ${MCP_LITELLM_API_KEY}
+        connect_timeout: 30
+      truenas_mcp:
+        url: http://litellm.ai:4000/truenas_mcp/mcp
+        headers:
+          Authorization: Bearer ${MCP_LITELLM_API_KEY}
+        connect_timeout: 30
+      mealie_mcp:
+        url: http://litellm.ai:4000/mealie_mcp/mcp
+        headers:
+          Authorization: Bearer ${MCP_LITELLM_API_KEY}
+        connect_timeout: 30
+      paperless_mcp:
+        url: http://litellm.ai:4000/paperless_mcp/mcp
+        headers:
+          Authorization: Bearer ${MCP_LITELLM_API_KEY}
+        connect_timeout: 30
+      sparky_fitness:
+        url: http://litellm.ai:4000/sparky_fitness/mcp
+        headers:
+          Authorization: Bearer ${MCP_LITELLM_API_KEY}
+        connect_timeout: 30
+      rohlik:
+        url: https://mcp.rohlik.cz/mcp
+        connect_timeout: 25
+        auth: oauth
+        keepalive_interval: 20
+      picsart-gen-ai:
+        url: https://api.picsart.com/gen-ai/mcp
+        auth: oauth
+        connect_timeout: 30
+    plugins:
+      enabled:
+      - memini
+      - neuralwatt-provider
+      - openai-codex
+      - ponytail
+      - web-ddgs
+      - web-exa
+      - web-searxng
+      - web-tavily
+      disabled: []
+    platforms:
+      matrix:
+        enabled: true
+      signal:
+        enabled: false
+    skills:
+      external_dirs:
+      - /opt/data/skills-pmb
+      auto_load:
+      - english-coach
+      creation_nudge_interval: 15
+      disabled: []
