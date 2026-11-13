@@ -40,7 +40,7 @@ spec:
           app:
             image:
               repository: ghcr.io/riddix/home-assistant-matter-hub
-              tag: 2.0.59@sha256:40f6df4ef6b800f32fe3ee8496ffbeaa0c0283590d731267fa3bd2c89830ce5e
+              tag: 2.0.60@sha256:76d5ec6bb726e2d48950e998bad247b3f276843516b3576895fef4b6f673e354
             env:
               TZ: "Europe/Prague"
               HAMH_HOME_ASSISTANT_URL: "http://10.1.70.151:8123"
