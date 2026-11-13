@@ -145,6 +145,14 @@ def sparky_search(name: str) -> bool:
 
 
 def sparky_import(foods: list[dict]) -> None:
+    if os.environ.get("DRY_RUN") == "1":
+        log(f"dry run: would write {len(foods)} foods")
+        for row in foods[:5]:
+            log(f"  {row['name']}: {row['calories']} kcal, {row.get('protein')} p, "
+                f"{row.get('carbs')} c, {row.get('fat')} f, {row.get('sodium')} na (per 100 g)")
+        if len(foods) > 5:
+            log(f"  ... and {len(foods) - 5} more")
+        return
     r = httpx.post(f"{SPARKY}/api/foods/import-from-csv", headers=SPARKY_HEADERS,
                    json={"foods": foods, "overwrite": False}, timeout=120)
     if r.status_code != 200:
