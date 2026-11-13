@@ -61,8 +61,13 @@ spec:
           # kanidm is the only way in
           ENABLE_INTERNAL_SIGNIN: false
         oauth2_client:
-          # a login nobody has created an account for is refused
-          ENABLE_AUTO_REGISTRATION: false
+          # Kanidm is the account source: the first login creates the account,
+          # because there is no local password to sign in with and link by hand.
+          # Internal sign-in stays disabled, so this cannot be reached by password.
+          ENABLE_AUTO_REGISTRATION: true
+          # match an existing account by email instead of showing the link-account
+          # form, which cannot be completed without a local password
+          ACCOUNT_LINKING: auto
         session:
           # memory sessions die with the pod, which breaks the oauth handshake
           # halfway: the browser returns with a session id the new process has
