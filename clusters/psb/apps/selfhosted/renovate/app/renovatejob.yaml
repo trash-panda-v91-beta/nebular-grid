@@ -1,0 +1,37 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/renovate-operator.mogenius.com/renovatejob_v1alpha1.json
+# One CR per forge, not per repo: renovate autodiscovers inside the platform, and
+# the operator spawns a separate Kubernetes Job per run, so logs, retries and
+# failures are per job instead of one long process looping over everything.
+apiVersion: renovate-operator.mogenius.com/v1alpha1
+kind: RenovateJob
+metadata:
+  name: nebular-grid
+spec:
+  provider:
+    name: forgejo
+    # internal service, so the API traffic never leaves the cluster
+    endpoint: http://forgejo-http.selfhosted.svc.cluster.local:3000/api/v1
+  image: ghcr.io/renovatebot/renovate:41
+  parallelism: 3
+  schedule: "30 * * * *"
+  secretRef: renovate-secret
+  extraEnv:
+    - name: RENOVATE_AUTODISCOVER
+      value: "true"
+    - name: RENOVATE_AUTODISCOVER_FILTER
+      value: nebular-grid/*
+    - name: RENOVATE_ONBOARDING
+      value: "false"
+    - name: RENOVATE_REQUIRE_CONFIG
+      value: optional
+    - name: RENOVATE_GIT_AUTHOR
+      value: "renovate <renovate@nebular-grid.space>"
+    - name: LOG_LEVEL
+      value: info
+  resources:
+    requests:
+      cpu: 100m
+      memory: 512Mi
+    limits:
+      memory: 1Gi
