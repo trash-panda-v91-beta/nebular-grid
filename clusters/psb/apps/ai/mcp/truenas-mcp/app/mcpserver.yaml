@@ -12,8 +12,6 @@ spec:
     port: 8000
     path: /mcp
     env:
-      # TrueNAS middleware websocket. asc.nebular-grid.space is the UI/API name and has a Let's Encrypt
-      # cert the NAS renews itself; asc.sto.bar.internal stays the name for NFS and NTP.
       - name: TRUENAS_URI
         value: wss://asc.nebular-grid.space/api/current
       - name: TRUENAS_VERIFY_SSL
