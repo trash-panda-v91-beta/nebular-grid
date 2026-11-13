@@ -13,18 +13,3 @@ spec:
   targetNamespace: network
   timeout: 5m
   wait: false
----
-# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/kustomize.toolkit.fluxcd.io/kustomization_v1.json
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: externaldns-unifi
-spec:
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: externaldns-cloudflare
-  path: "./clusters/psb/apps/network/external-dns/unifi"
-  prune: true
-  targetNamespace: network
-  timeout: 5m
-  wait: false
