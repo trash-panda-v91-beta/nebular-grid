@@ -3,17 +3,17 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: renovate
+  name: renovate-jobs
 spec:
   commonMetadata:
     labels:
-      app.kubernetes.io/name: renovate
+      app.kubernetes.io/name: renovate-jobs
+  # the operator has to install its CRDs before a RenovateJob can be dry-run,
+  # so this waits for the operator release to be ready
   dependsOn:
-    - name: forgejo
+    - name: renovate-operator
       namespace: selfhosted
-    - name: external-secrets
-      namespace: external-secrets
-  path: ./clusters/psb/apps/selfhosted/renovate/app
+  path: ./clusters/psb/apps/selfhosted/renovate/jobs
   prune: true
   targetNamespace: selfhosted
   timeout: 5m
