@@ -235,6 +235,11 @@ spec:
             runner:
               - path: /config
                 readOnly: true
+            # the plugin resolves k8s:///config/podspec-*.yaml itself, so it needs
+            # the files too. Without this every job pod got image="" and died
+            k8s-plugin:
+              - path: /config
+                readOnly: true
       registration:
         type: secret
         name: forgejo-runner-secret
