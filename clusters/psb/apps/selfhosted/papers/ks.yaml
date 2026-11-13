@@ -23,9 +23,6 @@ spec:
       APP: papers
       # papers.db plus 30 days of rendered XML fit easily in 1Gi
       KOPIUR_CAPACITY: 1Gi
-      # papers runs as uid/gid 1000, not the kopiur default 2000
-      KOPIUR_MOVER_UID: "1000"
-      KOPIUR_MOVER_GID: "1000"
   prune: true
   targetNamespace: selfhosted
   timeout: 5m

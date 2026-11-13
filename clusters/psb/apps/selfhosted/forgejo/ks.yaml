@@ -31,9 +31,6 @@ spec:
       APP_NAMESPACE: selfhosted
       KOPIUR_CLAIM: forgejo
       KOPIUR_CAPACITY: 20Gi
-      # forgejo runs as uid/gid 1000, not the kopiur default 2000
-      KOPIUR_MOVER_UID: "1000"
-      KOPIUR_MOVER_GID: "1000"
       OIDC_DISPLAY_NAME: Forgejo
       OIDC_CALLBACK: /user/oauth2/kanidm/callback
       # git.nebular-grid.space, not forgejo.nebular-grid.space
