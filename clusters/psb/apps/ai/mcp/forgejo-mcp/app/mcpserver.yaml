@@ -1,0 +1,23 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmcpserver_v1alpha1.json
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMMCPServer
+metadata:
+  name: forgejo-mcp
+spec:
+  alias: forgejo_mcp
+  transport: http
+  workload:
+    image: docker.io/richarvey/forgejo-mcp:latest
+    port: 3000
+    path: /mcp
+    env:
+      - name: FORGEJO_URL
+        value: http://forgejo-http.selfhosted.svc.cluster.local:3000
+      - name: FORGEJO_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: forgejo-mcp-secret
+            key: FORGEJO_TOKEN
+      - name: PORT
+        value: "3000"
