@@ -43,6 +43,10 @@ spec:
         # no local admin account, login is kanidm only and the admins group grants site admin
         username: ""
       config:
+        actions:
+          # data.forgejo.org mirrors a few actions only; repos here pin
+          # jdx/mise-action and actions/labeler, so resolve against GitHub
+          DEFAULT_ACTIONS_URL: https://github.com
         database:
           DB_TYPE: postgres
           HOST: postgres-rw.database.svc.cluster.local:5432
