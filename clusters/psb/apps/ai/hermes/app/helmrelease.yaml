@@ -307,7 +307,7 @@ spec:
                   secretKeyRef:
                     name: kanidm-hermes-oidc
                     key: client-secret
-              TZ: "America/Chicago"
+              TZ: "Europe/Prague"
             resources:
               requests:
                 cpu: 500m
@@ -345,7 +345,7 @@ spec:
               - "12321"
               - /opt/data
             env:
-              TZ: "America/Chicago"
+              TZ: "Europe/Prague"
             resources:
               requests:
                 cpu: 10m

@@ -12,8 +12,6 @@ data:
     MATRIX_HOMESERVER=https://matrix.nebular-grid.space
     MATRIX_USER_ID=@cl4:nebular-grid.space
     MATRIX_ALLOWED_USERS=@petr:nebular-grid.space,@aneta:nebular-grid.space
-    MATRIX_HOME_ROOM=!6DsViCbuo5Gq4_cfP9PAXSCoomvUnsHIk822BYlJLpA
-    MATRIX_HOME_ROOM_THREAD_ID=
     MATRIX_DEVICE_ID=d8OUEibR8u
     MEMINI_BASE_URL=http://memini.ai.svc.cluster.local:8080
     MEMINI_NAMESPACE=hermes
@@ -191,12 +189,9 @@ data:
         - hermes-google_chat
     platforms:
       matrix:
+        # no home room: the old one died with the server reset, and every scheduled report
+        # names its own room instead of relying on a default
         enabled: true
-        home_channel:
-          platform: matrix
-          chat_id: '!6DsViCbuo5Gq4_cfP9PAXSCoomvUnsHIk822BYlJLpA'
-          name: '!6DsViCbuo5Gq4_cfP9PAXSCoomvUnsHIk822BYlJLpA'
-          user_id: '@trash-panda-v91-beta:nebular-grid.space'
       signal:
         enabled: false
     mcp_servers:
