@@ -53,7 +53,9 @@ spec:
     gatewayAPI:
       enabled: false
     hubble:
-      enabled: false
+      enabled: true
+      relay:
+        enabled: true
     ipam:
       mode: kubernetes
     # Pod CIDR only. This doubles as the masquerading boundary: anything
