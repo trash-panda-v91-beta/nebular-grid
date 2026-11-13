@@ -41,6 +41,9 @@ spec:
       # the chart reads client-id/client-secret from keys named key/secret
       OIDC_CLIENT_ID_KEY: key
       OIDC_CLIENT_SECRET_KEY: secret
+      # kanidm would otherwise send petr@idm.nebular-grid.space as the username,
+      # and Forgejo rejects @ in a username, so the first login fails with 500
+      OIDC_SHORT_USERNAME: "true"
   prune: true
   targetNamespace: selfhosted
   timeout: 5m
