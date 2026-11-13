@@ -4,7 +4,7 @@
 #USAGE flag "--execute" help="Actually restore; without it the script only prints the plan"
 set -euo pipefail
 
-script_dir="$(cd "$(dirname "$0")/../../scripts" && pwd)"
+script_dir="$(cd "$(dirname "$0")/../../../scripts" && pwd)"
 args=()
 
 if [[ -n "${usage_namespace:-}" ]]; then
