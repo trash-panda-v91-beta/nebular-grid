@@ -19,3 +19,4 @@ resources:
   - ./mealie/ks.yaml
   - ./forgejo/ks.yaml
   - ./forgejo-runner/ks.yaml
+  - ./renovate/ks.yaml

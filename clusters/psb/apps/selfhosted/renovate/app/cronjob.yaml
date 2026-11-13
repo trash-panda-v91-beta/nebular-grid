@@ -1,0 +1,76 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/batch/cronjob_v1.json
+# Self hosted renovate against Forgejo. Dependency updates are the thing we do
+# not want to depend on a third party platform for, so the bot runs in cluster
+# and talks to the Forgejo API directly.
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: renovate
+spec:
+  schedule: "0 */4 * * *"
+  timeZone: Europe/Prague
+  concurrencyPolicy: Forbid
+  startingDeadlineSeconds: 3600
+  successfulJobsHistoryLimit: 2
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 0
+      activeDeadlineSeconds: 1800
+      template:
+        spec:
+          restartPolicy: Never
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
+            seccompProfile:
+              type: RuntimeDefault
+          containers:
+            - name: renovate
+              image: docker.io/renovate/renovate:41
+              env:
+                - name: RENOVATE_PLATFORM
+                  value: forgejo
+                # in cluster service, so the API never leaves the cluster
+                - name: RENOVATE_ENDPOINT
+                  value: http://forgejo-http.selfhosted.svc.cluster.local:3000/api/v1
+                - name: RENOVATE_TOKEN
+                  valueFrom:
+                    secretKeyRef:
+                      name: renovate-secret
+                      key: token
+                - name: RENOVATE_AUTODISCOVER
+                  value: "true"
+                - name: RENOVATE_AUTODISCOVER_FILTER
+                  value: nebular-grid/*
+                # each repo carries its own renovate.json extending the shared preset
+                - name: RENOVATE_ONBOARDING
+                  value: "false"
+                - name: RENOVATE_REQUIRE_CONFIG
+                  value: optional
+                - name: RENOVATE_GIT_AUTHOR
+                  value: "renovate <renovate@nebular-grid.space>"
+                - name: RENOVATE_CACHE_DIR
+                  value: /tmp/renovate-cache
+                - name: LOG_LEVEL
+                  value: info
+              resources:
+                requests:
+                  cpu: 100m
+                  memory: 512Mi
+                limits:
+                  memory: 1Gi
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop:
+                    - ALL
+              volumeMounts:
+                - name: tmp
+                  mountPath: /tmp
+          volumes:
+            - name: tmp
+              emptyDir: {}
