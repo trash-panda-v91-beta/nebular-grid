@@ -18,3 +18,4 @@ resources:
   - ./donetick/ks.yaml
   - ./mealie/ks.yaml
   - ./forgejo/ks.yaml
+  - ./forgejo-runner/ks.yaml
