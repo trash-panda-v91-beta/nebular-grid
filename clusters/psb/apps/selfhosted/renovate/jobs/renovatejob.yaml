@@ -12,7 +12,7 @@ spec:
     name: forgejo
     # internal service, so the API traffic never leaves the cluster
     endpoint: http://forgejo-http.selfhosted.svc.cluster.local:3000/api/v1
-  image: ghcr.io/renovatebot/renovate:41
+  image: ghcr.io/renovatebot/renovate:44@sha256:56c9cd93b1baf92ebcc121cdd5cffa46daeeb09e23460cf1c363627a6e5334a6
   parallelism: 3
   schedule: "30 * * * *"
   secretRef: renovate-secret
