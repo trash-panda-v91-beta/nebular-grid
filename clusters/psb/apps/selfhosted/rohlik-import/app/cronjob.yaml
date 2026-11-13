@@ -73,6 +73,8 @@ spec:
                   value: http://sparkyfitness.selfhosted.svc.cluster.local:3010
                 - name: SPARKY_HEALTH_WAIT
                   value: "600"
+                - name: DRY_RUN
+                  value: "0"
                 - name: ROHLIK_USER
                   valueFrom:
                     secretKeyRef:
