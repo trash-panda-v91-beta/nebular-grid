@@ -76,6 +76,10 @@ spec:
                 .room-link-grant-secret
                 auth.json
                 /config.yaml
+                cache/
+                .local/state/
+                .local/share/tirith/
+                skills/.usage.json
                 EOF
             securityContext:
               allowPrivilegeEscalation: false
@@ -230,7 +234,7 @@ spec:
               # the image keeps image-provenance.json there and a ConfigMap mount would hide it
               HERMES_MANAGED_DIR: /etc/hermes-managed
               HERMES_UID: "2000"
-              HERMES_CRON_TIMEOUT: 0
+              HERMES_CRON_TIMEOUT: "900"
               HOME: /opt/data
               HOMEBREW_CELLAR: /opt/data/.local/homebrew/Cellar
               HOMEBREW_PREFIX: /opt/data/.local/homebrew
