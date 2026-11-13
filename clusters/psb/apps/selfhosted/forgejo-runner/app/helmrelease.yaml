@@ -158,9 +158,6 @@ spec:
                 drop:
                   - ALL
               readOnlyRootFilesystem: true
-            volumeMounts:
-              - name: plugin
-                mountPath: /plugin
           # registers once, then never again unless the volume is lost
           register:
             image:
@@ -193,12 +190,6 @@ spec:
               capabilities:
                 drop:
                   - ALL
-            volumeMounts:
-              - name: data
-                mountPath: /data
-              - name: registration
-                mountPath: /run/registration
-                readOnly: true
         containers:
           runner:
             image:
@@ -223,16 +214,6 @@ spec:
                 drop:
                   - ALL
               readOnlyRootFilesystem: true
-            volumeMounts:
-              - name: config
-                mountPath: /config
-                readOnly: true
-              - name: data
-                mountPath: /data
-              - name: plugin
-                mountPath: /plugin
-              - name: tmp
-                mountPath: /tmp
     serviceAccount:
       forgejo-runner: {}
     persistence:
@@ -240,25 +221,39 @@ spec:
         type: persistentVolumeClaim
         accessMode: ReadWriteOnce
         size: 2Gi
-        globalMounts:
-          - path: /data
+        advancedMounts:
+          forgejo-runner:
+            register:
+              - path: /data
+            runner:
+              - path: /data
       config:
         type: configMap
         identifier: config
-        globalMounts:
-          - path: /config
-            readOnly: true
+        advancedMounts:
+          forgejo-runner:
+            runner:
+              - path: /config
+                readOnly: true
       registration:
         type: secret
         name: forgejo-runner-secret
-        globalMounts:
-          - path: /run/registration
-            readOnly: true
+        advancedMounts:
+          forgejo-runner:
+            register:
+              - path: /run/registration
+                readOnly: true
       plugin:
         type: emptyDir
-        globalMounts:
-          - path: /plugin
+        advancedMounts:
+          forgejo-runner:
+            k8s-plugin:
+              - path: /plugin
+            runner:
+              - path: /plugin
       tmp:
         type: emptyDir
-        globalMounts:
-          - path: /tmp
+        advancedMounts:
+          forgejo-runner:
+            runner:
+              - path: /tmp
