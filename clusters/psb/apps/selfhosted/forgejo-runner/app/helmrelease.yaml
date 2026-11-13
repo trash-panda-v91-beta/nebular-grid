@@ -176,7 +176,7 @@ spec:
                 fi
                 forgejo-runner register --no-interactive \
                   --instance http://forgejo-http.selfhosted.svc.cluster.local:3000 \
-                  --token "$(cat /run/registration/token)" \
+                  --token "$(cat /run/registration/registration-token)" \
                   --name nebular-grid-k8s \
                   --labels "ubuntu-latest:k8s:///config/podspec-default.yaml,docker:k8s:///config/podspec-dind.yaml"
             env:
