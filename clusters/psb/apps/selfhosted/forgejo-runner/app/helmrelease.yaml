@@ -230,22 +230,15 @@ spec:
       config:
         type: configMap
         identifier: config
-        # the plugin resolves k8s:///config/podspec-*.yaml itself. globalMounts
-        # covers the runner but does not reach init containers, and the plugin is
-        # a native sidecar, so it has to be listed by name or every job pod comes
-        # out with image="" and is torn down immediately
-        globalMounts:
-          - path: /config
-            readOnly: true
+        # the plugin resolves k8s:///config/podspec-*.yaml itself, so both the
+        # runner and the plugin container need the files. Listed explicitly per
+        # container: adding a globalMount as well duplicates the mount and the
+        # apply fails with "duplicate entries for key [mountPath=/config]".
         advancedMounts:
           forgejo-runner:
-            k8s-plugin:
+            runner:
               - path: /config
                 readOnly: true
-              - path: /config
-                readOnly: true
-            # the plugin resolves k8s:///config/podspec-*.yaml itself, so it needs
-            # the files too. Without this every job pod got image="" and died
             k8s-plugin:
               - path: /config
                 readOnly: true
