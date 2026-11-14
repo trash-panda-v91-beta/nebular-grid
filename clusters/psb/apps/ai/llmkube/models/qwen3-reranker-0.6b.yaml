@@ -20,7 +20,7 @@ metadata:
     krr/ignore: "true"
 spec:
   modelRef: qwen3-reranker-0.6b
-  image: ghcr.io/ggml-org/llama.cpp:server@sha256:3d05996b4956a27f26f108827b8f24eea392e91eaab8114138424e92443903df
+  image: ghcr.io/ggml-org/llama.cpp:server@sha256:c7d58273d753d33a352e5c41ab300c5ae040a16fa4b202231bb606478065c124
   replicas: 1
   priority: batch
   parallelSlots: 4
